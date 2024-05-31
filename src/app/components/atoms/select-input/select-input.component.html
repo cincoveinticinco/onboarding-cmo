@@ -1,0 +1,15 @@
+<div class="input-container">
+  <label>{{ label }}</label>
+  <small>{{ description }}</small>
+  <select
+      formControlName="regimen_fiscal"
+      name="regimen_fiscal">
+      <option disabled value="">Seleccione una opción</option>
+      @for (opt of options; track opt) {
+          <option [value]="opt.id">{{opt.name}}</option>
+      } @empty {
+          <option disabled>No hay opciones para mostrar</option>
+      }
+  </select>
+  <!-- <ng-container *ngTemplateOutlet="errorTemplate; context:{'control': 'regimen_fiscal'}"></ng-container> -->
+</div>
