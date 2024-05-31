@@ -20,7 +20,7 @@ import { PersonasExpuestasPoliticamenteComponent } from '../../components/molecu
 })
 export class FormsCmoComponent {
   personEnnum = TIPOPERSONA;
-  typePerson: number = TIPOPERSONA.Natural;
+  typePerson: number = TIPOPERSONA.Juridica;
   title: string = '';
   
   ngOnInit() {
