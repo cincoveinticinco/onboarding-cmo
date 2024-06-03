@@ -1,5 +1,5 @@
-<div value class="input-container">
+<div class="input-container">
   <label>{{ label }}</label>
   <small>{{ description }}</small>
-  <input type="text" [placeholder]="placeholder"/>
+  <input type="text" [placeholder]="placeholder" (input)="setValue($event)" />
 </div>

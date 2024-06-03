@@ -1,47 +1,51 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { InitialDataComponent } from '../../molecules/initial-data/initial-data.component';
-import { DatosEmpresaComponent } from '../../molecules/datos-empresa/datos-empresa.component';
-import { DatosRepresentanteLegalComponent } from '../../molecules/datos-representante-legal/datos-representante-legal.component';
-import { DatosFacturaElectronicaComponent } from '../../molecules/datos-factura-electronica/datos-factura-electronica.component';
-import { DatosContabilidadComponent } from '../../molecules/datos-contabilidad/datos-contabilidad.component';
-import { DatosContactoComercialComponent } from '../../molecules/datos-contacto-comercial/datos-contacto-comercial.component';
-import { DatosFiscalesComponent } from '../../molecules/datos-fiscales/datos-fiscales.component';
-import { DatosTesoreriaComponent } from '../../molecules/datos-tesoreria/datos-tesoreria.component';
-import { DatosFinancierosComponent } from '../../molecules/datos-financieros/datos-financieros.component';
-import { AutorizacionDatosPersonalesComponent } from '../../molecules/autorizacion-datos-personales/autorizacion-datos-personales.component';
-import { DeclaracionSagrilaftComponent } from '../../molecules/declaracion-sagrilaft/declaracion-sagrilaft.component';
-import { AcuerdoConfidencialidadComponent } from '../../molecules/acuerdo-confidencialidad/acuerdo-confidencialidad.component';
-import { PersonasExpuestasPoliticamenteComponent } from '../../molecules/personas-expuestas-politicamente/personas-expuestas-politicamente.component';
-import { DeclaracionPepComponent } from '../../molecules/declaracion-pep/declaracion-pep.component';
-import { InformacionFinancieraComponent } from '../../molecules/informacion-financiera/informacion-financiera.component';
-import { PersonaDiligenciaFormularioComponent } from '../../molecules/persona-diligencia-formulario/persona-diligencia-formulario.component';
 import { BlackButtonComponent } from '../../atoms/black-button/black-button.component';
 
 @Component({
   selector: 'app-vinculacion-juridica',
   standalone: true,
   imports: [
+    ReactiveFormsModule,
+    FormsModule,
     InitialDataComponent,
-    DatosEmpresaComponent,
-    DatosRepresentanteLegalComponent,
-    DatosFacturaElectronicaComponent,
-    DatosContabilidadComponent,
-    DatosContactoComercialComponent,
-    DatosFiscalesComponent,
-    DatosTesoreriaComponent,
-    DatosFinancierosComponent,
-    AutorizacionDatosPersonalesComponent,
-    DeclaracionSagrilaftComponent,
-    AcuerdoConfidencialidadComponent,
-    PersonasExpuestasPoliticamenteComponent,
-    DeclaracionPepComponent,
-    InformacionFinancieraComponent,
-    PersonaDiligenciaFormularioComponent,
     BlackButtonComponent
   ],
   templateUrl: './vinculacion-juridica.component.html',
-  styleUrl: './vinculacion-juridica.component.css'
+  styleUrls: ['./vinculacion-juridica.component.css']
 })
 export class VinculacionJuridicaComponent {
+  juridicaForm: FormGroup;
 
+  constructor(private fb: FormBuilder) {
+    this.juridicaForm = this.fb.group({
+      name: new FormControl('', [Validators.required]),
+      tipoSolicitud: new FormControl('', [Validators.required]),
+      fechaSolicitud: new FormControl('', [Validators.required])
+    });
+  }
+
+  setFormValue(controlName: string, value: string) {
+    const control = this.juridicaForm.get(controlName);
+    if (control) {
+      control.setValue(value);
+    }
+  }
+
+  sendForm() {
+    if (this.juridicaForm.valid) {
+      console.log(this.juridicaForm.value);
+    } else {
+      this.juridicaForm.markAllAsTouched();
+    }
+  }
+
+  getErrorMessage(controlName: string): string | null {
+    const control = this.juridicaForm.get(controlName);
+    if (control?.hasError('required')) {
+      return 'Este campo es requerido';
+    }
+    return null;
+  }
 }
