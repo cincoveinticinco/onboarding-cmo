@@ -10,6 +10,7 @@ import { Component, Input, Output, EventEmitter} from '@angular/core';
 export class BlackButtonComponent {
   @Input() name: string | undefined;
   @Output() onClick = new EventEmitter<void>();
+  @Input() type: string = 'button';
 
   handleClick() {
     this.onClick.emit();

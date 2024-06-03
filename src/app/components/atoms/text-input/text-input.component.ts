@@ -11,6 +11,7 @@ export class TextInputComponent {
   @Input() description: string | undefined;
   @Input() placeholder: string = '';
   @Input() controlName: string = '';
+  @Input() error: string | null = null;
   @Output() setFormValue = new EventEmitter<{controlName: string, value: string}>();
 
   setValue(event: any) {

@@ -4,14 +4,17 @@
     [placeholder]="'VINCULACION'"
     [description]="'Type of application'"
     [controlName]="'tipoSolicitud'"
+    [error]="getErrors('tipoSolicitud')"
     class="col-5"
     (setFormValue)="setValue($event.controlName, $event.value)"
   ></app-text-input>
+
   <app-text-input 
     [label]="'Fecha de Solicitud'"
     [placeholder]="'21/03/2024'"
     [controlName]="'fechaSolicitud'"
     [description]="'Date of application'"
+    [error]="getErrors('fechaSolicitud')"
     class="col-5"
     (setFormValue)="setValue($event.controlName, $event.value)"
   ></app-text-input>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { InitialDataComponent } from '../../molecules/initial-data/initial-data.component';
 import { BlackButtonComponent } from '../../atoms/black-button/black-button.component';
@@ -26,6 +26,23 @@ export class VinculacionJuridicaComponent {
     });
   }
 
+  @HostListener('submit', ['$event'])
+  onFormSubmit(event: Event) {
+    event.preventDefault();
+    if (this.juridicaForm.valid) {
+      console.log(this.juridicaForm.value);
+    } else {
+      Object.values(this.juridicaForm.controls).forEach((control) => {
+        control.markAsTouched();
+      });
+
+      const invalidElements = document.querySelectorAll('.ng-invalid');
+      if (invalidElements.length > 0) {
+        invalidElements[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  }
+
   setFormValue(controlName: string, value: string) {
     const control = this.juridicaForm.get(controlName);
     if (control) {
@@ -37,7 +54,9 @@ export class VinculacionJuridicaComponent {
     if (this.juridicaForm.valid) {
       console.log(this.juridicaForm.value);
     } else {
-      this.juridicaForm.markAllAsTouched();
+      Object.values(this.juridicaForm.controls).forEach((control) => {
+        control.markAsTouched();
+      });
     }
   }
 

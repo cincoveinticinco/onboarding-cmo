@@ -1,6 +1,7 @@
 <form [formGroup]="juridicaForm" (ngSubmit)="sendForm()">
   <app-initial-data 
     (setFormValue)="setFormValue($event.controlName, $event.value)"
+    [form]="juridicaForm"
   />
 
   <!-- Uncomment these lines as needed for the form -->
@@ -21,10 +22,10 @@
   <!-- <app-persona-diligencia-formulario></app-persona-diligencia-formulario> -->
 
   <div class="row">
-    <app-black-button
-      [name]="'enviar formulario'"
-      class="col-4 col-start-third center-element big-gap"
-      (onClick)="sendForm()"
-    ></app-black-button>
+      <app-black-button
+        [name]="'enviar formulario'"
+        [type]="'submit'"
+        class="col-4 col-start-third center-element big-gap"
+      ></app-black-button>
   </div>
 </form>

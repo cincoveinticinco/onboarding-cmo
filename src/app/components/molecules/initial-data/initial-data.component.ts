@@ -14,13 +14,17 @@ import { FormGroup } from '@angular/forms';
 export class InitialDataComponent {
   @Input() form: FormGroup | undefined;
   @Output() setFormValue = new EventEmitter<{ controlName: string, value: string }>();
-  @Output() getErrorMessage = new EventEmitter<string>();
 
   setValue(controlName: string, value: string) {
     this.setFormValue.emit({ controlName, value });
   }
 
-  emitErrorMessage(controlName: string) {
-    this.getErrorMessage.emit(controlName);
+  getErrors(controlName: string): string | null {
+    const control = this.form?.get(controlName);
+    const touched = control?.touched;
+    if (control?.hasError('required') && touched) {
+      return 'Este campo es requerido';
+    }
+    return null;
   }
 }
