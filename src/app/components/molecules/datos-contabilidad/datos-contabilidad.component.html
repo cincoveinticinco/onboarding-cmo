@@ -2,18 +2,22 @@
 <div class="row">
   <app-text-input
     [label]="'Nombre Responsable'"
+    [control]="getControl('accounting_responsible_name')"
     class="col-4"
   />
   <app-text-input
     [label]="'Celular'"
+    [control]="getControl('accounting_responsible_phone')"
     class="col-4"
   />
   <app-text-input
     [label]="'Correo electrónico'"
+    [control]="getControl('accounting_responsible_email')"
     class="col-4"
   />
   <app-text-input
     [label]="'Cargo'"
+    [control]="getControl('accounting_responsible_position')"
     class="col-4"
   />
 </div>

@@ -66,6 +66,10 @@ a {
     align-items: center;
 }
 
+.error {
+  color: var(--alert-color);
+}
+
 .align-start {
     display: flex;
     align-items: flex-start;

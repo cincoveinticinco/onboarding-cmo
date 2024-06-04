@@ -1,7 +1,21 @@
 <div class="input-container">
   <label>{{ label }}</label>
-  <small>{{ description }}</small>
-  <input type="text" [placeholder]="placeholder" (input)="setValue($event)" />
-  @if(error)
-    {<small class="error">{{ error }}</small>}
+  @if(control.errors && (control.dirty || control.touched)) {
+    <small class="error">
+      {{
+        getErrors()
+      }}
+    </small>
+  } 
+  @if(!getErrors()){
+    <small class="description">
+      {{ description }}
+    </small>
+  }
+  <input
+    [placeholder]="placeholder"
+    [formControl]="control"
+    type="text"
+  />
+ 
 </div>

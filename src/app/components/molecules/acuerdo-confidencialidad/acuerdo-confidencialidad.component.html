@@ -155,7 +155,13 @@ medios, exclusivamente:</p>
 
   <p>EL RECEPTOR</p>
   <div class="row">
-    <app-text-input [label]="'Dirección Física'" class="col-4" />
-    <app-text-input [label]="'Correo Electrónico'" class="col-4" />
+    <app-text-input 
+    [label]="'Dirección Física'"
+    [control]="getControl('confidentiality_agreement_address')" 
+    class="col-4" />
+    <app-text-input 
+      [label]="'Correo Electrónico'"
+      [control]="getControl('confidentiality_agreement_email')"
+      class="col-4" />
   </div>
 </div>

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { TextInputComponent } from '../../atoms/text-input/text-input.component';
 import { FileboxComponent } from '../../atoms/filebox/filebox.component';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-firma',
@@ -13,5 +14,9 @@ import { FileboxComponent } from '../../atoms/filebox/filebox.component';
   styleUrl: './firma.component.css'
 })
 export class FirmaComponent {
-
+  @Input() form: FormGroup | undefined;
+  
+  getControl(controlName: string): FormControl {
+    return this.form?.get(controlName) as FormControl;
+  }
 }

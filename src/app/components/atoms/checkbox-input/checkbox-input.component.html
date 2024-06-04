@@ -1,8 +1,27 @@
 <div class="input-container">
 	<label class="large-txt">{{ label }}</label>
+  @if(control.errors && (control.dirty || control.touched)) {
+    <small class="error">
+      {{
+        getErrors()
+      }}
+    </small>
+  } 
+  @if(!getErrors()){
+    <small class="description">
+      {{ description }}
+    </small>
+  }
 	<div class="input-choose-option">
-			<label><input name="relacion" type="radio" value="1" formControlName="relacion"> Si</label>
-			<label><input name="relacion" type="radio" value="0" formControlName="relacion"> No</label>
+			<label><input 
+        [formControl]="control"
+        type="radio" 
+        value="1"> Si</label>
+			<label><input 
+        [formControl]="control"
+        type="radio" 
+        value="0"
+      > No</label>
 	</div>
 </div>
-<!-- <ng-container *ngTemplateOutlet="errorTemplate; context:{'control': 'relacion'}"></ng-container> -->
+

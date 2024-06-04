@@ -1,8 +1,20 @@
 <app-subtitle [subtitle]="'persona que diligenció el formulario'" />
 <div class="row">
-  <app-text-input [label]="'Nombres y Apellidos'" class="col-4" />
-  <app-text-input [label]="'Número de documento'" class="col-4" />
-  <app-text-input [label]="'Cargo'" class="col-4" />
+  <app-text-input 
+    [label]="'Nombres y Apellidos'"
+    [control]="getControl('form_name')"
+    class="col-4" 
+  />
+  <app-text-input 
+    [label]="'Número de documento'"
+    [control]="getControl('form_document')"
+    class="col-4" 
+  />
+  <app-text-input 
+    [label]="'Cargo'"
+    [control]="getControl('form_position')"
+    class="col-4" 
+  />
 </div>
 <div class="row">
   <label class="col-12">Firma</label>
@@ -11,6 +23,11 @@
   />
 </div>
 <div class="row">
-  <app-text-input [label]="'Nombre representante legal'" class="col-4" />
-  <app-text-input [label]="'Cédula representante legal'" class="col-4" />
+  <app-text-input 
+    [label]="'Nombre representante legal'"
+    class="col-4" 
+  />
+  <app-text-input 
+    [label]="'Cédula representante legal'"
+    class="col-4" />
 </div>

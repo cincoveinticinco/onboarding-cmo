@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SubtitleComponent } from '../../atoms/subtitle/subtitle.component';
 import { TextInputComponent } from '../../atoms/text-input/text-input.component';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-acuerdo-confidencialidad',
@@ -13,5 +14,10 @@ import { TextInputComponent } from '../../atoms/text-input/text-input.component'
   styleUrl: './acuerdo-confidencialidad.component.css'
 })
 export class AcuerdoConfidencialidadComponent {
+  @Input() form: FormGroup | undefined;
+  
 
+  getControl(controlName: string): FormControl {
+    return this.form?.get(controlName) as FormControl;
+  }
 }

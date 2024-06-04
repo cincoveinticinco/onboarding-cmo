@@ -2,6 +2,21 @@ import { Component, HostListener } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { InitialDataComponent } from '../../molecules/initial-data/initial-data.component';
 import { BlackButtonComponent } from '../../atoms/black-button/black-button.component';
+import { DatosEmpresaComponent } from '../../molecules/datos-empresa/datos-empresa.component';
+import { DatosRepresentanteLegalComponent } from '../../molecules/datos-representante-legal/datos-representante-legal.component';
+import { DatosFacturaElectronicaComponent } from '../../molecules/datos-factura-electronica/datos-factura-electronica.component';
+import { DatosContabilidadComponent } from '../../molecules/datos-contabilidad/datos-contabilidad.component';
+import { DatosFiscalesComponent } from '../../molecules/datos-fiscales/datos-fiscales.component';
+import { DatosTesoreriaComponent } from '../../molecules/datos-tesoreria/datos-tesoreria.component';
+import { DatosContactoComercialComponent } from '../../molecules/datos-contacto-comercial/datos-contacto-comercial.component';
+import { DatosFinancierosComponent } from '../../molecules/datos-financieros/datos-financieros.component';
+import { AutorizacionDatosPersonalesComponent } from '../../molecules/autorizacion-datos-personales/autorizacion-datos-personales.component';
+import { PersonasExpuestasPoliticamenteComponent } from '../../molecules/personas-expuestas-politicamente/personas-expuestas-politicamente.component';
+import { DeclaracionPepComponent } from '../../molecules/declaracion-pep/declaracion-pep.component';
+import { DeclaracionSagrilaftComponent } from '../../molecules/declaracion-sagrilaft/declaracion-sagrilaft.component';
+import { AcuerdoConfidencialidadComponent } from '../../molecules/acuerdo-confidencialidad/acuerdo-confidencialidad.component';
+import { InformacionFinancieraComponent } from '../../molecules/informacion-financiera/informacion-financiera.component';
+import { PersonaDiligenciaFormularioComponent } from '../../molecules/persona-diligencia-formulario/persona-diligencia-formulario.component';
 
 @Component({
   selector: 'app-vinculacion-juridica',
@@ -10,7 +25,22 @@ import { BlackButtonComponent } from '../../atoms/black-button/black-button.comp
     ReactiveFormsModule,
     FormsModule,
     InitialDataComponent,
-    BlackButtonComponent
+    BlackButtonComponent,
+    DatosEmpresaComponent,
+    DatosRepresentanteLegalComponent,
+    DatosFacturaElectronicaComponent,
+    DatosContabilidadComponent,
+    DatosFiscalesComponent,
+    DatosTesoreriaComponent,
+    DatosContactoComercialComponent,
+    DatosFinancierosComponent,
+    AutorizacionDatosPersonalesComponent,
+    PersonasExpuestasPoliticamenteComponent,
+    DeclaracionPepComponent,
+    DeclaracionSagrilaftComponent,
+    AcuerdoConfidencialidadComponent,
+    InformacionFinancieraComponent,
+    PersonaDiligenciaFormularioComponent
   ],
   templateUrl: './vinculacion-juridica.component.html',
   styleUrls: ['./vinculacion-juridica.component.css']
@@ -20,9 +50,52 @@ export class VinculacionJuridicaComponent {
 
   constructor(private fb: FormBuilder) {
     this.juridicaForm = this.fb.group({
+      type: new FormControl('', [Validators.required]),
+      date: new FormControl('', [Validators.required]),
       name: new FormControl('', [Validators.required]),
-      tipoSolicitud: new FormControl('', [Validators.required]),
-      fechaSolicitud: new FormControl('', [Validators.required])
+      document: new FormControl('', [Validators.required]),
+      address: new FormControl('', [Validators.required]),
+      city: new FormControl('', [Validators.required]),
+      phone: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required]),
+      legal_representatives_name: new FormControl('', [Validators.required]),
+      f_document_representative: new FormControl('', [Validators.required]),
+      legal_representatives_phone: new FormControl('', [Validators.required]),
+      legal_representatives_email: new FormControl('', [Validators.required]),
+      electronic_billing_name: new FormControl('', [Validators.required]),
+      electronic_billing_email: new FormControl('', [Validators.required]),
+      electronic_billing_phone: new FormControl('', [Validators.required]),
+      accounting_responsible_name: new FormControl('', [Validators.required]),
+      accounting_responsible_phone: new FormControl('', [Validators.required]),
+      accounting_responsible_email: new FormControl('', [Validators.required]),
+      accounting_responsible_position: new FormControl('', [Validators.required]),
+      ciiu: new FormControl('', [Validators.required]),
+      simple_regime: new FormControl('', [Validators.required]),
+      self_withholding: new FormControl('', [Validators.required]),
+      big_contributor: new FormControl('', [Validators.required]),
+      treasury_responsible_name: new FormControl('', [Validators.required]),
+      treasury_responsible_phone: new FormControl('', [Validators.required]),
+      treasury_responsible_email: new FormControl('', [Validators.required]),
+      treasury_responsible_position: new FormControl('', [Validators.required]),
+      commercial_responsible_name: new FormControl('', [Validators.required]),
+      commercial_responsible_phone: new FormControl('', [Validators.required]),
+      commercial_responsible_email: new FormControl('', [Validators.required]),
+      last_close_assets: new FormControl('', [Validators.required]),
+      last_year_assets: new FormControl('', [Validators.required]),
+      last_close_liabilities: new FormControl('', [Validators.required]),
+      last_year_liabilities: new FormControl('', [Validators.required]),
+      last_close_income: new FormControl('', [Validators.required]),
+      last_year_income: new FormControl('', [Validators.required]),
+      last_close_equity: new FormControl('', [Validators.required]),
+      last_year_equity: new FormControl('', [Validators.required]),
+      last_close_expenses: new FormControl('', [Validators.required]),
+      last_year_expenses: new FormControl('', [Validators.required]),
+      is_pep: new FormControl('', [Validators.required]),
+      confidentiality_agreement_address: new FormControl('', [Validators.required]),
+      confidentiality_agreement_email: new FormControl('', [Validators.required]),
+      form_name: new FormControl('', [Validators.required]),
+      form_document: new FormControl('', [Validators.required]),
+      form_position: new FormControl('', [Validators.required]),
     });
   }
 
@@ -30,7 +103,7 @@ export class VinculacionJuridicaComponent {
   onFormSubmit(event: Event) {
     event.preventDefault();
     if (this.juridicaForm.valid) {
-      console.log(this.juridicaForm.value);
+      return;
     } else {
       Object.values(this.juridicaForm.controls).forEach((control) => {
         control.markAsTouched();
@@ -43,28 +116,14 @@ export class VinculacionJuridicaComponent {
     }
   }
 
-  setFormValue(controlName: string, value: string) {
-    const control = this.juridicaForm.get(controlName);
-    if (control) {
-      control.setValue(value);
-    }
-  }
-
   sendForm() {
     if (this.juridicaForm.valid) {
       console.log(this.juridicaForm.value);
     } else {
+      console.log(this.juridicaForm.value)
       Object.values(this.juridicaForm.controls).forEach((control) => {
         control.markAsTouched();
       });
     }
-  }
-
-  getErrorMessage(controlName: string): string | null {
-    const control = this.juridicaForm.get(controlName);
-    if (control?.hasError('required')) {
-      return 'Este campo es requerido';
-    }
-    return null;
   }
 }

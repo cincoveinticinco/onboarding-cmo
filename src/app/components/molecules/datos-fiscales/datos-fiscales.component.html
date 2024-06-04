@@ -1,10 +1,21 @@
 <app-subtitle [subtitle]="'datos fiscales'" />
 <div class="row">
-  <app-select-input [label]="'Códico Actividad Económica (CIIU)'" [options]="['1', '2', '3']" class="col-4"/>
+  <app-select-input [label]="'Códico Actividad Económica (CIIU)'" [options]="['1', '2', '3']" class="col-4" [control]="getControl('ciiu')" />
   <div class="col-4 align-end"> 
     <p><b>Actividad Económica Principal</b></p>
   </div>
-  <app-checkbox-input [label]="'¿Pertenece al régimen simple?'" class="col-12"/>
-  <app-checkbox-input [label]="'¿Es autoretenedor?'" class="col-12"/>
-  <app-checkbox-input [label]="'¿Es gran contribuyente?'" class="col-12"/>
+  <app-checkbox-input 
+    [label]="'¿Pertenece al régimen simple?'"
+    [control]="getControl('simple_regime')"
+    class="col-12"/>
+  <app-checkbox-input 
+    [label]="'¿Es autoretenedor?'" 
+    class="col-12"
+    [control]="getControl('self_withholding')"
+  />
+  <app-checkbox-input 
+    [label]="'¿Es gran contribuyente?'"
+    [control]="getControl('big_contributor')"
+    class="col-12"
+  />
 </div>

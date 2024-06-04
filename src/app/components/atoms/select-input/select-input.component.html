@@ -1,8 +1,19 @@
 <div class="input-container">
   <label>{{ label }}</label>
-  <small>{{ description }}</small>
+  @if(control.errors && (control.dirty || control.touched)) {
+    <small class="error">
+      {{
+        getErrors()
+      }}
+    </small>
+  } 
+  @if(!getErrors()){
+    <small class="description">
+      {{ description }}
+    </small>
+  }
   <select
-      formControlName="regimen_fiscal"
+    [formControl]="control"
       name="regimen_fiscal">
       <option disabled value="">Seleccione una opción</option>
       @for (opt of options; track opt) {
@@ -11,5 +22,4 @@
           <option disabled>No hay opciones para mostrar</option>
       }
   </select>
-  <!-- <ng-container *ngTemplateOutlet="errorTemplate; context:{'control': 'regimen_fiscal'}"></ng-container> -->
 </div>

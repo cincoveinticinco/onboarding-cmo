@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { SubtitleComponent } from '../../atoms/subtitle/subtitle.component';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-autorizacion-datos-personales',
@@ -11,5 +12,4 @@ import { SubtitleComponent } from '../../atoms/subtitle/subtitle.component';
   styleUrl: './autorizacion-datos-personales.component.css'
 })
 export class AutorizacionDatosPersonalesComponent {
-
 }

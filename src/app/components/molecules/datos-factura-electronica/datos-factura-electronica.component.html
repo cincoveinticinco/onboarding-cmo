@@ -2,14 +2,18 @@
 <div class="row">
   <app-text-input
     [label]="'Nombre Responsable'"
+    [control]="getControl('electronic_billing_name')"
     class="col-4"
   />
   <app-text-input
     [label]="'Celular'"
+    [control]="getControl('electronic_billing_phone')"
     class="col-4"
+
   />
   <app-text-input
     [label]="'Correo electrónico'"
+    [control]="getControl('electronic_billing_email')"
     class="col-4"
   />
 </div>

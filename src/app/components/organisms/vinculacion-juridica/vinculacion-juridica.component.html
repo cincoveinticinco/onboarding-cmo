@@ -1,26 +1,45 @@
 <form [formGroup]="juridicaForm" (ngSubmit)="sendForm()">
   <app-initial-data 
-    (setFormValue)="setFormValue($event.controlName, $event.value)"
+     [form]="juridicaForm"
+  />
+  <app-datos-empresa 
     [form]="juridicaForm"
   />
-
-  <!-- Uncomment these lines as needed for the form -->
-  <!-- <app-datos-empresa></app-datos-empresa> -->
-  <!-- <app-datos-representante-legal></app-datos-representante-legal> -->
-  <!-- <app-datos-factura-electronica></app-datos-factura-electronica> -->
-  <!-- <app-datos-contabilidad></app-datos-contabilidad> -->
-  <!-- <app-datos-fiscales></app-datos-fiscales> -->
-  <!-- <app-datos-tesoreria></app-datos-tesoreria> -->
-  <!-- <app-datos-contacto-comercial></app-datos-contacto-comercial> -->
-  <!-- <app-datos-financieros></app-datos-financieros> -->
-  <!-- <app-autorizacion-datos-personales></app-autorizacion-datos-personales> -->
-  <!-- <app-personas-expuestas-politicamente></app-personas-expuestas-politicamente> -->
-  <!-- <app-declaracion-pep></app-declaracion-pep> -->
-  <!-- <app-declaracion-sagrilaft></app-declaracion-sagrilaft> -->
-  <!-- <app-acuerdo-confidencialidad></app-acuerdo-confidencialidad> -->
-  <!-- <app-informacion-financiera></app-informacion-financiera> -->
-  <!-- <app-persona-diligencia-formulario></app-persona-diligencia-formulario> -->
-
+  <app-datos-representante-legal 
+    [form]="juridicaForm"
+  />
+  <app-datos-factura-electronica
+    [form]="juridicaForm"
+  />
+  <app-datos-contabilidad
+    [form]="juridicaForm"
+  />
+  <app-datos-fiscales
+    [form]="juridicaForm"
+  />
+  <app-datos-tesoreria
+    [form]="juridicaForm"
+  />
+  <app-datos-contacto-comercial
+    [form]="juridicaForm"
+  /> 
+  <app-autorizacion-datos-personales />
+  <app-personas-expuestas-politicamente
+    [form]="juridicaForm"
+  />
+  @if(juridicaForm.get('is_pep')?.value == '1'){
+    <app-declaracion-pep />
+  }
+  <app-declaracion-sagrilaft />
+  <app-acuerdo-confidencialidad
+    [form]="juridicaForm"
+  />
+  <app-informacion-financiera
+    [form]="juridicaForm"
+  />
+  <app-persona-diligencia-formulario
+    [form]="juridicaForm"
+  />
   <div class="row">
       <app-black-button
         [name]="'enviar formulario'"
