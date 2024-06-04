@@ -23,66 +23,66 @@
     class="col-4"></app-text-input>
   <app-checkbox-input 
     [label]="'¿Sufre de alguna enfermedad?'"
-    [controlName]="'suffers_illness'"
-    [control]="getControl('suffers_illness')" 
+    [controlName]="'illness'"
+    [control]="getControl('illness')" 
     class="col-12"
   />
-  @if(showDescription('suffers_illness')) {
+  @if(showDescription('illness')) {
     <app-text-input 
       [label]="'¿Cuál(es)?'"
-      [control]="getControl('illnesses')"
+      [control]="getControl('illness_description')"
       class="col-4"
     ></app-text-input>
   }
   <app-checkbox-input 
     [label]="'¿Toma algún medicamento?'"
-    [controlName]="'takes_medicine'"
-    [control]="getControl('takes_medicine')" 
+    [controlName]="'medicines'"
+    [control]="getControl('medicines')" 
     class="col-12"
   />
-  @if(showDescription('takes_medicine')) {
+  @if(showDescription('medicines')) {
     <app-text-input 
       [label]="'¿Cuál(es)?'"
-      [control]="getControl('medicines')"
+      [control]="getControl('medicines_description')"
       class="col-4"
     ></app-text-input>
   }
   <app-checkbox-input 
     [label]="'¿Sufre de alguna fobia?'"
-    [controlName]="'suffers_phobias'"
-    [control]="getControl('suffers_phobias')" 
+    [controlName]="'phobias'"
+    [control]="getControl('phobias')" 
     class="col-12"
   />
-  @if(showDescription('suffers_phobias')) {
+  @if(showDescription('phobias')) {
     <app-text-input 
       [label]="'¿Cuál(es)?'"
-      [control]="getControl('phobias')"
+      [control]="getControl('phobias_description')"
       class="col-4"
     ></app-text-input>
   }
   <app-checkbox-input 
     [label]="'¿Sufre de alergias?'"
-    [controlName]="'suffers_allergies'"
-    [control]="getControl('suffers_allergies')" 
+    [controlName]="'allergies'"
+    [control]="getControl('allergies')" 
     class="col-12"
   />
-  @if(showDescription('suffers_allergies')) {
+  @if(showDescription('allergies')) {
     <app-text-input 
       [label]="'¿Cuál(es)?'"
-      [control]="getControl('allergies')"
+      [control]="getControl('allergies_description')"
       class="col-4"
     ></app-text-input>
   }
   <app-checkbox-input 
     [label]="'¿Tiene alguna restricción alimenticia??'"
-    [controlName]="'has_food_restrictions'"
-    [control]="getControl('has_food_restrictions')"
+    [controlName]="'food_restrictions'"
+    [control]="getControl('food_restrictions')"
     class="col-12"
   />
-  @if(showDescription('has_food_restrictions')) {
+  @if(showDescription('food_restrictions')) {
     <app-text-input 
       [label]="'¿Cuál(es)?'"
-      [control]="getControl('food_restrictions')"
+      [control]="getControl('food_restrictions_description')"
       class="col-4"
     ></app-text-input>
   }

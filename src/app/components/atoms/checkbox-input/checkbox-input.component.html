@@ -1,9 +1,13 @@
 <div class="input-container">
-  <label class="large-txt">{{ label }}</label>
+  <label >{{ label }}</label>
+  <div *ngIf="control.errors && (control.dirty || control.touched)">
+    <small class="error">{{ getErrors() }}</small>
+  </div>
   <div class="input-choose-option">
     <label>
       <input
         name="{{ controlName }}"
+        (ngModelChange)="setDescriptionControl($event, controlName)"
         [formControl]="control"
         type="radio" 
         [value]="true"> Sí
@@ -12,12 +16,10 @@
       <input
         name="{{ controlName }}"
         [formControl]="control"
+        (ngModelChange)="setDescriptionControl($event, controlName)"
         type="radio" 
         [value]="false"> No
     </label>
-  </div>
-  <div *ngIf="control.errors && (control.dirty || control.touched)">
-    <small class="error">{{ getErrors() }}</small>
   </div>
   <div *ngIf="!getErrors()">
     <small class="description">{{ description }}</small>
