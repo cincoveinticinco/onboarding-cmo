@@ -1,6 +1,17 @@
 <app-subtitle [subtitle]="'datos de contacto en caso de emergencia'"></app-subtitle>
 <div class="row">
-  <app-text-input [label]="'Nombre del contacto en caso de emergencia'" class="col-4"></app-text-input>
-  <app-text-input [label]="'Teléfono de contacto'" class="col-4"></app-text-input>
-  <app-text-input [label]="'Parentesco'" class="col-4"></app-text-input>
+  <app-text-input 
+    [label]="'Nombre del contacto en caso de emergencia'" 
+    [control]="getControl('emergency_name')"
+    class="col-4"
+  ></app-text-input>
+  <app-text-input 
+    [label]="'Teléfono de contacto'"
+    [control]="getControl('emergency_phone')"
+    class="col-4"></app-text-input>
+  <app-text-input 
+    [label]="'Parentesco'"
+    [control]="getControl('emergency_relationship')"
+    class="col-4"
+  ></app-text-input>
 </div>

@@ -7,13 +7,14 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './checkbox-input.component.html',
-  styleUrl: './checkbox-input.component.css'
+  styleUrls: ['./checkbox-input.component.css']
 })
 export class CheckboxInputComponent {
   @Input() label: string | undefined;
   @Input() control: FormControl = new FormControl();
+  @Input() controlName: string = '';
   @Input() description: string = '';
-
+  
   getErrors(): string | null {
     const touched = this.control.touched;
     if (this.control.hasError('required') && touched) {

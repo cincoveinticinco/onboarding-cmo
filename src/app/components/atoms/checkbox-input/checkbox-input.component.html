@@ -1,27 +1,25 @@
 <div class="input-container">
-	<label class="large-txt">{{ label }}</label>
-  @if(control.errors && (control.dirty || control.touched)) {
-    <small class="error">
-      {{
-        getErrors()
-      }}
-    </small>
-  } 
-  @if(!getErrors()){
-    <small class="description">
-      {{ description }}
-    </small>
-  }
-	<div class="input-choose-option">
-			<label><input 
+  <label class="large-txt">{{ label }}</label>
+  <div class="input-choose-option">
+    <label>
+      <input
+        name="{{ controlName }}"
         [formControl]="control"
         type="radio" 
-        value="1"> Si</label>
-			<label><input 
+        [value]="true"> Sí
+    </label>
+    <label>
+      <input
+        name="{{ controlName }}"
         [formControl]="control"
         type="radio" 
-        value="0"
-      > No</label>
-	</div>
+        [value]="false"> No
+    </label>
+  </div>
+  <div *ngIf="control.errors && (control.dirty || control.touched)">
+    <small class="error">{{ getErrors() }}</small>
+  </div>
+  <div *ngIf="!getErrors()">
+    <small class="description">{{ description }}</small>
+  </div>
 </div>
-

@@ -21,4 +21,8 @@ export class DatosSaludComponent {
   getControl(controlName: string): FormControl {
     return this.form?.get(controlName) as FormControl;
   }
+
+  showDescription(controlName: string): boolean {
+    return this.getControl(controlName).value
+  }
 }

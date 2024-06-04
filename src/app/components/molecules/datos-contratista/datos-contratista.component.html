@@ -2,48 +2,59 @@
 <div class="row">
   <app-text-input
     [label]="'Nombres y Apellidos Completos'"
-    [description]="'(tal como aparece en su documento de identidad)'"
-    class="col-10"
+    [control]="getControl('name')"
+    [description]="'(Tal como aparece en su documento de identidad)'"
+    class="col-11"
   />
   <app-select-input
     [label]="'Tipos de documento'"
+    [control]="getControl('document_type')"
     class="col-4"
   />
   <app-text-input
     [label]="'Número de documento'"
-    class="col-6"
+    [control]="getControl('document')"
+    class="col-7"
     [description]="'Escriba el documento con el que este registrado en la cuenta bancaria que registro para el pago'"
   />
   <app-text-input
     [label]="'Numero Permiso Especial de Permanencia para el Fomento de la Formalización (PEPFF)'"
-    class="col-10"
+    [control]="getControl('pepff')"
+    class="col-11"
   />
   <app-select-input
     [label]="'Código Actividad Económica (CIIU)'"
+    [control]="getControl('ciiu')"
     class="col-4"
   />
   <app-text-input
     [label]="'Actividad económica principal'"
-    class="col-6"
+    [control]="getControl('economic_activity')"
+    class="col-7"
   />
   <app-text-input
     [label]="'Dirección de Residencia'"
+    [control]="getControl('address')"
     class="col-12"
   />
   <app-text-input
     [label]="'Ciudad'"
+    [control]="getControl('city')"
     class="col-4"
   />
   <app-text-input
     [label]="'Departamento'"
+    [control]="getControl('department')"
     class="col-4"
   />
   <app-text-input
     [label]="'Celular / Teléfono de Contacto'"
+    [control]="getControl('phone')"
     class="col-4"
   />
   <app-text-input
     [label]="'Correo Electrónico del Contratista'"
+    [control]="getControl('email')"
     class="col-4"
   />
 </div>
