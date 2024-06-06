@@ -1,3 +1,4 @@
+<app-panel-buttons (saveForm)="saveForm()"/>
 <form [formGroup]="juridicaForm" (ngSubmit)="sendForm()">
   <app-initial-data [form]="juridicaForm" />    
   <app-datos-empresa [form]="juridicaForm" />

@@ -43,7 +43,9 @@ export class AuthService {
   }
 
   getValueToken() {
+   
       const value = localStorage.getItem('id_vendor_token');
+      console.log('value', value)
       if (value) 
       return value;
       else return null;

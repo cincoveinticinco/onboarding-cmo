@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, EventEmitter, HostListener, Output } from '@angular/core';
 import { InitialDataComponent } from '../../molecules/initial-data/initial-data.component';
 import { DatosEmpresaComponent } from '../../molecules/datos-empresa/datos-empresa.component';
 import { DatosContratistaComponent } from '../../molecules/datos-contratista/datos-contratista.component';
@@ -13,6 +13,7 @@ import { AutorizacionDatosPersonalesComponent } from '../../molecules/autorizaci
 import { BlackButtonComponent } from '../../atoms/black-button/black-button.component';
 import { FirmaComponent } from '../../molecules/firma/firma.component';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { PanelButtonsComponent } from '../../molecules/panel-buttons/panel-buttons.component';
 
 @Component({
   selector: 'app-vinculacion-natural',
@@ -32,13 +33,15 @@ import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, 
     AcuerdoConfidencialidadComponent,
     AutorizacionDatosPersonalesComponent,
     FirmaComponent,
-    BlackButtonComponent
+    BlackButtonComponent,
+    PanelButtonsComponent
   ],
   templateUrl: './vinculacion-natural.component.html',
   styleUrl: './vinculacion-natural.component.css'
 })
 export class VinculacionNaturalComponent {
   naturalForm: FormGroup;
+  @Output() notify: EventEmitter<any> = new EventEmitter();
 
   constructor(private fb: FormBuilder) {
 
@@ -111,11 +114,18 @@ export class VinculacionNaturalComponent {
   sendForm() {
     if (this.naturalForm.valid) {
       console.log(this.naturalForm.value);
+      this.notify.emit(this.naturalForm);
     } else {
       console.log(this.naturalForm.value)
       Object.values(this.naturalForm.controls).forEach((control) => {
         control.markAsTouched();
       });
     }
+  }
+
+  saveForm() {
+    console.log('SENDING FORM TO SAVE ....')
+    console.log(this.naturalForm)
+    this.notify.emit(this.naturalForm);
   }
 }

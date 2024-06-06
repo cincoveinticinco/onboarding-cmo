@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output, input } from '@angular/core';
 import { BlackButtonComponent } from '../../atoms/black-button/black-button.component';
 
 @Component({
@@ -11,5 +11,6 @@ import { BlackButtonComponent } from '../../atoms/black-button/black-button.comp
   styleUrl: './panel-buttons.component.css'
 })
 export class PanelButtonsComponent {
+  @Output() saveForm: EventEmitter<any> = new EventEmitter();
 
 }

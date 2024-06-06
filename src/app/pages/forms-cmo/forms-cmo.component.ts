@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormHeaderComponent } from '../../components/molecules/form-header/form-header.component';
 import { TIPOPERSONA } from '../../shared/interfaces/typo_persona';
 import { PanelButtonsComponent } from '../../components/molecules/panel-buttons/panel-buttons.component';
 import { VinculacionNaturalComponent } from '../../components/organisms/vinculacion-natural/vinculacion-natural.component';
+import { Router } from '@angular/router';
 import { VinculacionJuridicaComponent } from '../../components/organisms/vinculacion-juridica/vinculacion-juridica.component';
-import { PersonasExpuestasPoliticamenteComponent } from '../../components/molecules/personas-expuestas-politicamente/personas-expuestas-politicamente.component';
+import { VendorService } from '../../services/vendor.service';
+import { GlobalService } from '../../services/global.service';
 
 @Component({
   selector: 'app-forms-cmo',
@@ -22,9 +24,20 @@ export class FormsCmoComponent {
   personEnnum = TIPOPERSONA;
   typePerson: number = TIPOPERSONA.Natural;
   title: string = '';
+
+  constructor(private _vS: VendorService, private _gS: GlobalService, private router: Router) {
+  }
   
   ngOnInit() {
     this.getTitle();
+  }
+
+  sendForm(ev: any) {
+    console.log('ev', ev)
+    const formData = this._gS.setVinculationForm(ev.value);
+    this._vS.updateVendor(formData).subscribe((response: any) => {
+        console.log('response', response);
+    });
   }
   
   getTitle() {

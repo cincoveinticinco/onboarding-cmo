@@ -1,3 +1,5 @@
+
+<app-panel-buttons (saveForm)="saveForm()"/>
 <form [formGroup]="naturalForm" (ngSubmit)="sendForm()">
   <app-initial-data [form]="naturalForm" />
   <app-datos-contratista [form]="naturalForm"/>

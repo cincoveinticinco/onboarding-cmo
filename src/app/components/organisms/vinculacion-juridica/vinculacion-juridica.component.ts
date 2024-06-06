@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, EventEmitter, HostListener, Output } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { InitialDataComponent } from '../../molecules/initial-data/initial-data.component';
 import { BlackButtonComponent } from '../../atoms/black-button/black-button.component';
@@ -17,6 +17,7 @@ import { DeclaracionSagrilaftComponent } from '../../molecules/declaracion-sagri
 import { AcuerdoConfidencialidadComponent } from '../../molecules/acuerdo-confidencialidad/acuerdo-confidencialidad.component';
 import { InformacionFinancieraComponent } from '../../molecules/informacion-financiera/informacion-financiera.component';
 import { PersonaDiligenciaFormularioComponent } from '../../molecules/persona-diligencia-formulario/persona-diligencia-formulario.component';
+import { PanelButtonsComponent } from '../../molecules/panel-buttons/panel-buttons.component';
 
 @Component({
   selector: 'app-vinculacion-juridica',
@@ -40,13 +41,16 @@ import { PersonaDiligenciaFormularioComponent } from '../../molecules/persona-di
     DeclaracionSagrilaftComponent,
     AcuerdoConfidencialidadComponent,
     InformacionFinancieraComponent,
-    PersonaDiligenciaFormularioComponent
+    PersonaDiligenciaFormularioComponent,
+    PanelButtonsComponent
   ],
   templateUrl: './vinculacion-juridica.component.html',
   styleUrls: ['./vinculacion-juridica.component.css']
 })
 export class VinculacionJuridicaComponent {
   juridicaForm: FormGroup;
+  @Output() notify: EventEmitter<any> = new EventEmitter();
+  @Output() save: EventEmitter<any> = new EventEmitter();
 
   constructor(private fb: FormBuilder) {
     this.juridicaForm = this.fb.group({
@@ -119,11 +123,18 @@ export class VinculacionJuridicaComponent {
   sendForm() {
     if (this.juridicaForm.valid) {
       console.log(this.juridicaForm.value);
+      // this.notify.emit(this.juridicaForm);
     } else {
       console.log(this.juridicaForm.value)
       Object.values(this.juridicaForm.controls).forEach((control) => {
         control.markAsTouched();
       });
     }
+  }
+
+  saveForm() {
+    console.log('SENDING FORM TO SAVE ....')
+    console.log(this.juridicaForm)
+    this.notify.emit(this.juridicaForm);
   }
 }

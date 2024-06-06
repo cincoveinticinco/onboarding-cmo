@@ -61,7 +61,9 @@ export class VendorService {
   }
 
   updateVendor(values: any) {
-    return this.http.post(`${environment.apiUrl}dynamo/updateVendor`, values, { headers: this.headers}).pipe(
+    this.setHeaders();
+    console.log(this.headers)
+    return this.http.post(`${environment.apiUrl}cmo/update_vendor`, values, { headers: this.headers}).pipe(
       map((response: any) => response));
   }
 
