@@ -10,23 +10,23 @@ import { shareReplay, tap } from 'rxjs';
 export class AuthService {
   
   private loginApiUrl: string = environment.apiUrlFront;
-  crewId: any = null;
+  vendorId: any = null;
  
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private http: HttpClient, private router: Router, private route: ActivatedRoute) { }
  
-  loginCrew(email: string, token: string, crew_id: any){
-    return this.http.post(`${environment.apiUrl}cmo/validateToken`, {token: token, email: email, id: crew_id}).pipe(
-      tap( res => this.setCrewSession(res)),
+  loginVendor(email: string, token: string, vendor_id: any){
+    return this.http.post(`${environment.apiUrl}cmo/validate_token`, {token: token, email: email, id: vendor_id}).pipe(
+      tap( res => this.setVendorSession(res)),
       shareReplay(1)
     )
   }
 
-  private setCrewSession(authResult: any){
-    localStorage.setItem('id_crew_token', authResult.crew_token);
+  private setVendorSession(authResult: any){
+    localStorage.setItem('id_vendor_token', authResult.vendor_token);
   }
 
-  generateCrewToken(email_crew: any) {
-    return this.http.post(`${environment.apiUrl}cmo/sendToken`, {email: email_crew}).pipe(
+  generateVendorToken(email_vendor: any) {
+    return this.http.post(`${environment.apiUrl}cmo/send_token`, {email: email_vendor}).pipe(
       shareReplay(1)
     )
   } 
@@ -38,22 +38,22 @@ export class AuthService {
   }
 
   async getToken() {
-    const value = localStorage.getItem('id_crew_token');
+    const value = localStorage.getItem('id_vendor_token');
     return value;
   }
 
   getValueToken() {
-      const value = localStorage.getItem('id_crew_token');
+      const value = localStorage.getItem('id_vendor_token');
       if (value) 
       return value;
       else return null;
   }
 
-  logOut(crewId: any) {
+  logOut(vendorId: any) {
     this.route.params.subscribe((params: any) => {
-      this.crewId = params.id;
+      this.vendorId = params.id;
       localStorage.clear();
-      window.location.href = this.loginApiUrl + 'home/' + crewId;
+      window.location.href = this.loginApiUrl + 'home/' + vendorId;
     })
   }
 }

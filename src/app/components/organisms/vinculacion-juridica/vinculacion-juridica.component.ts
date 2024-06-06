@@ -91,11 +91,11 @@ export class VinculacionJuridicaComponent {
       last_close_expenses: new FormControl('', [Validators.required]),
       last_year_expenses: new FormControl('', [Validators.required]),
       is_pep: new FormControl('', [Validators.required]),
-      confidentiality_agreement_address: new FormControl('', [Validators.required]),
-      confidentiality_agreement_email: new FormControl('', [Validators.required]),
-      form_name: new FormControl('', [Validators.required]),
-      form_document: new FormControl('', [Validators.required]),
-      form_position: new FormControl('', [Validators.required]),
+      confidential_responsible_address: new FormControl('', [Validators.required]),
+      confidential_responsible_email: new FormControl('', [Validators.required]),
+      form_responsible_name: new FormControl('', [Validators.required]),
+      form_responsible_document: new FormControl('', [Validators.required]),
+      form_responsible_position: new FormControl('', [Validators.required]),
     });
   }
 

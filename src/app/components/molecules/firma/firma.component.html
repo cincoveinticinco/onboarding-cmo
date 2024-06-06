@@ -1,10 +1,16 @@
 
 <div class="row">
-  <app-text-input [label]="'Nombres y Apellidos'" class="col-6"></app-text-input>
-  <app-text-input [label]="'Número de Identificación'" class="col-4"></app-text-input>
+  <app-text-input 
+    [label]="'Nombres y Apellidos'"
+    [control]="getControl('form_responsible_name')"
+    class="col-6"></app-text-input>
+  <app-text-input 
+    [label]="'Número de Identificación'"
+    [control]="getControl('form_responsible_document')"
+    class="col-4"></app-text-input>
 </div>
 <div class="row">
-  <label class="col-12">Firma Representante Legal</label>
+  <label class="col-12">Firma</label>
   <app-filebox 
     class="col-4"
   />

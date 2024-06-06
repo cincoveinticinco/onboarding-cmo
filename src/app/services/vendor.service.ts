@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from './../../environments/environment';
+import { environment } from '../../environments/environment';
 import { map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { Observable } from 'rxjs';
@@ -8,12 +8,12 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class CrewService {
+export class VendorService {
 
   tokenSession: any = null;
   private headers: HttpHeaders | undefined;
   private _generalForm: any = null;
-  private _crewId: any = null;
+  private _vendorId: any = null;
   private _documentsList: any[] = [];
 
   setGeneralForm(data: any) {
@@ -25,13 +25,13 @@ export class CrewService {
     return this._generalForm;
   }
 
-  setCrewId(data: any) {
-    this._crewId = null;
-    this._crewId = data;
+  setVendorId(data: any) {
+    this._vendorId = null;
+    this._vendorId = data;
   }
 
-  getCrewId() {
-    return this._crewId;
+  getVendorId() {
+    return this._vendorId;
   }
 
   setDocumentsList(data: any[]) {
@@ -51,33 +51,33 @@ export class CrewService {
     });
   }
 
-  getCrewInfo(crew_id: any) {
+  getVendorInfo(vendor_id: any) {
     this.setHeaders();
-    return this.http.get(`${environment.apiUrl}dynamo/getDetailCrewCast`, {
+    return this.http.get(`${environment.apiUrl}dynamo/getDetailVendor`, {
       headers: this.headers,
       params: new HttpParams()
-        .set('crew_id', crew_id),
+        .set('vendor_id', vendor_id),
     });
   }
 
-  updateCrewCast(values: any) {
-    return this.http.post(`${environment.apiUrl}dynamo/updateCrewCast`, values, { headers: this.headers}).pipe(
+  updateVendor(values: any) {
+    return this.http.post(`${environment.apiUrl}dynamo/updateVendor`, values, { headers: this.headers}).pipe(
       map((response: any) => response));
   }
 
-  getCrewEmail(crew_id: any) {
-    return this.http.get(`${environment.apiUrl}cmo/get_crew_and_cast_id`, {
+  getVendorEmail(vendor_id: any) {
+    return this.http.get(`${environment.apiUrl}cmo/get_vendor_id`, {
       params: new HttpParams()
-        .set('id', crew_id)
+        .set('id', vendor_id)
     });
   }
 
-  getVinculationInfo(crew_id: any) {
+  getVinculationInfo(vendor_id: any) {
     this.setHeaders();
-    return this.http.get(`${environment.apiUrl}dynamo/getDetailCrewCastDocuments`, {
+    return this.http.get(`${environment.apiUrl}dynamo/getDetailVendorDocuments`, {
       headers: this.headers,
       params: new HttpParams()
-        .set('crew_id', crew_id),
+        .set('vendor_id', vendor_id),
     });
   }
 
@@ -89,7 +89,7 @@ export class CrewService {
 
   updateVinculation(values: any) {
     this.setHeaders();
-    return this.http.post(`${environment.apiUrl}dynamo/updateDetailCrewCastDocuments`, values, { headers: this.headers }).pipe(
+    return this.http.post(`${environment.apiUrl}dynamo/updateDetailVendorDocuments`, values, { headers: this.headers }).pipe(
       map((response: any) => response));
   }
 
@@ -121,15 +121,15 @@ export class CrewService {
 		return this.http.request(req);
 	}
 
-  updateCrewDocument(formData: any){
+  updateVendorDocument(formData: any){
     this.setHeaders();
-    return this.http.post(`${environment.apiUrl}dynamo/addDocumentCrew`, {...formData}, { headers: this.headers })
+    return this.http.post(`${environment.apiUrl}dynamo/addDocumentVendor`, {...formData}, { headers: this.headers })
     .pipe(map( response => response))
   }
 
-  deleteCrewDocument(formData: any){
+  deleteVendorDocument(formData: any){
     this.setHeaders();
-    return this.http.post(`${environment.apiUrl}dynamo/deleteDocumentCrew`, {...formData}, { headers: this.headers })
+    return this.http.post(`${environment.apiUrl}dynamo/deleteDocumentVendor`, {...formData}, { headers: this.headers })
     .pipe(map( response => response))
   }
 

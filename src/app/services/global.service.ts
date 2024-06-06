@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { CrewService } from './crew.service';
+import { VendorService } from './vendor.service';
 import { Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { info } from 'console';
 
 @Injectable({
   providedIn: 'root'
@@ -252,389 +253,181 @@ export class GlobalService {
     'Zimbabuense',
   ];
 
-  setInitialFormMx(typePerson: any, data: any) {
-    var formData = {
-      crew_id: this._cS.getCrewId(),
-      f_document_type_id: data['f_document_type_id'],
-      name: data['name'],
-      document: data['document'],
-      nationality: data['pais'] != "0" ? data['pais'] : null,
-      telephone: data['telefono'],
-      address: data['direccion'],
-      population: data['colonia'],
-      f_public_admin_mex_type_id: data['alcaldia'],
-      city: data['ciudad'],
-      info_add_address: data['codigo_postal'],
-      birth_date: data['fecha_nacimiento'],
-      genders_id: data['genero_id'] != "0" ? data['genero_id'] : null,
-      info_additional: [
-        {
-          "vendor_inf_add_type_id": 12, // Madre padre
-          "value": data[('madre_padre')],
-          "description": data[('madre_padre_description')]  // description
-        },
-        {
-          "vendor_inf_add_type_id": 14, // Información futura 100
-          "value": data[('informacion_futura')]
-        },
-        {
-          "vendor_inf_add_type_id": 16, // Datos otros 103
-          "value": data[('datos_otros')]
-        },
-        {
-          "vendor_inf_add_type_id": 17, // Permisos eventos 101
-          "value": data[('permisos_eventos')]
-        },
-        {
-          "vendor_inf_add_type_id": 18, // Vinculo
-          "value": data[('vinculo')],
-          "description": data[('vinculo_description')]
-        },
-        {
-          "vendor_inf_add_type_id": 20, // Relación
-          "value": data[('relacion')],
-          "description": data[('relacion_description')]
-        },
-        {
-          "vendor_inf_add_type_id": 23, // Restricción
-          "value": data[('restriccion')],
-          "description": data[('restriccion_description')]
-        },
-        {
-          "vendor_inf_add_type_id": 24, // alergia 
-          "value": data[('alergia')],
-          "description": data[('alergia_description')]
-        },
-        {
-          "vendor_inf_add_type_id": 26, // Autorización de medios 102
-          "value": data[('autorizacion_media')]
-        },
-        {
-          "vendor_inf_add_type_id": 104, // Verificacion datos, nuevo campo
-          "value": data[('verificacion_datos')],
-        },
-        {
-          "vendor_inf_add_type_id": 105, // REPSE
-          "value": data[('repse')],
-          "description": data[('repse_register_description')]
-        }
-      ],
-      emergency_contact_name: data[('nombre_emergencia')],
-      emergency_contact_telephone: data[('telefono_emergencia')],
-      blood_type_id: data[('grupo_sanguineo')] != "0" ? data[('grupo_sanguineo')] : null,
-      occupation: data[('profesion')], // verificar
-      bank_branch: data[('nombre_banco')],
-      bank_key: data[('numero_cuenta')],
-      account_clabe: data[('cuenta_clabe')], // NO EXISTE LLAVE
-      f_contractor_regime_types_id: data[('regimen_fiscal')],
-      
-      // Moral person extra data
-
-      vendor_economic: data[('actividad_empresa')],
-      legal_representatives_name: data[('representante_legal')] || null,
-      city_representative: data[('f_nacionalidad_representative')] || null,
-      f_document_representative: data[('f_document_representative')] || null,
-      lr_actor: data['lr_actor'] || null,
-      responsible_responsibles_name: data[('persona_servicio_name_description')] || null,
-      responsible_responsibles_document: data[('responsible_responsibles_document')],
-      responsible_city: data[('persona_servicio_nacionalidad_description')],
-      responsible_responsibles_email: data[('persona_servicio_email_description')],
-    }
-    return formData
-  }
-
-  setInitialForm(typePerson: any, data: any) {
-    var formData = {
-      crew_id: this._cS.getCrewId(),
-      name: data['name'],
-      f_vendor_type_id: typePerson,
-      document: data['document'],
-      country_id: data['pais_id'] != "0" ? data['pais_id'] : null,
-      expedition_place: data['lugar_expedicion'],
-      f_vendor_economic_act_id: data['actividad_economica_id'] != "0" ? data['actividad_economica_id'] : null,
-      d_industry_id: data['industria_id'] != "0" ? data['industria_id'] : null,
-      d_jurisdiction_id: data['jurisdiccion_id'] != "0" ? data['jurisdiccion_id'] : null,
-      nationality: data['nacionalidad'],
-      legal_representatives_name: data['representante_legal'],
-      f_document_representative: data['f_document_representative'],
-      city_representative: data['city_representative'],
-      responsible_responsibles_name: data['responsible_responsibles_name'],
-      responsible_responsibles_document: data['responsible_responsibles_document'],
-      responsible_responsibles_email: data['responsible_responsibles_email'],
-      responsible_f_document_type_id: data['responsible_f_document_type_id'],
-      pep: data['pep'],
-      pep_description: data['pep_description'],
-      actor_pep: data['actor_pep'],
-      actor_name: data['actor_name'],
-      actor_document: data['actor_document'],
-      manager_name: data['manager_name'],
-      manager_email: data['manager_email'],
-      manager_telephone: data['manager_telephone'],
-      actor_pep_description: data['actor_pep_description'],
-      lr_actor: data['lr_actor']
-    }
-    return formData;
-  }
-
   setVinculationForm(data: any) {
     var formData = {
-      crew_id: this._cS.getCrewId(),
-      artistic_name: data[('artistic_name')],
-      birth_date: data[('fecha_nacimiento')],
-      nationality: data[('nacionalidad')],
-      genders_id: data[('genero_id')] != "0" ? data[('genero_id')] : null,
-      address: data[('direccion')],
-      city: data[('ciudad')],
-      telephone: data[('telefono')],
+      name: data[('name')],
+      f_document_type_id: data[('document_type_id')],
+      document: data[('document')],
+      ciiu: data[('ciiu')],
+      f_vendor_economic_act_id: data[('economic_activity_id')],
+      address: data[('address')],
+      city: data[('city')],
+      department: data[('department')],
+      telephone: data[('telephone')],
+      email: data[('email')],
+      emergency_contact_name: data[('emergency_contact_name')],
+      emergency_contact_telephone: data[('emergency_contact_telephone')],
+      emergency_contact_kinship: data[('emergency_contact_kinship')],
       eps: data[('eps')],
       afp: data[('pension')],
-      children_number: data[('madre_padre_description')],
-      occupation: data[('profesion')],
-      emergency_contact_name: data[('nombre_emergencia')],
-      emergency_contact_telephone: data[('telefono_emergencia')],
-      bank_branch: data[('nombre_banco')],
-      bank_key: data[('numero_cuenta')],
-      f_payment_regime_methods_id: data[('pago_medio_id')] != "0" ? data[('pago_medio_id')] : null,
-      blood_type_id: data[('grupo_sanguineo')] != "0" ? data[('grupo_sanguineo')] : null,
-      bank_account_type_id: data[('type_cuenta_id')] != "0" ? data[('type_cuenta_id')] : null,
-      occupational_risk_administrators_id: data[('arl_id')] != "0" ? data[('arl_id')] : null,
-      f_type_contributing_epses_id: data[('eps_id')] != "0" ? data[('eps_id')] : null,
-      f_contractor_regime_types_id: data[('type_regimen_id')] != "0" ? data[('type_regimen_id')] : null,
-      f_type_of_company_regimes_id: data[('type_crew_id')] != "0" ? data[('type_crew_id')] : null,
+      occupational_risk_administrators_id: data[('arl')],
+      legal_representatives_name: data[('legal_representatives_name')],
+      legal_representatives_telephone: data[('legal_representatives_telephone')],
+      legal_representatives_email: data[('legal_representatives_email')],
+      electronic_billing_name: data[('electronic_billing_name')],
+      electronic_billing_email: data[('electronic_billing_email')],
+      electronic_billing_telephone: data[('electronic_billing_telephone')],
+      accounting_responsible_name: data[('accounting_responsible_name')],
+      accounting_responsible_telephone: data[('accounting_responsible_telephone')],
+      accounting_responsible_email: data[('accounting_responsible_email')],
+      accounting_responsible_position: data[('accounting_responsible_position')],
+      treasury_responsible_name: data[('treasury_responsible_name')],
+      treasury_responsible_telephone: data[('treasury_responsible_telephone')],
+      treasury_responsible_email: data[('treasury_responsible_email')],
+      treasury_responsible_position: data[('treasury_responsible_position')],
+      commercial_responsible_name: data[('commercial_responsible_name')],
+      commercial_responsible_telephone: data[('commercial_responsible_telephone')],
+      commercial_responsible_email: data[('commercial_responsible_email')],
+      confidential_responsible_address: data[('confidential_responsible_address')],
+      confidential_responsible_email: data[('confidential_responsible_email')],
+      last_close_assets: data[('last_close_assets')],
+      last_year_assets: data[('last_year_assets')],
+      last_close_liabilities: data[('last_close_liabilities')],
+      last_year_liabilities: data[('last_year_liabilities')],
+      last_close_income: data[('last_close_income')],
+      last_year_income: data[('last_year_income')],
+      last_close_equity: data[('last_close_equity')],
+      last_year_equity: data[('last_year_equity')],
+      last_close_expenses: data[('last_close_expenses')],
+      last_year_expenses: data[('last_year_expenses')],
+      is_pep: data[('is_pep')],
       info_additional: [
         {
-          "vendor_inf_add_type_id": 12,
-          "value": data[('madre_padre')]
+          info_additional_type_id: 110,
+          value: data[('illness')],
+          description: data[('illness_description')]
         },
         {
-          "vendor_inf_add_type_id": 13,
-          "value": data[('mascota')]
+          info_additional_type_id: 111,
+          value: data[('medicines')],
+          description: data[('medicines_description')]
         },
         {
-          "vendor_inf_add_type_id": 14,
-          "value": data[('informacion_futura')]
+          info_additional_type_id: 112,
+          value: data[('allergy')],
+          description: data[('allergy_description')]
         },
         {
-          "vendor_inf_add_type_id": 15,
-          "value": data[('permisos_entidades')]
+          info_additional_type_id: 113,
+          value: data[('food_restrictions')],
+          description: data[('food_restrictions_description')]
         },
         {
-          "vendor_inf_add_type_id": 16,
-          "value": data[('datos_otros')]
+          info_additional_type_id: 114,
+          value: data[('phobias')],
+          description: data[('phobias_description')]
         },
         {
-          "vendor_inf_add_type_id": 17,
-          "value": data[('permisos_eventos')]
+          info_additional_type_id: 115,
+          value: data[('income_tax_declarant')],
+          description: data[('income_tax_declarant_description')]
         },
         {
-          "vendor_inf_add_type_id": 18,
-          "value": data[('vinculo')],
-          "description": data[('vinculo_description')]
+          info_additional_type_id: 116,
+          value: data[('dependents')],
+          description: data[('dependents_description')]
         },
         {
-          "vendor_inf_add_type_id": 20,
-          "value": data[('relacion')],
-          "description": data[('relacion_description')]
+          info_additional_type_id: 117,
+          value: data[('prepaid_medicine')],
+          description: data[('prepaid_medicine_description')]
         },
         {
-          "vendor_inf_add_type_id": 23,
-          "value": data[('restriccion')],
-          "description": data[('restriccion_description')]
+          info_additional_type_id: 118,
+          value: data[('mortgage_credit')],
+          description: data[('mortgage_credit_description')]
         },
         {
-          "vendor_inf_add_type_id": 24,
-          "value": data[('alergia')],
-          "description": data[('alergia_description')]
+          info_additional_type_id: 119,
+          value: data[('voluntary_contributions')],
+          description: data[('voluntary_contributions_description')]
         },
         {
-          "vendor_inf_add_type_id": 26,
-          "value": data[('autorizacion_media')]
+          info_additional_type_id: 120,
+          value: data[('afc_account')],
+          description: data[('afc_account_description')]
         },
         {
-          "vendor_inf_add_type_id": 27,
-          "value": data[('payroll')],
-          "description": data[('payroll_description')]
+          info_additional_type_id: 121,
+          value: data[('vat_responsible')],
+          description: data[('vat_responsible_description')]
         },
         {
-          "vendor_inf_add_type_id": 58,
-          "value": data[('informacion_futura_actor')]
+          "vendor_inf_add_type_id": 122,
+          "value": data[('simple_regime')]
         },
         {
-          "vendor_inf_add_type_id": 59,
-          "value": data[('autorizacion_media_actor')]
+          "vendor_inf_add_type_id": 123,
+          "value": data[('self_withholding')]
         },
         {
-          "vendor_inf_add_type_id": 60,
-          "value": data[('permisos_entidades_actor')]
-        },
-        {
-          "vendor_inf_add_type_id": 61,
-          "value": data[('datos_otros_actor')]
-        },
-        {
-          "vendor_inf_add_type_id": 62,
-          "value": data[('permisos_eventos_actor')]
-        },
-        {
-          "vendor_inf_add_type_id": 63,
-          "value": data[('vinculo_actor')],
-          "description": data[('vinculo_description_actor')]
-        },
-        {
-          "vendor_inf_add_type_id": 65,
-          "value": data[('relacion_actor')],
-          "description": data[('relacion_description_actor')]
-        },
+          "vendor_inf_add_type_id": 124,
+          "value": data[('big_contributor')]
+        }
       ]
     }
-    return formData;
   }
 
-  setEditInitialForm(form: any, crew: any) {
-    form.get('name')?.setValue(crew?.name || '');
-    form.get('document_type_id')?.setValue(crew?.f_document_type_id || 0);
-    form.get('document')?.setValue(crew?.document || '');
-    form.get('lugar_expedicion')?.setValue(crew?.expedition_place || '');
-    form.get('nacionalidad')?.setValue(crew?.nationality || '');
-    form.get('pais_id')?.setValue(crew?.country_id || 0);
-    form.get('jurisdiccion_id')?.setValue(crew?.d_jurisdiction_id || 0);
-    form.get('actividad_economica_id')?.setValue(crew?.f_vendor_economic_act_id || 0);
-    form.get('industria_id')?.setValue(crew?.d_industry_id || 0);
-    form.get('pep')?.setValue(crew?.pep ? "1" : "0");
-    form.get('pep_description')?.setValue(crew?.pep_description || '');
-    form.get('representante_legal')?.setValue(crew?.legal_representative_name || '');
-    form.get('f_document_representative')?.setValue(crew?.legal_representative_document || '');
-    form.get('city_representative')?.setValue(crew?.city_representative || '');
-    form.get('responsible_responsibles_name')?.setValue(crew?.responsible_responsibles_name || '');
-    form.get('responsible_responsibles_document')?.setValue(crew?.responsible_responsibles_document || '');
-    form.get('responsible_responsibles_email')?.setValue(crew?.responsible_responsibles_email || '');
-    form.get('responsible_f_document_type_id')?.setValue(crew?.responsible_f_document_type_id || '');
-    form.get('documento_identificacion')?.setValue(this.getDocumentLink(28));
-    form.get('documento_identificacion_empresa')?.setValue(this.getDocumentLink(40));
-    form.get('rut')?.setValue(this.getDocumentLink(35));
-    form.get('actor_pep')?.setValue(crew?.actor_pep ? "1" : "0");
-    form.get('lr_actor')?.setValue(crew?.lr_actor_value ? "1" : "0");
-    form.get('actor_name')?.setValue(crew?.actor_name || '');
-    form.get('actor_document')?.setValue(crew?.actor_document || '');
-    form.get('manager_name')?.setValue(crew?.manager_name || '');
-    form.get('manager_email')?.setValue(crew?.manager_email || '');
-    form.get('manager_telephone')?.setValue(crew?.manager_telephone || '');
-    form.get('actor_pep_description')?.setValue(crew?.actor_pep_description || '');
-    form.get('documento_identificacion_actor')?.setValue(this.getDocumentLink(303));
-  }
-  setEditMxInitialForm(form: any, crew: any, crewAnswers: any[]) {
-    form.get('name')?.setValue(crew?.name || '');
-    form.get('actividad_empresa')?.setValue(crew?.vendor_economic || '');
-    form.get('f_document_type_id')?.setValue(crew?.f_document_type_id || 0);
-    form.get('document')?.setValue(crew?.document || '');
-    form.get('telefono')?.setValue(crew?.telephone || '');
-    form.get('f_nacionalidad_representative')?.setValue(crew?.city_representative|| '');
-    form.get('direccion')?.setValue(crew?.address || '');
-    form.get('colonia')?.setValue(crew?.population || '');
-    form.get('pais_id')?.setValue(crew?.country_id || 0);
-    form.get('jurisdiccion_id')?.setValue(crew?.d_jurisdiction_id || 0);
-    form.get('actividad_economica_id')?.setValue(crew?.f_vendor_economic_act_id || 0);
-    form.get('industria_id')?.setValue(crew?.d_industry_id || 0);
-    form.get('representante_legal')?.setValue(crew?.legal_representative_name || '');
-    form.get('f_document_representative')?.setValue(crew?.legal_representative_document || '');
-    form.get('alcaldia')?.setValue(crew?.f_public_admin_mex_type_id || '');
-    form.get('ciudad')?.setValue(crew?.city || '');
-    form.get('city_representative')?.setValue(crew?.city_representative || '');
-    form.get('responsible_responsibles_name')?.setValue(crew?.responsible_responsibles_name || '');
-    form.get('responsible_responsibles_document')?.setValue(crew?.responsible_responsibles_document || '');
-    form.get('responsible_responsibles_email')?.setValue(crew?.responsible_responsibles_email || '');
-    form.get('responsible_f_document_type_id')?.setValue(crew?.responsible_f_document_type_id || '');
-    form.get('persona_servicio_email_description')?.setValue(crew?.responsible_responsibles_email || '');
-    form.get('documento_identificacion')?.setValue(this.getDocumentLink(28));
-    form.get('documento_identificacion_empresa')?.setValue(this.getDocumentLink(40));
-    form.get('codigo_postal')?.setValue(crew?.info_add_address || '');
-    form.get('nombre_banco')?.setValue(crew?.bank_branch || '');
-    form.get('numero_cuenta')?.setValue(crew?.bank_key || '');
-    form.get('cuenta_clabe')?.setValue(crew?.account_clabe || '');
-    form.get('regimen_fiscal')?.setValue(crew?.f_contractor_regime_types_id || '');
-    form.get('persona_servicio_name_description')?.setValue(crew?.responsible_responsibles_name || '');
-    form.get('responsible_responsibles_document')?.setValue(crew?.responsible_responsibles_document || '');
-    form.get('persona_servicio_nacionalidad_description')?.setValue(crew?.responsible_city || '');
-    form.get('fecha_nacimiento')?.setValue(crew?.birth_date || '');
-    form.get('genero_id')?.setValue(crew?.genders_id || 0);
-    form.get('nombre_emergencia')?.setValue(crew?.emergency_contact_name || '');
-    form.get('telefono_emergencia')?.setValue(crew?.emergency_contact_telephone || '');
-    form.get('grupo_sanguineo')?.setValue(crew?.blood_type_id || '');
-    form.get('profesion')?.setValue(crew?.occupation || '');
-    // yes or not
-    form.get('repse_register_description')?.setValue(this.getDescription(105, crewAnswers));
-    form.get('repse')?.setValue(this.getQuestionData(105, crewAnswers, 'repse', form));
-    form.get('fecha_nacimiento')?.setValue(crew?.birth_date || '');
-    form.get('lr_actor')?.setValue(crew?.lr_actor_value ? "1" : "0");
-    form.get('alergia')?.setValue(this.getQuestionData(24, crewAnswers, 'alergia', form));
-    form.get('alergia_description')?.setValue(this.getDescription(24, crewAnswers));
-    form.get('restriccion')?.setValue(this.getQuestionData(23, crewAnswers, 'restriccion', form));
-    form.get('restriccion_description')?.setValue(this.getDescription(23, crewAnswers));
-    form.get('madre_padre')?.setValue(this.getQuestionData(12, crewAnswers, 'madre_padre', form));
-    form.get('madre_padre_description')?.setValue(this.getDescription(12, crewAnswers));
-    form.get('vinculo')?.setValue(this.getQuestionData(18, crewAnswers, 'vinculo', form));
-    form.get('vinculo_description')?.setValue(this.getDescription(18, crewAnswers));
-    form.get('relacion')?.setValue(this.getQuestionData(20, crewAnswers, 'relacion', form));
-    form.get('relacion_description')?.setValue(this.getDescription(20, crewAnswers));
-    form.get('informacion_futura')?.setValue(this.getQuestionData(14, crewAnswers, 'informacion_futura', form));
-    form.get('datos_otros')?.setValue(this.getQuestionData(16, crewAnswers, 'datos_otros', form));
-    form.get('permisos_entidades')?.setValue(this.getQuestionData(15, crewAnswers, 'permisos_entidades', form));
-    form.get('permisos_eventos')?.setValue(this.getQuestionData(17, crewAnswers, 'permisos_eventos', form));
-    form.get('autorizacion_media')?.setValue(this.getQuestionData(26, crewAnswers));
-    form.get('verificacion_datos')?.setValue(this.getQuestionData(104, crewAnswers));
-}
-
-
-  setEditVinculationForm(form: any, crew: any, crewAnswers: any[]) {
-    form.get('artistic_name')?.setValue(crew?.actor_artistic_name || '');
-    form.get('fecha_nacimiento')?.setValue(crew?.birth_date || '');
-    form.get('nacionalidad')?.setValue(crew?.nationality || '');
-    form.get('genero_id')?.setValue(crew?.genders_id || 0);
-    form.get('direccion')?.setValue(crew?.address || '');
-    form.get('ciudad')?.setValue(crew?.city || '');
-    form.get('telefono')?.setValue(crew?.telephone || '');
-    form.get('eps')?.setValue(crew?.eps || '');
-    form.get('pension')?.setValue(crew?.afp || '');
-    form.get('madre_padre_description')?.setValue(crew?.children_number || '');
-    form.get('profesion')?.setValue(crew?.occupation || '');
-    form.get('nombre_banco')?.setValue(crew?.bank_branch || '');
-    form.get('numero_cuenta')?.setValue(crew?.bank_key || '');
-    form.get('pago_medio_id')?.setValue(crew?.f_payment_regime_methods_id || '');
-    form.get('grupo_sanguineo')?.setValue(crew?.blood_type_id || '');
-    form.get('arl_id')?.setValue(crew?.occupational_risk_administrators_id || '');
-    form.get('type_regimen_id')?.setValue(crew?.f_contractor_regime_types_id || '');
-    form.get('type_crew_id')?.setValue(crew?.f_type_of_company_regimes_id || '');
-    form.get('nombre_emergencia')?.setValue(crew?.emergency_contact_name || '');
-    form.get('telefono_emergencia')?.setValue(crew?.emergency_contact_telephone || '');
-    form.get('eps_id')?.setValue(crew?.f_type_contributing_epses_id || '');
-    form.get('type_cuenta_id')?.setValue(crew?.f_vendor_bank_account_type_id || '');
+  setEditVinculationForm(form: any, vendor: any, vendorAnswers: any[]) {
+    form.get('artistic_name')?.setValue(vendor?.actor_artistic_name || '');
+    form.get('fecha_nacimiento')?.setValue(vendor?.birth_date || '');
+    form.get('nacionalidad')?.setValue(vendor?.nationality || '');
+    form.get('genero_id')?.setValue(vendor?.genders_id || 0);
+    form.get('direccion')?.setValue(vendor?.address || '');
+    form.get('ciudad')?.setValue(vendor?.city || '');
+    form.get('telefono')?.setValue(vendor?.telephone || '');
+    form.get('eps')?.setValue(vendor?.eps || '');
+    form.get('pension')?.setValue(vendor?.afp || '');
+    form.get('madre_padre_description')?.setValue(vendor?.children_number || '');
+    form.get('profesion')?.setValue(vendor?.occupation || '');
+    form.get('nombre_banco')?.setValue(vendor?.bank_branch || '');
+    form.get('numero_cuenta')?.setValue(vendor?.bank_key || '');
+    form.get('pago_medio_id')?.setValue(vendor?.f_payment_regime_methods_id || '');
+    form.get('grupo_sanguineo')?.setValue(vendor?.blood_type_id || '');
+    form.get('arl_id')?.setValue(vendor?.occupational_risk_administrators_id || '');
+    form.get('type_regimen_id')?.setValue(vendor?.f_contractor_regime_types_id || '');
+    form.get('type_vendor_id')?.setValue(vendor?.f_type_of_company_regimes_id || '');
+    form.get('nombre_emergencia')?.setValue(vendor?.emergency_contact_name || '');
+    form.get('telefono_emergencia')?.setValue(vendor?.emergency_contact_telephone || '');
+    form.get('eps_id')?.setValue(vendor?.f_type_contributing_epses_id || '');
+    form.get('type_cuenta_id')?.setValue(vendor?.f_vendor_bank_account_type_id || '');
     //yes or no
-    form.get('madre_padre')?.setValue(this.getQuestionData(12, crewAnswers));
-    form.get('mascota')?.setValue(this.getQuestionData(13, crewAnswers));
-    form.get('informacion_futura')?.setValue(this.getQuestionData(14, crewAnswers));
-    form.get('permisos_entidades')?.setValue(this.getQuestionData(15, crewAnswers));
-    form.get('datos_otros')?.setValue(this.getQuestionData(16, crewAnswers));
-    form.get('permisos_eventos')?.setValue(this.getQuestionData(17, crewAnswers));
-    form.get('vinculo')?.setValue(this.getQuestionData(18, crewAnswers, 'vinculo', form));
-    form.get('vinculo_description')?.setValue(this.getDescription(18, crewAnswers));
-    form.get('relacion')?.setValue(this.getQuestionData(20, crewAnswers, 'relacion', form));
-    form.get('relacion_description')?.setValue(this.getDescription(20, crewAnswers));
-    form.get('restriccion')?.setValue(this.getQuestionData(23, crewAnswers, 'restriccion', form));
-    form.get('restriccion_description')?.setValue(this.getDescription(23, crewAnswers));
-    form.get('alergia')?.setValue(this.getQuestionData(24, crewAnswers, 'alergia', form));
-    form.get('alergia_description')?.setValue(this.getDescription(24, crewAnswers));
-    form.get('autorizacion_media')?.setValue(this.getQuestionData(26, crewAnswers));
-    form.get('payroll')?.setValue(this.getQuestionData(27, crewAnswers, 'payroll', form));
-    form.get('payroll_description')?.setValue(this.getDescription(27, crewAnswers));
-    form.get('informacion_futura_actor')?.setValue(this.getQuestionData(58, crewAnswers, 'informacion_futura_actor', form));
-    form.get('autorizacion_media_actor')?.setValue(this.getQuestionData(59, crewAnswers, 'autorizacion_media_actor', form));
-    form.get('permisos_entidades_actor')?.setValue(this.getQuestionData(60, crewAnswers, 'permisos_entidades_actor', form));
-    form.get('datos_otros_actor')?.setValue(this.getQuestionData(61, crewAnswers, 'datos_otros_actor', form));
-    form.get('permisos_eventos_actor')?.setValue(this.getQuestionData(62, crewAnswers, 'permisos_eventos_actor', form));
-    form.get('vinculo_actor')?.setValue(this.getQuestionData(63, crewAnswers, 'vinculo_actor', form));
-    form.get('vinculo_description_actor')?.setValue(this.getDescription(63, crewAnswers));
-    form.get('relacion_actor')?.setValue(this.getQuestionData(65, crewAnswers, 'vinculo_actor', form));
-    form.get('relacion_description_actor')?.setValue(this.getDescription(65, crewAnswers));
+    form.get('madre_padre')?.setValue(this.getQuestionData(12, vendorAnswers));
+    form.get('mascota')?.setValue(this.getQuestionData(13, vendorAnswers));
+    form.get('informacion_futura')?.setValue(this.getQuestionData(14, vendorAnswers));
+    form.get('permisos_entidades')?.setValue(this.getQuestionData(15, vendorAnswers));
+    form.get('datos_otros')?.setValue(this.getQuestionData(16, vendorAnswers));
+    form.get('permisos_eventos')?.setValue(this.getQuestionData(17, vendorAnswers));
+    form.get('vinculo')?.setValue(this.getQuestionData(18, vendorAnswers, 'vinculo', form));
+    form.get('vinculo_description')?.setValue(this.getDescription(18, vendorAnswers));
+    form.get('relacion')?.setValue(this.getQuestionData(20, vendorAnswers, 'relacion', form));
+    form.get('relacion_description')?.setValue(this.getDescription(20, vendorAnswers));
+    form.get('restriccion')?.setValue(this.getQuestionData(23, vendorAnswers, 'restriccion', form));
+    form.get('restriccion_description')?.setValue(this.getDescription(23, vendorAnswers));
+    form.get('alergia')?.setValue(this.getQuestionData(24, vendorAnswers, 'alergia', form));
+    form.get('alergia_description')?.setValue(this.getDescription(24, vendorAnswers));
+    form.get('autorizacion_media')?.setValue(this.getQuestionData(26, vendorAnswers));
+    form.get('payroll')?.setValue(this.getQuestionData(27, vendorAnswers, 'payroll', form));
+    form.get('payroll_description')?.setValue(this.getDescription(27, vendorAnswers));
+    form.get('informacion_futura_actor')?.setValue(this.getQuestionData(58, vendorAnswers, 'informacion_futura_actor', form));
+    form.get('autorizacion_media_actor')?.setValue(this.getQuestionData(59, vendorAnswers, 'autorizacion_media_actor', form));
+    form.get('permisos_entidades_actor')?.setValue(this.getQuestionData(60, vendorAnswers, 'permisos_entidades_actor', form));
+    form.get('datos_otros_actor')?.setValue(this.getQuestionData(61, vendorAnswers, 'datos_otros_actor', form));
+    form.get('permisos_eventos_actor')?.setValue(this.getQuestionData(62, vendorAnswers, 'permisos_eventos_actor', form));
+    form.get('vinculo_actor')?.setValue(this.getQuestionData(63, vendorAnswers, 'vinculo_actor', form));
+    form.get('vinculo_description_actor')?.setValue(this.getDescription(63, vendorAnswers));
+    form.get('relacion_actor')?.setValue(this.getQuestionData(65, vendorAnswers, 'vinculo_actor', form));
+    form.get('relacion_description_actor')?.setValue(this.getDescription(65, vendorAnswers));
   }
 
   getQuestionData(id: any, answers: any[], controlName?: string, form?: any) {
@@ -656,7 +449,7 @@ export class GlobalService {
   }
 
   getDocumentLink(id: any) {
-    let documentsList = this._cS.getDocumentsList();
+    let documentsList = this._vS.getDocumentsList();
     let document = documentsList.find((dl: any) => dl.id == id);
     const file = document.link ? { name: document.link, url: document.link, document_id: document?.document_id } : null;
     return file;
@@ -672,5 +465,5 @@ export class GlobalService {
 		});
 	}
 
-  constructor(private _cS: CrewService, private _snackBar: MatSnackBar) { }
+  constructor(private _vS: VendorService, private _snackBar: MatSnackBar) { }
 }

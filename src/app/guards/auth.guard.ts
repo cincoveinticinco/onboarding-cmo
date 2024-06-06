@@ -5,7 +5,7 @@ import { inject } from '@angular/core';
 export const authGuard: CanActivateFn = (route, state) => {
 
   const auth = inject(AuthService)
-  const crewId = route.paramMap.get('id');
+  const vendorId = route.paramMap.get('id');
 
   return new Promise((resolve, reject) => {
     auth.getSession().then((isLoggedIn: any) => {
@@ -13,7 +13,7 @@ export const authGuard: CanActivateFn = (route, state) => {
         resolve(true)
         return
       }
-      auth.logOut(crewId);
+      auth.logOut(vendorId);
       resolve(false)
     });
   })

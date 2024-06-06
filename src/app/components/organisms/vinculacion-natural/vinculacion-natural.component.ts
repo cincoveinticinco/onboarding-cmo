@@ -46,11 +46,11 @@ export class VinculacionNaturalComponent {
       type: new FormControl('', [Validators.required]),
       date: new FormControl('', [Validators.required]),
       name: new FormControl('', [Validators.required]),
-      document_type: new FormControl('', [Validators.required]),
+      document_type_id: new FormControl('', [Validators.required]),
       document: new FormControl('', [Validators.required]),
       pepff: new FormControl('', [Validators.required]),
       ciiu: new FormControl('', [Validators.required]),
-      economic_activity: new FormControl('', [Validators.required]),
+      economic_activity_id: new FormControl('', [Validators.required]),
       address: new FormControl('', [Validators.required]),
       city: new FormControl('', [Validators.required]),
       department: new FormControl('', [Validators.required]),
@@ -75,9 +75,9 @@ export class VinculacionNaturalComponent {
       food_restrictions: new FormControl('', [Validators.required]),
       food_restrictions_description: new FormControl('', [Validators.required]),
       is_pep: new FormControl('', [Validators.required]),
-      confidentiality_agreement_address: new FormControl('', [Validators.required]),
-      confidentiality_agreement_email: new FormControl('', [Validators.required]),
-      accountant_email: new FormControl('', [Validators.required]),
+      confidential_responsible_address: new FormControl('', [Validators.required]),
+      confidential_responsible_email: new FormControl('', [Validators.required]),
+      accounting_responsible_email: new FormControl('', [Validators.required]),
       income_tax_declarant: new FormControl('', [Validators.required]),
       dependents: new FormControl('', [Validators.required]),
       prepaid_medicine: new FormControl('', [Validators.required]),
@@ -86,6 +86,8 @@ export class VinculacionNaturalComponent {
       afc_account: new FormControl('', [Validators.required]),
       vat_responsible: new FormControl('', [Validators.required]),
       simple_regime: new FormControl('', [Validators.required]),
+      form_responsible_name: new FormControl('', [Validators.required]),
+      form_responsible_document: new FormControl('', [Validators.required])
     });
   }
 
