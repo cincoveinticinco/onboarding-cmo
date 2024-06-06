@@ -10,7 +10,7 @@
         (ngModelChange)="setDescriptionControl($event, controlName)"
         [formControl]="control"
         type="radio" 
-        [value]="true"> Sí
+        [value]="'1'"> Sí
     </label>
     <label>
       <input
@@ -18,7 +18,7 @@
         [formControl]="control"
         (ngModelChange)="setDescriptionControl($event, controlName)"
         type="radio" 
-        [value]="false"> No
+        [value]="'0'"> No
     </label>
   </div>
   <div *ngIf="!getErrors()">

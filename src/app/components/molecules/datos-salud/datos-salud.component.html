@@ -27,7 +27,7 @@
     [control]="getControl('illness')" 
     class="col-12"
   />
-  @if(showDescription('illness')) {
+  @if(showDescription('illness') === '1') {
     <app-text-input 
       [label]="'¿Cuál(es)?'"
       [control]="getControl('illness_description')"
@@ -40,7 +40,7 @@
     [control]="getControl('medicines')" 
     class="col-12"
   />
-  @if(showDescription('medicines')) {
+  @if(showDescription('medicines')  === '1') {
     <app-text-input 
       [label]="'¿Cuál(es)?'"
       [control]="getControl('medicines_description')"
@@ -53,7 +53,7 @@
     [control]="getControl('phobias')" 
     class="col-12"
   />
-  @if(showDescription('phobias')) {
+  @if(showDescription('phobias')  === '1') {
     <app-text-input 
       [label]="'¿Cuál(es)?'"
       [control]="getControl('phobias_description')"
@@ -66,7 +66,7 @@
     [control]="getControl('allergies')" 
     class="col-12"
   />
-  @if(showDescription('allergies')) {
+  @if(showDescription('allergies')  === '1') {
     <app-text-input 
       [label]="'¿Cuál(es)?'"
       [control]="getControl('allergies_description')"
@@ -74,12 +74,12 @@
     ></app-text-input>
   }
   <app-checkbox-input 
-    [label]="'¿Tiene alguna restricción alimenticia??'"
+    [label]="'¿Tiene alguna restricción alimenticia?'"
     [controlName]="'food_restrictions'"
     [control]="getControl('food_restrictions')"
     class="col-12"
   />
-  @if(showDescription('food_restrictions')) {
+  @if(showDescription('food_restrictions')  === '1') {
     <app-text-input 
       [label]="'¿Cuál(es)?'"
       [control]="getControl('food_restrictions_description')"

@@ -22,7 +22,7 @@ export class DatosSaludComponent {
     return this.form?.get(controlName) as FormControl;
   }
 
-  showDescription(controlName: string): boolean {
+  showDescription(controlName: string): '0' | '1' {
     return this.getControl(controlName).value
   }
 }
