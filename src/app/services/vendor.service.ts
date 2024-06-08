@@ -51,18 +51,16 @@ export class VendorService {
     });
   }
 
-  getVendorInfo(vendor_id: any) {
+  getVendorInfo() {
     this.setHeaders();
-    return this.http.get(`${environment.apiUrl}dynamo/getDetailVendor`, {
+    return this.http.get(`${environment.apiUrl}cmo/get_detail_vendor`, {
       headers: this.headers,
-      params: new HttpParams()
-        .set('vendor_id', vendor_id),
     });
   }
 
   updateVendor(values: any) {
     this.setHeaders();
-    console.log(this.headers)
+    console.log(values, '*****************************')
     return this.http.post(`${environment.apiUrl}cmo/update_vendor`, values, { headers: this.headers}).pipe(
       map((response: any) => response));
   }

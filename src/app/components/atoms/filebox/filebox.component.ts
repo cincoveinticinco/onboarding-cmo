@@ -1,23 +1,22 @@
 import { Component, Input, Optional, Self } from '@angular/core';
 import { DragAndDropFileDirective } from '../../../shared/directives/drag-and-drop-file.directive'
-import { AbstractControl, ControlValueAccessor, FormControl, NgControl, ValidationErrors, Validator } from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, FormControl, NgControl, ReactiveFormsModule, ValidationErrors, Validator } from '@angular/forms';
 import { DialogComponent } from '../../../shared/components/dialog/dialog.component';
 
 @Component({
   selector: 'app-filebox',
   standalone: true,
-  imports: [DragAndDropFileDirective, DialogComponent],
+  imports: [DragAndDropFileDirective, DialogComponent, ReactiveFormsModule],
   templateUrl: './filebox.component.html',
   styleUrl: './filebox.component.scss'
 })
 export class FileboxComponent implements ControlValueAccessor, Validator {
 
   @Input() onlyPdf = false;
+  @Input() control: FormControl = new FormControl();
 
   onChange = (value: string) => {}
-  onTouched = () => {}
-
-  control: FormControl = new FormControl('');
+  onTouched = () => {}  
   value: any;
   disabled: boolean = false;
   fileName: any;

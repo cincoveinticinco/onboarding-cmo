@@ -14,6 +14,7 @@ export class TextInputComponent {
   @Input() description: string | undefined;
   @Input() placeholder: string = '';
   @Input() control: FormControl = new FormControl();
+  @Input() type: string = 'text';
 
   getErrors(): string | null {
     const touched = this.control.touched;

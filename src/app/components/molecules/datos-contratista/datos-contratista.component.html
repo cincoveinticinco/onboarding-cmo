@@ -8,28 +8,38 @@
   />
   <app-select-input
     [label]="'Tipos de documento'"
+    [options]="lists?.documentTypes"
+    [optionName]="'document_type_esp'"
+    [optionValue]="'id'"
     [control]="getControl('document_type_id')"
     class="col-4"
   />
   <app-text-input
     [label]="'Número de documento'"
     [control]="getControl('document')"
+    [type]="'number'"
     class="col-7"
     [description]="'Escriba el documento con el que este registrado en la cuenta bancaria que registro para el pago'"
   />
-  <app-text-input
-    [label]="'Numero Permiso Especial de Permanencia para el Fomento de la Formalización (PEPFF)'"
-    [control]="getControl('pepff')"
-    class="col-11"
-  />
+  @if(showPepff()) {
+    <app-text-input
+      [label]="'Numero Permiso Especial de Permanencia para el Fomento de la Formalización (PEPFF)'"
+      [control]="getControl('pepff')"
+      class="col-11"
+    />
+  }
   <app-select-input
     [label]="'Código Actividad Económica (CIIU)'"
-    [control]="getControl('ciiu')"
+    [options]="lists?.economicActivities"
+    [optionName]="'ciiu'"
+    [optionValue]="'id'"
+    [control]="getControl('economic_activity_id')"
+    (change)="setEconomicActivity($event)"
     class="col-4"
   />
   <app-text-input
     [label]="'Actividad económica principal'"
-    [control]="getControl('economic_activity_id')"
+    [control]="getControl('economic_activity')"
     class="col-7"
   />
   <app-text-input

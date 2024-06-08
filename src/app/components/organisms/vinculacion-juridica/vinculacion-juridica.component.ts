@@ -100,6 +100,7 @@ export class VinculacionJuridicaComponent {
       form_responsible_name: new FormControl('', [Validators.required]),
       form_responsible_document: new FormControl('', [Validators.required]),
       form_responsible_position: new FormControl('', [Validators.required]),
+      signature: new FormControl('', [Validators.required]),
     });
   }
 

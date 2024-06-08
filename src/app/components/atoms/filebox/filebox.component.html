@@ -7,9 +7,17 @@
       >
     <span>Arrastar y soltar o <a>buscar</a></span>
     @if (!onlyPdf) {
-      <input  type="file" accept=".pdf, .jpeg, .png, .jpg" (change)="onFileChange($event)">
+      <input  
+        type="file" 
+        accept=".pdf, .jpeg, .png, .jpg" 
+        (change)="onFileChange($event)"
+      >
     } @else {
-      <input  type="file" accept=".pdf" (change)="onFileChange($event)">
+      <input  
+        type="file" 
+        accept=".pdf" 
+        (change)="onFileChange($event)" 
+      >
     }
   </label>
 }

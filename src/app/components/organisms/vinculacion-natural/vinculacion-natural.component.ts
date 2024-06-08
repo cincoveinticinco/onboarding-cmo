@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output, SimpleChanges } from '@angular/core';
 import { InitialDataComponent } from '../../molecules/initial-data/initial-data.component';
 import { DatosEmpresaComponent } from '../../molecules/datos-empresa/datos-empresa.component';
 import { DatosContratistaComponent } from '../../molecules/datos-contratista/datos-contratista.component';
@@ -14,6 +14,8 @@ import { BlackButtonComponent } from '../../atoms/black-button/black-button.comp
 import { FirmaComponent } from '../../molecules/firma/firma.component';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PanelButtonsComponent } from '../../molecules/panel-buttons/panel-buttons.component';
+import { VendorService } from '../../../services/vendor.service';
+import { GlobalService } from '../../../services/global.service';
 
 @Component({
   selector: 'app-vinculacion-natural',
@@ -41,9 +43,10 @@ import { PanelButtonsComponent } from '../../molecules/panel-buttons/panel-butto
 })
 export class VinculacionNaturalComponent {
   naturalForm: FormGroup;
+  @Input() lists: any = {};
   @Output() notify: EventEmitter<any> = new EventEmitter();
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private _gS: GlobalService, private _vS: VendorService) {
 
     this.naturalForm = this.fb.group({
       type: new FormControl('', [Validators.required]),
@@ -54,6 +57,7 @@ export class VinculacionNaturalComponent {
       pepff: new FormControl('', [Validators.required]),
       ciiu: new FormControl('', [Validators.required]),
       economic_activity_id: new FormControl('', [Validators.required]),
+      economic_activity: new FormControl('', [Validators.required]),
       address: new FormControl('', [Validators.required]),
       city: new FormControl('', [Validators.required]),
       department: new FormControl('', [Validators.required]),
@@ -90,8 +94,16 @@ export class VinculacionNaturalComponent {
       vat_responsible: new FormControl('', [Validators.required]),
       simple_regime: new FormControl('', [Validators.required]),
       form_responsible_name: new FormControl('', [Validators.required]),
-      form_responsible_document: new FormControl('', [Validators.required])
+      form_responsible_document: new FormControl('', [Validators.required]),
+      signature: new FormControl('', [Validators.required]),
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['lists'] && this.lists.vendorInfo) {
+      console.log('this.lists.vendorInfo', this.lists.vendorInfo)
+      this._gS.fillInitialVinculationForm(this.naturalForm, this.lists.vendorInfo);
+    }
   }
 
   @HostListener('submit', ['$event'])

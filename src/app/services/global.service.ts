@@ -376,59 +376,125 @@ export class GlobalService {
         }
       ]
     }
+
+    return formData;
   }
 
-  setEditVinculationForm(form: any, vendor: any, vendorAnswers: any[]) {
-    form.get('artistic_name')?.setValue(vendor?.actor_artistic_name || '');
-    form.get('fecha_nacimiento')?.setValue(vendor?.birth_date || '');
-    form.get('nacionalidad')?.setValue(vendor?.nationality || '');
-    form.get('genero_id')?.setValue(vendor?.genders_id || 0);
-    form.get('direccion')?.setValue(vendor?.address || '');
-    form.get('ciudad')?.setValue(vendor?.city || '');
-    form.get('telefono')?.setValue(vendor?.telephone || '');
-    form.get('eps')?.setValue(vendor?.eps || '');
-    form.get('pension')?.setValue(vendor?.afp || '');
-    form.get('madre_padre_description')?.setValue(vendor?.children_number || '');
-    form.get('profesion')?.setValue(vendor?.occupation || '');
-    form.get('nombre_banco')?.setValue(vendor?.bank_branch || '');
-    form.get('numero_cuenta')?.setValue(vendor?.bank_key || '');
-    form.get('pago_medio_id')?.setValue(vendor?.f_payment_regime_methods_id || '');
-    form.get('grupo_sanguineo')?.setValue(vendor?.blood_type_id || '');
-    form.get('arl_id')?.setValue(vendor?.occupational_risk_administrators_id || '');
-    form.get('type_regimen_id')?.setValue(vendor?.f_contractor_regime_types_id || '');
-    form.get('type_vendor_id')?.setValue(vendor?.f_type_of_company_regimes_id || '');
-    form.get('nombre_emergencia')?.setValue(vendor?.emergency_contact_name || '');
-    form.get('telefono_emergencia')?.setValue(vendor?.emergency_contact_telephone || '');
-    form.get('eps_id')?.setValue(vendor?.f_type_contributing_epses_id || '');
-    form.get('type_cuenta_id')?.setValue(vendor?.f_vendor_bank_account_type_id || '');
-    //yes or no
-    form.get('madre_padre')?.setValue(this.getQuestionData(12, vendorAnswers));
-    form.get('mascota')?.setValue(this.getQuestionData(13, vendorAnswers));
-    form.get('informacion_futura')?.setValue(this.getQuestionData(14, vendorAnswers));
-    form.get('permisos_entidades')?.setValue(this.getQuestionData(15, vendorAnswers));
-    form.get('datos_otros')?.setValue(this.getQuestionData(16, vendorAnswers));
-    form.get('permisos_eventos')?.setValue(this.getQuestionData(17, vendorAnswers));
-    form.get('vinculo')?.setValue(this.getQuestionData(18, vendorAnswers, 'vinculo', form));
-    form.get('vinculo_description')?.setValue(this.getDescription(18, vendorAnswers));
-    form.get('relacion')?.setValue(this.getQuestionData(20, vendorAnswers, 'relacion', form));
-    form.get('relacion_description')?.setValue(this.getDescription(20, vendorAnswers));
-    form.get('restriccion')?.setValue(this.getQuestionData(23, vendorAnswers, 'restriccion', form));
-    form.get('restriccion_description')?.setValue(this.getDescription(23, vendorAnswers));
-    form.get('alergia')?.setValue(this.getQuestionData(24, vendorAnswers, 'alergia', form));
-    form.get('alergia_description')?.setValue(this.getDescription(24, vendorAnswers));
-    form.get('autorizacion_media')?.setValue(this.getQuestionData(26, vendorAnswers));
-    form.get('payroll')?.setValue(this.getQuestionData(27, vendorAnswers, 'payroll', form));
-    form.get('payroll_description')?.setValue(this.getDescription(27, vendorAnswers));
-    form.get('informacion_futura_actor')?.setValue(this.getQuestionData(58, vendorAnswers, 'informacion_futura_actor', form));
-    form.get('autorizacion_media_actor')?.setValue(this.getQuestionData(59, vendorAnswers, 'autorizacion_media_actor', form));
-    form.get('permisos_entidades_actor')?.setValue(this.getQuestionData(60, vendorAnswers, 'permisos_entidades_actor', form));
-    form.get('datos_otros_actor')?.setValue(this.getQuestionData(61, vendorAnswers, 'datos_otros_actor', form));
-    form.get('permisos_eventos_actor')?.setValue(this.getQuestionData(62, vendorAnswers, 'permisos_eventos_actor', form));
-    form.get('vinculo_actor')?.setValue(this.getQuestionData(63, vendorAnswers, 'vinculo_actor', form));
-    form.get('vinculo_description_actor')?.setValue(this.getDescription(63, vendorAnswers));
-    form.get('relacion_actor')?.setValue(this.getQuestionData(65, vendorAnswers, 'vinculo_actor', form));
-    form.get('relacion_description_actor')?.setValue(this.getDescription(65, vendorAnswers));
+  fillInitialVinculationForm(form: any, data: any) {
+    form.get('name')?.setValue(data?.name || '');
+    form.get('document_type_id')?.setValue(data?.f_document_type_id || '');
+    form.get('document')?.setValue(data?.document || '');
+    form.get('ciiu')?.setValue(data?.ciiu || '');
+    form.get('f_vendor_economic_act_id')?.setValue(data?.economic_activity_id || '');
+    form.get('address')?.setValue(data?.address || '');
+    form.get('city')?.setValue(data?.city || '');
+    form.get('department')?.setValue(data?.department || '');
+    form.get('telephone')?.setValue(data?.telephone || '');
+    form.get('email')?.setValue(data?.email || '');
+    form.get('emergency_contact_name')?.setValue(data?.emergency_contact_name || '');
+    form.get('emergency_contact_telephone')?.setValue(data?.emergency_contact_telephone || '');
+    form.get('emergency_contact_kinship')?.setValue(data?.emergency_contact_kinship || '');
+    form.get('eps')?.setValue(data?.eps || '');
+    form.get('economic_activity').setValue(data?.economic_activity || '');
+    form.get('economic_activity_id')?.setValue(data?.f_vendor_economic_act_id || '');
+    form.get('afp')?.setValue(data?.pension || '');
+    form.get('occupational_risk_administrators_id')?.setValue(data?.arl || '');
+    form.get('legal_representatives_name')?.setValue(data?.legal_representatives_name || '');
+    form.get('legal_representatives_telephone')?.setValue(data?.legal_representatives_telephone || '');
+    form.get('legal_representatives_email')?.setValue(data?.legal_representatives_email || '');
+    form.get('electronic_billing_name')?.setValue(data?.electronic_billing_name || '');
+    form.get('electronic_billing_email')?.setValue(data?.electronic_billing_email || '');
+    form.get('electronic_billing_telephone')?.setValue(data?.electronic_billing_telephone || '');
+    form.get('accounting_responsible_name')?.setValue(data?.accounting_responsible_name || '');
+    form.get('accounting_responsible_telephone')?.setValue(data?.accounting_responsible_telephone || '');
+    form.get('accounting_responsible_email')?.setValue(data?.accounting_responsible_email || '');
+    form.get('accounting_responsible_position')?.setValue(data?.accounting_responsible_position || '');
+    form.get('treasury_responsible_name')?.setValue(data?.treasury_responsible_name || '');
+    form.get('treasury_responsible_telephone')?.setValue(data?.treasury_responsible_telephone || '');
+    form.get('treasury_responsible_email')?.setValue(data?.treasury_responsible_email || '');
+    form.get('treasury_responsible_position')?.setValue(data?.treasury_responsible_position || '');
+    form.get('commercial_responsible_name')?.setValue(data?.commercial_responsible_name || '');
+    form.get('commercial_responsible_telephone')?.setValue(data?.commercial_responsible_telephone || '');
+    form.get('commercial_responsible_email')?.setValue(data?.commercial_responsible_email || '');
+    form.get('confidential_responsible_address')?.setValue(data?.confidential_responsible_address || '');
+    form.get('confidential_responsible_email')?.setValue(data?.confidential_responsible_email || '');
+    form.get('last_close_assets')?.setValue(data?.last_close_assets || '');
+    form.get('last_year_assets')?.setValue(data?.last_year_assets || '');
+    form.get('last_close_liabilities')?.setValue(data?.last_close_liabilities || '');
+    form.get('last_year_liabilities')?.setValue(data?.last_year_liabilities || '');
+    form.get('last_close_income')?.setValue(data?.last_close_income || '');
+    form.get('last_year_income')?.setValue(data?.last_year_income || '');
+    form.get('last_close_equity')?.setValue(data?.last_close_equity || '');
+    form.get('last_year_equity')?.setValue(data?.last_year_equity || '');
+    form.get('last_close_expenses')?.setValue(data?.last_close_expenses || '');
+    form.get('last_year_expenses')?.setValue(data?.last_year_expenses || '');
+    form.get('is_pep')?.setValue(data?.is_pep || '');
+
+    // Setting additional info
+    const info_additional = data?.info_additional || [];
+    for (let info of info_additional) {
+      switch(info.id) {
+        case 110:
+          form.get('illness')?.setValue((info.value ? '1' : '0'));
+          form.get('illness_description')?.setValue(info.description || '');
+          break;
+        case 111:
+          form.get('medicines')?.setValue(info.value ? '1' : '0');
+          form.get('medicines_description')?.setValue(info.description || '');
+          break;
+        case 112:
+          form.get('allergy')?.setValue(info.value ? '1' : '0');
+          form.get('allergy_description')?.setValue(info.description || '');
+          break;
+        case 113:
+          form.get('food_restrictions')?.setValue(info.value ? '1' : '0');
+          form.get('food_restrictions_description')?.setValue(info.description || '');
+          break;
+        case 114:
+          form.get('phobias')?.setValue(info.value ? '1' : '0');
+          form.get('phobias_description')?.setValue(info.description || '');
+          break;
+        case 115:
+          form.get('income_tax_declarant')?.setValue(info.value ? '1' : '0');
+          form.get('income_tax_declarant_description')?.setValue(info.description || '');
+          break;
+        case 116:
+          form.get('dependents')?.setValue(info.value ? '1' : '0');
+          form.get('dependents_description')?.setValue(info.description || '');
+          break;
+        case 117:
+          form.get('prepaid_medicine')?.setValue(info.value ? '1' : '0');
+          form.get('prepaid_medicine_description')?.setValue(info.description || '');
+          break;
+        case 118:
+          form.get('mortgage_credit')?.setValue(info.value ? '1' : '0');
+          form.get('mortgage_credit_description')?.setValue(info.description || '');
+          break;
+        case 119:
+          form.get('voluntary_contributions')?.setValue(info.value ? '1' : '0');
+          form.get('voluntary_contributions_description')?.setValue(info.description || '');
+          break;
+        case 120:
+          form.get('afc_account')?.setValue(info.value ? '1' : '0');
+          form.get('afc_account_description')?.setValue(info.description || '');
+          break;
+        case 121:
+          form.get('vat_responsible')?.setValue(info.value ? '1' : '0');
+          form.get('vat_responsible_description')?.setValue(info.description || '');
+          break;
+        case 122:
+          form.get('simple_regime')?.setValue(info.value ? '1' : '0');
+          break;
+        case 123:
+          form.get('self_withholding')?.setValue(info.value ? '1' : '0');
+          break;
+        case 124:
+          form.get('big_contributor')?.setValue(info.value ? '1' : '0');
+          break;
+      }
+    }
   }
+  
 
   getQuestionData(id: any, answers: any[], controlName?: string, form?: any) {
     let answer = answers.find((an: any) => an.id == id);

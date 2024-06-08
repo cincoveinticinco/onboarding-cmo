@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import {  } from 'stream';
 
 @Component({
   selector: 'app-select-input',
@@ -13,8 +14,12 @@ export class SelectInputComponent {
   @Input() options: any[] = [];
   @Input() description: string = '';
   @Input() label: string = '';
+  @Input() optionValue: string = '';
+  @Input() optionName: string = '';
 
   @Input() control: FormControl = new FormControl();
+
+  @Output() change: EventEmitter<any> = new EventEmitter();
 
   getErrors(): string | null {
     const touched = this.control.touched;
@@ -22,5 +27,11 @@ export class SelectInputComponent {
       return 'Este campo es requerido *';
     }
     return null;
+  }
+
+  onChange(event: any): void {
+    if(this.change) {
+      this.change.emit(event);
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { FormHeaderComponent } from '../../components/molecules/form-header/form-header.component';
 import { TIPOPERSONA } from '../../shared/interfaces/typo_persona';
 import { PanelButtonsComponent } from '../../components/molecules/panel-buttons/panel-buttons.component';
@@ -20,26 +20,50 @@ import { GlobalService } from '../../services/global.service';
   templateUrl: './forms-cmo.component.html',
   styleUrl: './forms-cmo.component.css'
 })
-export class FormsCmoComponent {
+export class FormsCmoComponent implements OnInit {
   personEnnum = TIPOPERSONA;
   typePerson: number = TIPOPERSONA.Natural;
   title: string = '';
-
-  constructor(private _vS: VendorService, private _gS: GlobalService, private router: Router) {
-  }
   
+  lists: any = {
+    documentTypes: [],
+    economicActivities: [],
+    vendorInfo: null
+  };
+
+  constructor(
+    private vendorService: VendorService,
+    private globalService: GlobalService,
+    private cd: ChangeDetectorRef
+  ) {}
+
   ngOnInit() {
     this.getTitle();
+    this.loadData();
+  }
+
+  loadData() {
+    this.vendorService.getVendorInfo().subscribe((response: any) => {
+      console.log('response', response);
+      this.lists = {
+        documentTypes: response.f_document_type_ids,
+        economicActivities: response.economic_activities,
+        vendorInfo: response?.vendor_basic_info
+      };
+      this.cd.detectChanges();
+    });
+    console.log('this.lists', this.lists);
   }
 
   sendForm(ev: any) {
-    console.log('ev', ev)
-    const formData = this._gS.setVinculationForm(ev.value);
-    this._vS.updateVendor(formData).subscribe((response: any) => {
-        console.log('response', response);
+    console.log('ev', ev.value);
+    const formData = this.globalService.setVinculationForm(ev.value);
+    console.log('formData', formData);
+    this.vendorService.updateVendor(formData).subscribe((response: any) => {
+      console.log('response', response);
     });
   }
-  
+
   getTitle() {
     switch (this.typePerson) {
       case TIPOPERSONA.Natural:

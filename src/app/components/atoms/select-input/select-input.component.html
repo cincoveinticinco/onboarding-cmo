@@ -14,10 +14,11 @@
   }
   <select
     [formControl]="control"
+    (ngModelChange)="onChange($event)"
       name="regimen_fiscal">
-      <option disabled value="">Seleccione una opción</option>
+      <option disabled value="">SELECCIONE UNA OPCION</option>
       @for (opt of options; track opt) {
-          <option [value]="opt.id">{{opt.name}}</option>
+          <option [value]="opt[(optionValue)]">{{opt[(optionName)]}}</option>
       } @empty {
           <option disabled>No hay opciones para mostrar</option>
       }
