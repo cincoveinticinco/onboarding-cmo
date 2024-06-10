@@ -1,9 +1,19 @@
 <app-subtitle [subtitle]="'datos fiscales'" />
 <div class="row">
-  <app-select-input [label]="'Códico Actividad Económica (CIIU)'" [options]="['1', '2', '3']" class="col-4" [control]="getControl('ciiu')" />
-  <div class="col-4 align-end"> 
-    <p><b>Actividad Económica Principal</b></p>
-  </div>
+  <app-select-input
+    [label]="'Código Actividad Económica (CIIU)'"
+    [options]="lists?.economicActivities"
+    [optionName]="'ciiu'"
+    [optionValue]="'id'"
+    [control]="getControl('economic_activity_id')"
+    (change)="setEconomicActivity($event)"
+    class="col-4"
+  />
+  <app-text-input
+    [label]="'Actividad económica principal'"
+    [control]="getControl('economic_activity')"
+    class="col-7"
+  />
   <app-checkbox-input 
     [label]="'¿Pertenece al régimen simple?'"
     [control]="getControl('simple_regime')"

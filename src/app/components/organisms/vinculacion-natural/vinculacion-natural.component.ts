@@ -67,8 +67,8 @@ export class VinculacionNaturalComponent {
       emergency_contact_telephone: new FormControl('', [Validators.required]),
       emergency_contact_kinship: new FormControl('', [Validators.required]),
       eps: new FormControl('', [Validators.required]),
-      pension: new FormControl('', [Validators.required]),
-      cesantias: new FormControl('', [Validators.required]),
+      afp: new FormControl('', [Validators.required]),
+      layoffs: new FormControl('', [Validators.required]),
       arl: new FormControl('', [Validators.required]),
       risk_level: new FormControl('', [Validators.required]),
       illness: new FormControl('', [Validators.required]),
@@ -100,9 +100,13 @@ export class VinculacionNaturalComponent {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['lists'] && this.lists.vendorInfo) {
+    if (changes['lists'] && this.lists.vendorInfo && this.naturalForm) {
       console.log('this.lists.vendorInfo', this.lists.vendorInfo)
       this._gS.fillInitialVinculationForm(this.naturalForm, this.lists.vendorInfo);
+      this.naturalForm.get('date')?.setValue(this._gS.formatDate(this.lists.vendorInfo.created_at));
+      this.naturalForm.controls['date'].disable();
+      this.naturalForm.get('type')?.setValue('VINCULACION PERSONA NATURAL');
+      this.naturalForm.controls['type'].disable();
     }
   }
 

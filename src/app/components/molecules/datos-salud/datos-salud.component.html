@@ -7,20 +7,23 @@
   ></app-text-input>
   <app-text-input 
     [label]="'Pensión'"
-    [control]="getControl('pension')"
+    [control]="getControl('afp')"
     class="col-4"></app-text-input>
   <app-text-input 
     [label]="'Cesantias'"
-    [control]="getControl('cesantias')" 
+    [control]="getControl('layoffs')" 
     class="col-4"></app-text-input>
   <app-text-input 
     [label]="'ARL'" 
     [control]="getControl('arl')"
     class="col-4"></app-text-input>
-  <app-text-input 
+  <app-select-input 
     [label]="'Nivel de riesgo'"
     [control]="getControl('risk_level')" 
-    class="col-4"></app-text-input>
+    [options]="lists?.riskLevels"
+    [optionName]="'name'"
+    [optionValue]="'id'"
+    class="col-4"></app-select-input>
   <app-checkbox-input 
     [label]="'¿Sufre de alguna enfermedad?'"
     [controlName]="'illness'"

@@ -3,5 +3,6 @@ export enum TIPODOCUMENTO {
   NUIP = 26,
   TARJETA_IDENTIDAD = 27,
   CE = 28,
-  PASAPORTE = 29
+  PASAPORTE = 29,
+  NIT = 30
 }

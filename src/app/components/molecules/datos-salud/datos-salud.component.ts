@@ -3,6 +3,7 @@ import { SubtitleComponent } from '../../atoms/subtitle/subtitle.component';
 import { TextInputComponent } from '../../atoms/text-input/text-input.component';
 import { CheckboxInputComponent } from '../../atoms/checkbox-input/checkbox-input.component';
 import { FormControl, FormGroup } from '@angular/forms';
+import { SelectInputComponent } from '../../atoms/select-input/select-input.component';
 
 @Component({
   selector: 'app-datos-salud',
@@ -10,13 +11,15 @@ import { FormControl, FormGroup } from '@angular/forms';
   imports: [
     SubtitleComponent,
     TextInputComponent,
-    CheckboxInputComponent
+    CheckboxInputComponent,
+    SelectInputComponent
   ],
   templateUrl: './datos-salud.component.html',
   styleUrl: './datos-salud.component.css'
 })
 export class DatosSaludComponent {
   @Input() form: FormGroup | undefined;
+  @Input() lists: any = {};
   
   getControl(controlName: string): FormControl {
     return this.form?.get(controlName) as FormControl;

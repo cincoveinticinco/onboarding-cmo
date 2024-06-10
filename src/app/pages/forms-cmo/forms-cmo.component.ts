@@ -3,10 +3,11 @@ import { FormHeaderComponent } from '../../components/molecules/form-header/form
 import { TIPOPERSONA } from '../../shared/interfaces/typo_persona';
 import { PanelButtonsComponent } from '../../components/molecules/panel-buttons/panel-buttons.component';
 import { VinculacionNaturalComponent } from '../../components/organisms/vinculacion-natural/vinculacion-natural.component';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { VinculacionJuridicaComponent } from '../../components/organisms/vinculacion-juridica/vinculacion-juridica.component';
 import { VendorService } from '../../services/vendor.service';
 import { GlobalService } from '../../services/global.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-forms-cmo',
@@ -24,6 +25,8 @@ export class FormsCmoComponent implements OnInit {
   personEnnum = TIPOPERSONA;
   typePerson: number = TIPOPERSONA.Natural;
   title: string = '';
+  loading: boolean = false;
+  vendorId: any;
   
   lists: any = {
     documentTypes: [],
@@ -34,23 +37,39 @@ export class FormsCmoComponent implements OnInit {
   constructor(
     private vendorService: VendorService,
     private globalService: GlobalService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private route: ActivatedRoute,
+    private auth: AuthService
   ) {}
 
   ngOnInit() {
-    this.getTitle();
-    this.loadData();
+    this.route.params.subscribe((params: any) => {
+      this.vendorId = params.id;
+      this.vendorService.setVendorId(params.id);
+      this.loadData();  
+    })
   }
 
   loadData() {
-    this.vendorService.getVendorInfo().subscribe((response: any) => {
-      console.log('response', response);
-      this.lists = {
-        documentTypes: response.f_document_type_ids,
-        economicActivities: response.economic_activities,
-        vendorInfo: response?.vendor_basic_info
-      };
-      this.cd.detectChanges();
+    this.loading = true;
+    this.vendorService.getVendorInfo().subscribe({
+      next: (response: any) => {
+        console.log('response', response);
+        this.lists = {
+          documentTypes: response.f_document_type_ids,
+          economicActivities: response?.economic_activities,
+          vendorInfo: response?.vendor_basic_info,
+          riskLevels: response?.arl_risk_levels
+        };
+        this.typePerson = response.vendor_basic_info?.f_person_type_id
+        console.log('typePerson', this.typePerson);
+        this.getTitle();
+        this.loading = false;
+      },
+      error: (e: any) => {
+        if (e.status == 401) this.auth.logOut(this.vendorId);
+      }
+    
     });
     console.log('this.lists', this.lists);
   }

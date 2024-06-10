@@ -269,11 +269,15 @@ export class GlobalService {
       emergency_contact_telephone: data[('emergency_contact_telephone')],
       emergency_contact_kinship: data[('emergency_contact_kinship')],
       eps: data[('eps')],
-      afp: data[('pension')],
-      occupational_risk_administrators_id: data[('arl')],
-      legal_representatives_name: data[('legal_representatives_name')],
-      legal_representatives_telephone: data[('legal_representatives_telephone')],
-      legal_representatives_email: data[('legal_representatives_email')],
+      arl: data[('arl')],
+      afp: data[('afp')],
+      layoffs: data[('layoffs')],
+      cmo_level_risk_arl_id: data[('risk_level')],
+      pepff: data[('pepff')],
+      legal_representative_name: data[('legal_representative_name')],
+      legal_representative_telephone: data[('legal_representative_telephone')],
+      legal_representative_email: data[('legal_representative_email')],
+      f_document_representative: data[('f_document_representative')],
       electronic_billing_name: data[('electronic_billing_name')],
       electronic_billing_email: data[('electronic_billing_email')],
       electronic_billing_telephone: data[('electronic_billing_telephone')],
@@ -281,10 +285,10 @@ export class GlobalService {
       accounting_responsible_telephone: data[('accounting_responsible_telephone')],
       accounting_responsible_email: data[('accounting_responsible_email')],
       accounting_responsible_position: data[('accounting_responsible_position')],
-      treasury_responsible_name: data[('treasury_responsible_name')],
-      treasury_responsible_telephone: data[('treasury_responsible_telephone')],
-      treasury_responsible_email: data[('treasury_responsible_email')],
-      treasury_responsible_position: data[('treasury_responsible_position')],
+      treassury_responsible_name: data[('treassury_responsible_name')],
+      treassury_responsible_telephone: data[('treassury_responsible_telephone')],
+      treassury_responsible_email: data[('treassury_responsible_email')],
+      treassury_responsible_position: data[('treassury_responsible_position')],
       commercial_responsible_name: data[('commercial_responsible_name')],
       commercial_responsible_telephone: data[('commercial_responsible_telephone')],
       commercial_responsible_email: data[('commercial_responsible_email')],
@@ -298,9 +302,12 @@ export class GlobalService {
       last_year_income: data[('last_year_income')],
       last_close_equity: data[('last_close_equity')],
       last_year_equity: data[('last_year_equity')],
-      last_close_expenses: data[('last_close_expenses')],
+      last_close_expense: data[('last_close_expense')],
       last_year_expenses: data[('last_year_expenses')],
       is_pep: data[('is_pep')],
+      form_responsible_name: data[('form_responsible_name')],
+      form_responsible_document: data[('form_responsible_document')],
+      form_responsible_position: data[('form_responsible_position')],
       info_additional: [
         {
           info_additional_type_id: 110,
@@ -314,8 +321,8 @@ export class GlobalService {
         },
         {
           info_additional_type_id: 112,
-          value: data[('allergy')],
-          description: data[('allergy_description')]
+          value: data[('allergies')],
+          description: data[('allergies_description')]
         },
         {
           info_additional_type_id: 113,
@@ -363,16 +370,16 @@ export class GlobalService {
           description: data[('vat_responsible_description')]
         },
         {
-          "vendor_inf_add_type_id": 122,
-          "value": data[('simple_regime')]
+          info_additional_type_id: 122,
+          value: data[('simple_regime')]
         },
         {
-          "vendor_inf_add_type_id": 123,
-          "value": data[('self_withholding')]
+          info_additional_type_id: 123,
+          value: data[('self_withholding')]
         },
         {
-          "vendor_inf_add_type_id": 124,
-          "value": data[('big_contributor')]
+          info_additional_type_id: 124,
+          value: data[('big_contributor')]
         }
       ]
     }
@@ -395,13 +402,16 @@ export class GlobalService {
     form.get('emergency_contact_telephone')?.setValue(data?.emergency_contact_telephone || '');
     form.get('emergency_contact_kinship')?.setValue(data?.emergency_contact_kinship || '');
     form.get('eps')?.setValue(data?.eps || '');
-    form.get('economic_activity').setValue(data?.economic_activity || '');
+    form.get('economic_activity')?.setValue(data?.economic_activity || '');
     form.get('economic_activity_id')?.setValue(data?.f_vendor_economic_act_id || '');
-    form.get('afp')?.setValue(data?.pension || '');
-    form.get('occupational_risk_administrators_id')?.setValue(data?.arl || '');
-    form.get('legal_representatives_name')?.setValue(data?.legal_representatives_name || '');
-    form.get('legal_representatives_telephone')?.setValue(data?.legal_representatives_telephone || '');
-    form.get('legal_representatives_email')?.setValue(data?.legal_representatives_email || '');
+    form.get('afp')?.setValue(data?.afp || '');
+    form.get('arl')?.setValue(data?.arl || '');
+    form.get('risk_level')?.setValue(data?.cmo_level_risk_arl_id || '');
+    form.get('layoffs')?.setValue(data?.layoffs || '');
+    form.get('legal_representative_name')?.setValue(data?.legal_representative_name || '');
+    form.get('legal_representative_telephone')?.setValue(data?.legal_representative_telephone || '');
+    form.get('legal_representative_email')?.setValue(data?.legal_representative_email || '');
+    form.get('f_document_representative')?.setValue(data?.legal_representative_document || '');
     form.get('electronic_billing_name')?.setValue(data?.electronic_billing_name || '');
     form.get('electronic_billing_email')?.setValue(data?.electronic_billing_email || '');
     form.get('electronic_billing_telephone')?.setValue(data?.electronic_billing_telephone || '');
@@ -409,10 +419,10 @@ export class GlobalService {
     form.get('accounting_responsible_telephone')?.setValue(data?.accounting_responsible_telephone || '');
     form.get('accounting_responsible_email')?.setValue(data?.accounting_responsible_email || '');
     form.get('accounting_responsible_position')?.setValue(data?.accounting_responsible_position || '');
-    form.get('treasury_responsible_name')?.setValue(data?.treasury_responsible_name || '');
-    form.get('treasury_responsible_telephone')?.setValue(data?.treasury_responsible_telephone || '');
-    form.get('treasury_responsible_email')?.setValue(data?.treasury_responsible_email || '');
-    form.get('treasury_responsible_position')?.setValue(data?.treasury_responsible_position || '');
+    form.get('treassury_responsible_name')?.setValue(data?.treassury_responsible_name || '');
+    form.get('treassury_responsible_telephone')?.setValue(data?.treassury_responsible_telephone || '');
+    form.get('treassury_responsible_email')?.setValue(data?.treassury_responsible_email || '');
+    form.get('treassury_responsible_position')?.setValue(data?.treassury_responsible_position || '');
     form.get('commercial_responsible_name')?.setValue(data?.commercial_responsible_name || '');
     form.get('commercial_responsible_telephone')?.setValue(data?.commercial_responsible_telephone || '');
     form.get('commercial_responsible_email')?.setValue(data?.commercial_responsible_email || '');
@@ -426,9 +436,12 @@ export class GlobalService {
     form.get('last_year_income')?.setValue(data?.last_year_income || '');
     form.get('last_close_equity')?.setValue(data?.last_close_equity || '');
     form.get('last_year_equity')?.setValue(data?.last_year_equity || '');
-    form.get('last_close_expenses')?.setValue(data?.last_close_expenses || '');
+    form.get('last_close_expense')?.setValue(data?.last_close_expense || '');
     form.get('last_year_expenses')?.setValue(data?.last_year_expenses || '');
-    form.get('is_pep')?.setValue(data?.is_pep || '');
+    form.get('is_pep')?.setValue(data?.pep ? '1' : '0');
+    form.get('form_responsible_name')?.setValue(data?.form_responsible_name || '');
+    form.get('form_responsible_document')?.setValue(data?.form_responsible_document || '');
+    form.get('form_responsible_position')?.setValue(data?.form_responsible_position || '');
 
     // Setting additional info
     const info_additional = data?.info_additional || [];
@@ -443,8 +456,8 @@ export class GlobalService {
           form.get('medicines_description')?.setValue(info.description || '');
           break;
         case 112:
-          form.get('allergy')?.setValue(info.value ? '1' : '0');
-          form.get('allergy_description')?.setValue(info.description || '');
+          form.get('allergies')?.setValue(info.value ? '1' : '0');
+          form.get('allergies_description')?.setValue(info.description || '');
           break;
         case 113:
           form.get('food_restrictions')?.setValue(info.value ? '1' : '0');
@@ -530,6 +543,15 @@ export class GlobalService {
 			duration: duration,
 		});
 	}
+
+  formatDate(isoDate: string): string {
+    const date = new Date(isoDate);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+  
+    return `${day}/${month}/${year}`;
+  }
 
   constructor(private _vS: VendorService, private _snackBar: MatSnackBar) { }
 }

@@ -1,3 +1,8 @@
+@if (loading) {
+  <div class="loader">
+      <div class="custom-loader"></div>
+  </div>
+}
 <div class="form-page">
 	<div class="form-content">
 			<app-form-header [title]="title"/>
@@ -11,7 +16,7 @@
 				<p>
 					El presente documento deberá ser completado y suscrito por el representante legal de la persona jurídica que se vinculará a la sociedad CMO PRODUCCIONES S.A.S., CMO INTERNACIONAL S.A.S. y/o CMO STUDIOS S.A.S., o aquellas que deseen realizar una actualización de datos previamente registrados.
 				</p>
-				<app-vinculacion-juridica class="full-width" (notify)="sendForm($event)" />
+				<app-vinculacion-juridica class="full-width" (notify)="sendForm($event)" [lists]="lists" />
 			}
 				
 	</div>
