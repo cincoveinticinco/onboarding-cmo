@@ -71,6 +71,8 @@ h1 {
     font-size: var(--title-font-size);
     text-align: center;
     margin-bottom: 1.06rem;
+    font-size: 1.5rem !important;
+    font-weight: blod !important;
 }
 
 p {
@@ -184,8 +186,12 @@ p.lbl-eng {
 
   small {
     font-style: italic;
-    padding: 0px 0;
-    height: 6px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 10px;
+    height: 12px;
+    text-wrap: nowrap;
   }
 
   input {
@@ -380,6 +386,19 @@ p.lbl-eng {
     position: fixed;
     top: 20px;
     right: 30px;
+}
+
+.delete-button{
+  margin: 0 !important;
+  background: transparent;
+  color: red;
+  min-width: auto;
+  padding: 0;
+  cursor: pointer;
+
+  &:hover{
+    background-color: #f88f1e36;
+  }
 }
 
 .validation-label {

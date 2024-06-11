@@ -48,7 +48,7 @@ export class DocumentationFormComponent implements OnInit {
             const fileData = {
               formControlName: controlName,
               value: control?.value?.file,
-              crew_id: this._vS.getVendorId(),
+              vendor_id: this._vS.getVendorId(),
             };
             this.submitFile(fileData);
             control.markAsPristine();
@@ -67,54 +67,7 @@ export class DocumentationFormComponent implements OnInit {
     this.loading = true;
     this.subs.push(this._vS.getDocumentsData().subscribe({
       next: ((data: any) => {
-        // this.documents = data.f_vendor_document_types || [];
-        this.documents = [
-          {
-              id: '324',
-              document_type: 'Signature'
-          },
-          {
-              id: '325',
-              document_type: 'Copia del documento de identidad del prestador del servicio'
-          },
-          {
-              id: '326',
-              document_type: 'RUT con antigüedad no mayor a un año'
-          },
-          {
-              id: '327',
-              document_type: 'Certificación bancaria no mayor a 90 días'
-          },
-          {
-              id: '328',
-              document_type: 'Foto a color tipo documento fondo blanco'
-          },
-          {
-              id: '329',
-              document_type: 'Certificación de afiliación al Sistema ARL'
-          },
-          {
-              id: '330',
-              document_type: 'Carta de autorización a CMO'
-          },
-          {
-              id: '331',
-              document_type: 'Cámara de comercio no mayor a 30 días'
-          },
-          {
-              id: '332',
-              document_type: 'Copia del documento de identidad del prestador del servicio'
-          },
-          {
-              id: '333',
-              document_type: 'Formato diligenciado y firmado de "Acuerdo de confidencialidad"'
-          },
-          {
-              id: '334',
-              document_type: 'Formato diligenciado y firmado de "Vinculación y/o actualización de datos"'
-          }
-      ];
-      
+        this.documents = data.f_vendor_document_types || [];
         this.setFormData();
         this.loading = false;
       })
@@ -150,6 +103,14 @@ export class DocumentationFormComponent implements OnInit {
     }
   }
 
+  getErrorMessage(docId: any) {
+    let control = this.documentForm.get(`document_${docId}`);
+    if (control?.hasError('required') && control?.touched) {
+      return 'Este campo es requerido *';
+    }
+    return
+  }
+
   submitFile(ev: any) {
     this.loading = true;
     const { value, formControlName } = ev;
@@ -164,7 +125,7 @@ export class DocumentationFormComponent implements OnInit {
     }
     else {
       const nameFile = this._gS.normalizeString(value.name);
-      this._vS.getPresignedPutURL(nameFile, ev.crew_id).pipe(
+      this._vS.getPresignedPutURL(nameFile, ev.vendor_id).pipe(
         catchError((error) =>
           of({ id: fileIdDocument, file: value, key: '', url: '' })
         ),
@@ -196,9 +157,9 @@ export class DocumentationFormComponent implements OnInit {
           (uploadFile: any) => {
             if (!uploadFile) return of(false);
             return this._vS.updateVendorDocument({
-              crew_document_type_id: Number(uploadFile.id),
+              vendor_document_type_id: Number(uploadFile.id),
               link: uploadFile.url
-              ? `${ev.crew_id}/${nameFile}`
+              ? `${ev.vendor_id}/${nameFile}`
               : '',
             });
           }

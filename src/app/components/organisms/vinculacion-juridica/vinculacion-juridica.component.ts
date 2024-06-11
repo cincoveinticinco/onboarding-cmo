@@ -109,7 +109,8 @@ export class VinculacionJuridicaComponent {
       form_responsible_name: new FormControl('', [Validators.required]),
       form_responsible_document: new FormControl('', [Validators.required]),
       form_responsible_position: new FormControl('', [Validators.required]),
-      signature: new FormControl('', [Validators.required])
+      signature: new FormControl('', [Validators.required]),
+      cv_link: new FormControl('', [Validators.required]),
     });
   }
 
@@ -127,7 +128,7 @@ export class VinculacionJuridicaComponent {
             if (foundKey) {
               const fileData = {
                 formControlName: controlName,
-                value: value.file,
+                value: value?.file,
                 vendor_id: this._vS.getVendorId()
               };
               this.onSubmitFile.emit(fileData);

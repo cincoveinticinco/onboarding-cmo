@@ -17,9 +17,15 @@
   />
 </div>
 <div class="row">
-  <label class="col-12">Firma</label>
+  <label class="col-12">Adjuntar imagen con su firma</label>
   <app-filebox 
     [control]="getControl('signature')"
-    class="col-4"
+    class="col-12"
+  />
+  <app-text-input
+    [label]="'Por favor, adjunte el link del CV de la persona prestadora del servicio'"
+    [control]="getControl('cv_link')"
+    [type]="'url'"
+    class="col-6"
   />
 </div>

@@ -3,6 +3,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { FormsCmoComponent } from './pages/forms-cmo/forms-cmo.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { authGuard } from './guards/auth.guard';
+import { ThanksComponent } from './components/organisms/thanks/thanks.component';
 
 export const routes: Routes = [
     {
@@ -14,8 +15,16 @@ export const routes: Routes = [
       canActivate: [authGuard],
       component: FormsCmoComponent
     },
+    {
+      path: 'thanks-docs/:id',
+      canActivate: [authGuard],
+      component: ThanksComponent,
+      data: {
+          type: 'docs'
+      }
+    },
 		{
 			path: '**',
 			component: PageNotFoundComponent
-		}
+		},
 ];

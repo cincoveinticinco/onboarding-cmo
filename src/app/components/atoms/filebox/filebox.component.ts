@@ -46,6 +46,14 @@ export class FileboxComponent implements ControlValueAccessor, Validator, OnInit
     }
   }
 
+  getErrors(): string | null {
+    const touched = this.control.touched;
+    if (this.control.hasError('required') && touched) {
+      return 'Este campo es requerido *';
+    }
+    return null;
+  }
+
   onFileChange(event: Event) {
     const target = event.target as HTMLInputElement;
     const files = target.files;

@@ -20,7 +20,7 @@
     }
 }
   
-.content-file-filled{
+.content-file-filled {
     background: var(--background-light-color);
     display: flex;
     border: 1px solid var(--font-color);
@@ -28,6 +28,7 @@
     justify-content: space-between;
     padding-left: 8px;
     max-width: 270px;
+    margin: 16px 0px;
   
     span{
       display: block;

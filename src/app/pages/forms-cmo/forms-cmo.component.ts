@@ -13,6 +13,7 @@ import { DocumentationFormComponent } from '../../components/organisms/documenta
 import { catchError, map, of, switchMap } from 'rxjs';
 import { HttpEventType } from '@angular/common/http';
 import { file_types } from '../../shared/interfaces/files_types';
+import { ThanksComponent } from '../../components/organisms/thanks/thanks.component';
 
 @Component({
   selector: 'app-forms-cmo',
@@ -22,7 +23,8 @@ import { file_types } from '../../shared/interfaces/files_types';
     PanelButtonsComponent,
     VinculacionNaturalComponent,
     VinculacionJuridicaComponent,
-    DocumentationFormComponent
+    DocumentationFormComponent,
+    ThanksComponent
   ],
   templateUrl: './forms-cmo.component.html',
   styleUrl: './forms-cmo.component.css'
@@ -105,11 +107,11 @@ export class FormsCmoComponent implements OnInit {
       file_types[key as unknown as keyof typeof file_types] == formControlName
     );
 
-    // const documentId = this.globalService.getDocumentLink(fileIdDocument)?.document_id;
-    console.log(value, 'VALUE')
+    const documentId = this.globalService.getDocumentLink(fileIdDocument)?.document_id;
+    console.log(documentId, 'VALUE')
     if (!value) {
-      // this.vendorService.deleteVendorDocument({ document_id: documentId })
-      // .subscribe((data) => this.loading = false);
+      this.vendorService.deleteVendorDocument({ document_id: documentId })
+      .subscribe((data) => this.loading = false);
     }
     else {
       const nameFile = this.globalService.normalizeString(value.name);

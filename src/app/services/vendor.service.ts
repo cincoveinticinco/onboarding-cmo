@@ -128,10 +128,14 @@ export class VendorService {
     .pipe(map( response => response))
   }
 
-  deleteVendorDocument(formData: any){
+  deleteVendorDocument(formData: any) {
     this.setHeaders();
-    return this.http.post(`${environment.apiUrl}cmo/deleteDocumentVendor`, {...formData}, { headers: this.headers })
-    .pipe(map( response => response))
+ 
+    return this.http.delete(`${environment.apiUrl}cmo/delete_document_vendor`, {
+      headers: this.headers,
+      params: formData
+    })
+    .pipe(map(response => response));
   }
 
   constructor(private http: HttpClient, private auth: AuthService) {
