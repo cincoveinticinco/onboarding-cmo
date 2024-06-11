@@ -169,9 +169,12 @@ export class VinculacionJuridicaComponent {
 
   sendForm() {
     if (this.juridicaForm.valid) {
-      this.notify.emit(this.juridicaForm);
+      let data = {
+        form: this.juridicaForm.value,
+        nextForm: true
+      }
+      this.notify.emit(data);
     } else {
-      console.log(this.juridicaForm.value, '*************************88')
       Object.values(this.juridicaForm.controls).forEach((control) => {
         control.markAsTouched();
       });
@@ -179,7 +182,11 @@ export class VinculacionJuridicaComponent {
   }
 
   saveForm() {
-    this.notify.emit(this.juridicaForm);
+    let data = {
+      form: this.juridicaForm.value,
+      nextForm: false
+    }
+    this.notify.emit(data);
   }
 
   logFormErrors(form: FormGroup) {

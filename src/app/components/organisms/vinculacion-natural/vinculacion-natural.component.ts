@@ -52,14 +52,13 @@ export class VinculacionNaturalComponent {
   subs: Subscription[] = [];
 
   constructor(private fb: FormBuilder, private _gS: GlobalService, private _vS: VendorService) {
-
     this.naturalForm = this.fb.group({
       type: new FormControl('', [Validators.required]),
       date: new FormControl('', [Validators.required]),
       name: new FormControl('', [Validators.required]),
       document_type_id: new FormControl('', [Validators.required]),
       document: new FormControl('', [Validators.required]),
-      pepff: new FormControl('', [Validators.required]),
+      pepff: new FormControl(''),
       ciiu: new FormControl('', [Validators.required]),
       economic_activity_id: new FormControl('', [Validators.required]),
       economic_activity: new FormControl('', [Validators.required]),
@@ -77,15 +76,15 @@ export class VinculacionNaturalComponent {
       arl: new FormControl('', [Validators.required]),
       risk_level: new FormControl('', [Validators.required]),
       illness: new FormControl('', [Validators.required]),
-      illness_description: new FormControl('', [Validators.required]),
+      illness_description: new FormControl(''),
       medicines: new FormControl('', [Validators.required]),
-      medicines_description: new FormControl('', [Validators.required]),
+      medicines_description: new FormControl(''),
       phobias: new FormControl('', [Validators.required]),
-      phobias_description: new FormControl('', [Validators.required]),
+      phobias_description: new FormControl(''),
       allergies: new FormControl('', [Validators.required]),
-      allergies_description: new FormControl('', [Validators.required]),
+      allergies_description: new FormControl(''),
       food_restrictions: new FormControl('', [Validators.required]),
-      food_restrictions_description: new FormControl('', [Validators.required]),
+      food_restrictions_description: new FormControl(''),
       is_pep: new FormControl('', [Validators.required]),
       confidential_responsible_address: new FormControl('', [Validators.required]),
       confidential_responsible_email: new FormControl('', [Validators.required]),
@@ -106,7 +105,6 @@ export class VinculacionNaturalComponent {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['lists'] && this.lists.vendorInfo && this.naturalForm) {
-      console.log('this.lists.vendorInfo', this.lists.vendorInfo)
       this._gS.fillInitialVinculationForm(this.naturalForm, this.lists.vendorInfo);
       this.naturalForm.get('date')?.setValue(this._gS.formatDate(this.lists.vendorInfo.created_at));
       this.naturalForm.controls['date'].disable();
@@ -116,31 +114,37 @@ export class VinculacionNaturalComponent {
   }
 
   ngOnInit(): void {
-    // Suscripción a cambios en los valores de los controles del formulario
-    this.subs.push(this.naturalForm.valueChanges.subscribe(
-      valor => {
-        Object.keys(this.naturalForm.controls).forEach((controlName: any) => {
-          const control = this.naturalForm.get(controlName);
-          if (control && control.dirty) {
-            const foundKey = Object.keys(file_types).find((key: any) => file_types[key] === controlName);
+    this.subscribeToFormChanges();
+    this.naturalForm.get('date')?.setValue(this._gS.formatDate(this.lists.vendorInfo.created_at));
+    this.naturalForm.controls['date'].disable();
+    this.naturalForm.get('type')?.setValue('VINCULACION PERSONA NATURAL');
+    this.naturalForm.controls['type'].disable();
+  }
 
+  subscribeToFormChanges() {
+    Object.keys(this.naturalForm.controls).forEach(controlName => {
+      const control = this.naturalForm.get(controlName);
+      if (control) {
+        const sub = control.valueChanges.subscribe(value => {
+          if (control) {
+            const foundKey = Object.keys(file_types).find((key: any) => file_types[key] === controlName);
             if (foundKey) {
               const fileData = {
                 formControlName: controlName,
-                value: control?.value?.file,
-                vendor_id: this._vS.getVendorId(),
+                value: value.file,
+                vendor_id: this._vS.getVendorId()
               };
               this.onSubmitFile.emit(fileData);
               control.markAsPristine();
             }
           }
         });
+        this.subs.push(sub);
       }
-    ));
+    });
   }
 
   ngOnDestroy() {
-    // Limpiar las suscripciones al destruir el componente
     this.subs.forEach(sub => sub.unsubscribe());
   }
 
@@ -163,19 +167,30 @@ export class VinculacionNaturalComponent {
 
   sendForm() {
     if (this.naturalForm.valid) {
-      console.log(this.naturalForm.value);
-      this.notify.emit(this.naturalForm);
+      let data = {
+        form: this.naturalForm.value,
+        nextForm: true
+      }
+      this.notify.emit(data);
     } else {
-      console.log(this.naturalForm.value)
-      Object.values(this.naturalForm.controls).forEach((control) => {
-        control.markAsTouched();
-      });
+      this.logFormErrors(this.naturalForm);
     }
   }
 
   saveForm() {
-    console.log('SENDING FORM TO SAVE ....')
-    console.log(this.naturalForm)
-    this.notify.emit(this.naturalForm);
+    let data = {
+      form: this.naturalForm.value,
+      nextForm: false
+    }
+    this.notify.emit(data);
+  }
+
+  logFormErrors(form: FormGroup) {
+    Object.keys(form.controls).forEach(key => {
+      const controlErrors = form.get(key)?.errors;
+      if (controlErrors) {
+        console.log(`Control: ${key}, Errors:`, controlErrors);
+      }
+    });
   }
 }

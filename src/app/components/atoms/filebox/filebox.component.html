@@ -20,13 +20,11 @@
       >
     }
   </label>
-}
-@else {
+} @else {
   <div class="content-file-filled">
     @if (value.url) {
       <span><a [href]="value.url" target="_blank">{{ value.name }}</a></span>
-    }
-    @else {
+    } @else {
       <span>{{ value.name }}</span>
     }
     <button type="button" class="delete-button" (click)="changeView('comfirm-delete')">

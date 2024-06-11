@@ -1,6 +1,8 @@
-import { Component, Input, Optional, Self } from '@angular/core';
-import { DragAndDropFileDirective } from '../../../shared/directives/drag-and-drop-file.directive'
+// File: filebox.component.ts
+import { Component, Input, Optional, Self, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, FormControl, NgControl, ReactiveFormsModule, ValidationErrors, Validator } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { DragAndDropFileDirective } from '../../../shared/directives/drag-and-drop-file.directive';
 import { DialogComponent } from '../../../shared/components/dialog/dialog.component';
 
 @Component({
@@ -8,61 +10,81 @@ import { DialogComponent } from '../../../shared/components/dialog/dialog.compon
   standalone: true,
   imports: [DragAndDropFileDirective, DialogComponent, ReactiveFormsModule],
   templateUrl: './filebox.component.html',
-  styleUrl: './filebox.component.css'
+  styleUrls: ['./filebox.component.css'] // Corrected from 'styleUrl' to 'styleUrls'
 })
-export class FileboxComponent implements ControlValueAccessor, Validator {
-
+export class FileboxComponent implements ControlValueAccessor, Validator, OnInit, OnDestroy {
   @Input() onlyPdf = false;
   @Input() control: FormControl = new FormControl();
 
-  onChange = (value: string) => {}
-  onTouched = () => {}  
+  private controlValueSubscription: Subscription | undefined;
+  onChange = (value: any) => {};
+  onTouched = () => {};
   value: any;
-  disabled: boolean = false;
+  disabled = false;
   fileName: any;
-  view: string = '';
+  view = '';
 
   constructor(@Optional() @Self() public ngControl: NgControl) {
-    if(this.ngControl != null){
+    if (this.ngControl != null) {
       this.ngControl.valueAccessor = this;
     }
   }
 
-  onFileChange(event: Event){
+  ngOnInit() {
+    if (this.control) {
+      console.log('Initializing FileboxComponent with control:', this.control);
+      if(this.control.value) {
+        this.value = this.control.value;
+        this.view = 'filled';
+      }
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.controlValueSubscription) {
+      this.controlValueSubscription.unsubscribe();
+    }
+  }
+
+  onFileChange(event: Event) {
     const target = event.target as HTMLInputElement;
-    const files = target.files
-    if(files && files.length > 0){
+    const files = target.files;
+    if (files && files.length > 0) {
       const file = files[0];
-     
-      this.value = { file, name: file.name, url: null};
-      this.onChange(this.value)
+      this.value = { file, name: file.name, url: null };
+      this.onChange(this.value);
       this.control.setValue(this.value);
     }
   }
 
   validate(control: AbstractControl<any, any>): ValidationErrors | null {
-    return null
+    return null;
   }
 
-  onDragFileChange(files: any){
-    if(files && files.length > 0){
+  onDragFileChange(files: any) {
+    if (files && files.length > 0) {
       const file = files[0];
-      this.control.setValue(file);
-
-      this.value = { file, name: file.name, url: null};
-      this.onChange(this.value)
+      this.value = { file, name: file.name, url: null };
+      this.onChange(this.value);
+      this.control.setValue(this.value);
     }
   }
 
-  clearFile(){
+  clearFile() {
     this.control.setValue(null);
     this.value = null;
-    this.onChange(this.value)
+    this.onChange(this.value);
   }
 
   writeValue(value: any): void {
-    this.value = value
+    this.value = value;
+    if (value) {
+      this.view = 'filled';
+    } else {
+      this.view = '';
+    }
   }
+
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }

@@ -3,6 +3,7 @@ import { VendorService } from './vendor.service';
 import { Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { info } from 'console';
+import { file_types } from '../shared/interfaces/files_types';
 
 @Injectable({
   providedIn: 'root'
@@ -442,9 +443,12 @@ export class GlobalService {
     form.get('form_responsible_name')?.setValue(data?.form_responsible_name || '');
     form.get('form_responsible_document')?.setValue(data?.form_responsible_document || '');
     form.get('form_responsible_position')?.setValue(data?.form_responsible_position || '');
+    form.get('signature')?.setValue(this.getDocumentLink(324))
+    console.log(this._vS.getDocumentsList())
+    console.log(form.get('signature')?.value)
 
     // Setting additional info
-    const info_additional = data?.info_additional || [];
+    const info_additional = data?.info_additional;
     for (let info of info_additional) {
       switch(info.id) {
         case 110:

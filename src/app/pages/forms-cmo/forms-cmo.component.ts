@@ -72,7 +72,7 @@ export class FormsCmoComponent implements OnInit {
         };
         this.typePerson = response.vendor_basic_info?.f_person_type_id
         console.log('typePerson', this.typePerson);
-        this.vendorStatus = response.vendor_basic_info?.f_vendor_status_id;
+        this.vendorStatus = response?.vendor_status
         this.vendorService.setDocumentsList(response.document_vendor);
         console.log('DOCS LIST', this.vendorService.getDocumentsList())
         this.getTitle();
@@ -87,10 +87,10 @@ export class FormsCmoComponent implements OnInit {
   }
 
   sendForm(ev: any) {
-    const formData = this.globalService.setVinculationForm(ev.value);
+    const formData = this.globalService.setVinculationForm(ev.form);
     console.log('formData', formData);
     this.vendorService.updateVendor(formData).subscribe((response: any) => {
-      return this.vendorService.setNextVendorStatus().subscribe((response: any) => {
+      return ev.nextForm && this.vendorService.setNextVendorStatus().subscribe((response: any) => {
         this.loadData();
       });
     });
@@ -145,7 +145,7 @@ export class FormsCmoComponent implements OnInit {
           (uploadFile: any) => {
             if (!uploadFile) return of(false);
             return this.vendorService.updateVendorDocument({
-              crew_document_type_id: Number(uploadFile.id),
+              vendor_document_type_id: Number(uploadFile.id),
               link: uploadFile.url
               ? `${ev.vendor_id}/${nameFile}`
               : ``,
@@ -153,6 +153,7 @@ export class FormsCmoComponent implements OnInit {
           }
         ),
         map((response: any) => {
+          console.log('responsesssasasdaasd', response);
           this.linkDocument = response;
         })
       )

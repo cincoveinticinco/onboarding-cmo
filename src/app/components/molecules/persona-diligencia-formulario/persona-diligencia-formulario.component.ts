@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { SubtitleComponent } from '../../atoms/subtitle/subtitle.component';
 import { TextInputComponent } from '../../atoms/text-input/text-input.component';
 import { FileboxComponent } from '../../atoms/filebox/filebox.component';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-persona-diligencia-formulario',
@@ -10,7 +10,8 @@ import { FormControl, FormGroup } from '@angular/forms';
   imports: [
     SubtitleComponent,
     TextInputComponent,
-    FileboxComponent
+    FileboxComponent,
+    ReactiveFormsModule
   ],
   templateUrl: './persona-diligencia-formulario.component.html',
   styleUrl: './persona-diligencia-formulario.component.css'
