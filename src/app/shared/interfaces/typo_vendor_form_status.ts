@@ -1,0 +1,4 @@
+export enum VENDORFORMSTATUS {
+  CREADO = 21,
+  VINCULACION = 22
+}

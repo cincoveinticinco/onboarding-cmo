@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input,  Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { InitialDataComponent } from '../../molecules/initial-data/initial-data.component';
 import { BlackButtonComponent } from '../../atoms/black-button/black-button.component';
@@ -20,6 +20,8 @@ import { PersonaDiligenciaFormularioComponent } from '../../molecules/persona-di
 import { PanelButtonsComponent } from '../../molecules/panel-buttons/panel-buttons.component';
 import { GlobalService } from '../../../services/global.service';
 import { VendorService } from '../../../services/vendor.service';
+import { file_types } from '../../../shared/interfaces/files_types';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-vinculacion-juridica',
@@ -54,6 +56,8 @@ export class VinculacionJuridicaComponent {
   @Input() lists: any = {};
   @Output() notify: EventEmitter<any> = new EventEmitter();
   @Output() save: EventEmitter<any> = new EventEmitter();
+  @Output() onSubmitFile: EventEmitter<any> = new EventEmitter();
+  subs: Subscription[] = [];
 
   constructor(private fb: FormBuilder, private _gS: GlobalService, private _vS: VendorService) {
     this.juridicaForm = this.fb.group({
@@ -105,13 +109,39 @@ export class VinculacionJuridicaComponent {
       form_responsible_name: new FormControl('', [Validators.required]),
       form_responsible_document: new FormControl('', [Validators.required]),
       form_responsible_position: new FormControl('', [Validators.required]),
-      signature: new FormControl('', [Validators.required]),
+      signature: new FormControl('', [Validators.required])
+    });
+  }
+
+  ngOnInit() {
+    this.subscribeToFormChanges();
+  }
+
+  subscribeToFormChanges() {
+    Object.keys(this.juridicaForm.controls).forEach(controlName => {
+      const control = this.juridicaForm.get(controlName);
+      if (control) {
+        const sub = control.valueChanges.subscribe(value => {
+          if (control) {
+            const foundKey = Object.keys(file_types).find((key: any) => file_types[key] === controlName);
+            if (foundKey) {
+              const fileData = {
+                formControlName: controlName,
+                value: value.file,
+                vendor_id: this._vS.getVendorId()
+              };
+              this.onSubmitFile.emit(fileData);
+              control.markAsPristine();
+            }
+          }
+        });
+        this.subs.push(sub);
+      }
     });
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['lists'] && this.lists.vendorInfo && this.juridicaForm) {
-      console.log('this.lists.vendorInfo', this.lists.vendorInfo)
       this._gS.fillInitialVinculationForm(this.juridicaForm, this.lists.vendorInfo);
       this.juridicaForm.get('date')?.setValue(this._gS.formatDate(this.lists.vendorInfo.created_at));
       this.juridicaForm.controls['date'].disable();
@@ -139,10 +169,9 @@ export class VinculacionJuridicaComponent {
 
   sendForm() {
     if (this.juridicaForm.valid) {
-      console.log(this.juridicaForm.value);
-      // this.notify.emit(this.juridicaForm);
+      this.notify.emit(this.juridicaForm);
     } else {
-      console.log(this.juridicaForm.value)
+      console.log(this.juridicaForm.value, '*************************88')
       Object.values(this.juridicaForm.controls).forEach((control) => {
         control.markAsTouched();
       });
@@ -150,8 +179,20 @@ export class VinculacionJuridicaComponent {
   }
 
   saveForm() {
-    console.log('SENDING FORM TO SAVE ....')
-    console.log(this.juridicaForm)
     this.notify.emit(this.juridicaForm);
   }
+
+  logFormErrors(form: FormGroup) {
+    Object.keys(form.controls).forEach(key => {
+      const controlErrors = form.get(key)?.errors;
+      if (controlErrors) {
+        console.log(`Control: ${key}, Errors:`, controlErrors);
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.subs.forEach(sub => sub.unsubscribe());
+  }
+
 }

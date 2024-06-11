@@ -16,6 +16,8 @@ import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, 
 import { PanelButtonsComponent } from '../../molecules/panel-buttons/panel-buttons.component';
 import { VendorService } from '../../../services/vendor.service';
 import { GlobalService } from '../../../services/global.service';
+import { Subscription } from 'rxjs';
+import { file_types } from '../../../shared/interfaces/files_types';
 
 @Component({
   selector: 'app-vinculacion-natural',
@@ -45,6 +47,9 @@ export class VinculacionNaturalComponent {
   naturalForm: FormGroup;
   @Input() lists: any = {};
   @Output() notify: EventEmitter<any> = new EventEmitter();
+  @Output() onSubmitFile: EventEmitter<any> = new EventEmitter();
+
+  subs: Subscription[] = [];
 
   constructor(private fb: FormBuilder, private _gS: GlobalService, private _vS: VendorService) {
 
@@ -108,6 +113,35 @@ export class VinculacionNaturalComponent {
       this.naturalForm.get('type')?.setValue('VINCULACION PERSONA NATURAL');
       this.naturalForm.controls['type'].disable();
     }
+  }
+
+  ngOnInit(): void {
+    // Suscripción a cambios en los valores de los controles del formulario
+    this.subs.push(this.naturalForm.valueChanges.subscribe(
+      valor => {
+        Object.keys(this.naturalForm.controls).forEach((controlName: any) => {
+          const control = this.naturalForm.get(controlName);
+          if (control && control.dirty) {
+            const foundKey = Object.keys(file_types).find((key: any) => file_types[key] === controlName);
+
+            if (foundKey) {
+              const fileData = {
+                formControlName: controlName,
+                value: control?.value?.file,
+                vendor_id: this._vS.getVendorId(),
+              };
+              this.onSubmitFile.emit(fileData);
+              control.markAsPristine();
+            }
+          }
+        });
+      }
+    ));
+  }
+
+  ngOnDestroy() {
+    // Limpiar las suscripciones al destruir el componente
+    this.subs.forEach(sub => sub.unsubscribe());
   }
 
   @HostListener('submit', ['$event'])

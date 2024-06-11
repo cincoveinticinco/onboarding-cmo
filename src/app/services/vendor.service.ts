@@ -74,28 +74,29 @@ export class VendorService {
 
   getVinculationInfo(vendor_id: any) {
     this.setHeaders();
-    return this.http.get(`${environment.apiUrl}dynamo/getDetailVendorDocuments`, {
+    return this.http.get(`${environment.apiUrl}cmo/getDetailVendorDocuments`, {
       headers: this.headers,
       params: new HttpParams()
         .set('vendor_id', vendor_id),
     });
   }
-
-  changeStatus(params: any = {}) {
+  setNextVendorStatus() {
     this.setHeaders();
-    return this.http.post(`${environment.apiUrl}dynamo/getsendVerification`, params, { headers: this.headers }).pipe(
+    return this.http.put(`${environment.apiUrl}/cmo/set_next_status`, null, {
+      headers: this.headers
+    }).pipe(
       map((response: any) => response));
   }
 
   updateVinculation(values: any) {
     this.setHeaders();
-    return this.http.post(`${environment.apiUrl}dynamo/updateDetailVendorDocuments`, values, { headers: this.headers }).pipe(
+    return this.http.post(`${environment.apiUrl}cmo/updateDetailVendorDocuments`, values, { headers: this.headers }).pipe(
       map((response: any) => response));
   }
 
   getDocumentsData() {
     this.setHeaders();
-    return this.http.get(`${environment.apiUrl}dynamo/get_required_documents_List`, {
+    return this.http.get(`${environment.apiUrl}cmo/get_required_documents_list`, {
       headers: this.headers,
       params: new HttpParams()
     });
@@ -123,13 +124,13 @@ export class VendorService {
 
   updateVendorDocument(formData: any){
     this.setHeaders();
-    return this.http.post(`${environment.apiUrl}dynamo/addDocumentVendor`, {...formData}, { headers: this.headers })
+    return this.http.post(`${environment.apiUrl}cmo/add_document_vendor`, {...formData}, { headers: this.headers })
     .pipe(map( response => response))
   }
 
   deleteVendorDocument(formData: any){
     this.setHeaders();
-    return this.http.post(`${environment.apiUrl}dynamo/deleteDocumentVendor`, {...formData}, { headers: this.headers })
+    return this.http.post(`${environment.apiUrl}cmo/deleteDocumentVendor`, {...formData}, { headers: this.headers })
     .pipe(map( response => response))
   }
 

@@ -8,7 +8,7 @@ import { DialogComponent } from '../../../shared/components/dialog/dialog.compon
   standalone: true,
   imports: [DragAndDropFileDirective, DialogComponent, ReactiveFormsModule],
   templateUrl: './filebox.component.html',
-  styleUrl: './filebox.component.scss'
+  styleUrl: './filebox.component.css'
 })
 export class FileboxComponent implements ControlValueAccessor, Validator {
 
@@ -33,10 +33,10 @@ export class FileboxComponent implements ControlValueAccessor, Validator {
     const files = target.files
     if(files && files.length > 0){
       const file = files[0];
-      this.control.setValue(file);
-
+     
       this.value = { file, name: file.name, url: null};
       this.onChange(this.value)
+      this.control.setValue(this.value);
     }
   }
 
