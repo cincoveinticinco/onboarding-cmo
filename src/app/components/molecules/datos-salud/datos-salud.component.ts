@@ -28,4 +28,12 @@ export class DatosSaludComponent {
   showDescription(controlName: string): '0' | '1' {
     return this.getControl(controlName).value
   }
+  
+  getRiskPercentage() {
+    let risk_level = this.getControl('risk_level')
+    if(risk_level.value) {
+      let percentage = this.lists?.riskLevels.find((item: any) => item.id === risk_level.value)?.risk_percentage
+      return percentage
+    }
+  }
 }

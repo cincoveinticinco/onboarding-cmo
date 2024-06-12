@@ -24,6 +24,9 @@
     [optionName]="'name'"
     [optionValue]="'id'"
     class="col-4"></app-select-input>
+  <p class="col-2 align-end"> 
+    {{ getRiskPercentage() }} %
+  </p>
   <app-checkbox-input 
     [label]="'¿Sufre de alguna enfermedad?'"
     [controlName]="'illness'"

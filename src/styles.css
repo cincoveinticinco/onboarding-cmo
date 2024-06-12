@@ -97,6 +97,12 @@ a {
     align-items: center;
 }
 
+.align-end {
+    display: flex;
+    align-items: flex-end;
+
+}
+
 .error {
   color: var(--alert-color);
 }
