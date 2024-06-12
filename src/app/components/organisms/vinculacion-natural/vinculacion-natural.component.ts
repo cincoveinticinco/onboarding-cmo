@@ -99,7 +99,7 @@ export class VinculacionNaturalComponent {
       simple_regime: new FormControl('', [Validators.required]),
       form_responsible_name: new FormControl('', [Validators.required]),
       form_responsible_document: new FormControl('', [Validators.required]),
-      signature: new FormControl('', [Validators.required])
+      signature: new FormControl('', [Validators.required]),
     });
   }
 
