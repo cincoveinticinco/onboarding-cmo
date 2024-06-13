@@ -10,6 +10,7 @@ import { Subscription, catchError, map, of, switchMap } from 'rxjs';
 import { HttpEventType } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BlackButtonComponent } from '../../atoms/black-button/black-button.component';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-documentation-form',
@@ -20,11 +21,12 @@ import { BlackButtonComponent } from '../../atoms/black-button/black-button.comp
 })
 export class DocumentationFormComponent implements OnInit {
 
-  @Input() typeVendor: any = null; 
+  @Input() typeVendor: any = null;
 
   readonly TIPOPERSONA = TIPOPERSONA;
   readonly VENDORFORMSTATUS = VENDORFORMSTATUS;
-  
+  readonly apiUrlFront = environment.apiUrlFront;
+
   loading: boolean = false;
   documents: any[] = [];
   documentForm: FormGroup;
@@ -39,7 +41,7 @@ export class DocumentationFormComponent implements OnInit {
   ngOnInit(): void {
     this.loadData();
 
-    this.subs.push(this.documentForm.valueChanges.subscribe(valor => {
+    this.subs.push(this.documentForm.valueChanges.subscribe((valor: any) => {
       Object.keys(this.documentForm.controls).forEach((controlName: any) => {
         const control = this.documentForm.get(controlName);
         if (control && control.dirty) {
@@ -97,8 +99,8 @@ export class DocumentationFormComponent implements OnInit {
       }));
     }
     else {
-      Object.values(this.documentForm.controls).forEach((control) => {
-        control.markAsTouched();
+      Object.values(this.documentForm.controls).forEach((control: any) => {
+        control?.markAsTouched();
       });
     }
   }
