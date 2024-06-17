@@ -80,7 +80,7 @@ export class VinculacionJuridicaComponent {
       accounting_responsible_telephone: new FormControl('', [Validators.required]),
       accounting_responsible_email: new FormControl('', [Validators.required]),
       accounting_responsible_position: new FormControl('', [Validators.required]),
-      ciiu: new FormControl('', [Validators.required]),
+      ciiu: new FormControl(''),
       economic_activity_id: new FormControl('', [Validators.required]),
       economic_activity: new FormControl('', [Validators.required]),
       simple_regime: new FormControl('', [Validators.required]),

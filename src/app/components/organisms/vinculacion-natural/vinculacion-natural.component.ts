@@ -59,7 +59,7 @@ export class VinculacionNaturalComponent {
       document_type_id: new FormControl('', [Validators.required]),
       document: new FormControl('', [Validators.required]),
       pepff: new FormControl(''),
-      ciiu: new FormControl('', [Validators.required]),
+      ciiu: new FormControl(''),
       economic_activity_id: new FormControl('', [Validators.required]),
       economic_activity: new FormControl('', [Validators.required]),
       address: new FormControl('', [Validators.required]),
