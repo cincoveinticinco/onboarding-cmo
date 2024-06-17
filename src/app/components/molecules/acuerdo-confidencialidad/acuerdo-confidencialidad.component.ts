@@ -15,6 +15,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 })
 export class AcuerdoConfidencialidadComponent {
   @Input() form: FormGroup | undefined;
+  @Input() list:any;
   
 
   getControl(controlName: string): FormControl {
