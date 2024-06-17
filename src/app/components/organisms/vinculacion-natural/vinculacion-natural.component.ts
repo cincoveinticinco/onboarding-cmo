@@ -88,7 +88,7 @@ export class VinculacionNaturalComponent {
       is_pep: new FormControl('', [Validators.required]),
       confidential_responsible_address: new FormControl('', [Validators.required]),
       confidential_responsible_email: new FormControl('', [Validators.required]),
-      accounting_responsible_email: new FormControl('', [Validators.required]),
+      accounting_responsible_email: new FormControl(''),
       income_tax_declarant: new FormControl('', [Validators.required]),
       dependents: new FormControl('', [Validators.required]),
       prepaid_medicine: new FormControl('', [Validators.required]),
