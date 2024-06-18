@@ -61,10 +61,12 @@
     [label]="'Celular / Teléfono de Contacto'"
     [control]="getControl('telephone')"
     class="col-4"
+    [pattern]="'^[0-9+-]+$'"
   />
   <app-text-input
     [label]="'Correo Electrónico del Contratista'"
     [control]="getControl('email')"
     class="col-4"
+    [type]="'email'"
   />
 </div>

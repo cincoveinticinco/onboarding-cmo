@@ -30,6 +30,7 @@ export class GlobalService {
       afp: data[('afp')],
       layoffs: data[('layoffs')],
       cmo_level_risk_arl_id: data[('risk_level')],
+      blood_type_id: data[('blood_type_id')],
       pepff: data[('pepff')],
       legal_representative_name: data[('legal_representative_name')],
       legal_representative_telephone: data[('legal_representative_telephone')],
@@ -62,6 +63,10 @@ export class GlobalService {
       last_close_expense: data[('last_close_expense')],
       last_year_expenses: data[('last_year_expenses')],
       is_pep: data[('is_pep')],
+      pep_start_date: data[('pep_start_date')],
+      pep_end_date: data[('pep_end_date')],
+      pep_term: data[('pep_term')],
+      pep_position: data[('pep_position')],
       form_responsible_name: data[('form_responsible_name')],
       form_responsible_document: data[('form_responsible_document')],
       form_responsible_position: data[('form_responsible_position')],
@@ -165,6 +170,7 @@ export class GlobalService {
     form.get('afp')?.setValue(data?.afp || '');
     form.get('arl')?.setValue(data?.arl || '');
     form.get('risk_level')?.setValue(data?.cmo_level_risk_arl_id || '');
+    form.get('blood_type_id')?.setValue(data?.blood_type_id || '');
     form.get('layoffs')?.setValue(data?.layoffs || '');
     form.get('legal_representative_name')?.setValue(data?.legal_representative_name || '');
     form.get('legal_representative_telephone')?.setValue(data?.legal_representative_telephone || '');
@@ -185,7 +191,7 @@ export class GlobalService {
     form.get('commercial_responsible_telephone')?.setValue(data?.commercial_responsible_telephone || '');
     form.get('commercial_responsible_email')?.setValue(data?.commercial_responsible_email || '');
     form.get('confidential_responsible_address')?.setValue(data?.confidential_responsible_address || '');
-    form.get('confidential_responsible_email')?.setValue(data?.confidential_responsible_email || '');
+    form.get('confidential_responsible_email')?.setValue(data?.confidential_responsible_email || data?.email || '');
     form.get('last_close_assets')?.setValue(data?.last_close_assets || '');
     form.get('last_year_assets')?.setValue(data?.last_year_assets || '');
     form.get('last_close_liabilities')?.setValue(data?.last_close_liabilities || '');
@@ -197,13 +203,15 @@ export class GlobalService {
     form.get('last_close_expense')?.setValue(data?.last_close_expense || '');
     form.get('last_year_expenses')?.setValue(data?.last_year_expenses || '');
     form.get('is_pep')?.setValue(data?.pep ? '1' : '0');
+    form.get('pep_start_date')?.setValue(data?.pep_start_date || null);
+    form.get('pep_end_date')?.setValue(data?.pep_end_date || null);
+    form.get('pep_term')?.setValue(data?.pep_term || '');
+    form.get('pep_position')?.setValue(data?.pep_position || '');
     form.get('form_responsible_name')?.setValue(data?.form_responsible_name || '');
     form.get('form_responsible_document')?.setValue(data?.form_responsible_document || '');
     form.get('form_responsible_position')?.setValue(data?.form_responsible_position || '');
     form.get('signature')?.setValue(this.getDocumentLink(324));
     form.get('cv_link')?.setValue(data?.cv_link || '');
-    console.log(this._vS.getDocumentsList())
-    console.log(form.get('signature')?.value)
 
     // Setting additional info
     const info_additional = data?.info_additional;

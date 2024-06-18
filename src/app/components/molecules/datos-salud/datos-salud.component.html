@@ -1,4 +1,4 @@
-<app-subtitle [subtitle]="'datos de salud'"></app-subtitle>
+<app-subtitle [subtitle]="'Datos de Seguridad Social'"></app-subtitle>
 <div class="row">
   <app-text-input 
     [label]="'EPS'" 
@@ -17,17 +17,31 @@
     [label]="'ARL'" 
     [control]="getControl('arl')"
     class="col-4"></app-text-input>
+    <app-select-input
+  [label]="'RH'"
+  [control]="getControl('blood_type_id')"
+  [options]="lists?.bloodTypes"
+  [optionName]="'name'"
+  [optionValue]="'id'"
+  class="col-4"></app-select-input>
+  <p class="col-4"></p>
   <app-select-input 
     [label]="'Nivel de riesgo'"
     [control]="getControl('risk_level')" 
     [options]="lists?.riskLevels"
     [optionName]="'name'"
     [optionValue]="'id'"
+    (change)="getRiskPercentage()"
     class="col-4"></app-select-input>
-  <p class="col-2 align-end"> 
-    {{ getRiskPercentage() }} %
+  <p class="col-6 align-end">
+    {{percentageRiskLevel || 0 | percent: '1.0-2'}}
   </p>
-  <app-checkbox-input 
+  @if (['4', '5'].includes(getControl('risk_level')?.value)) {
+    <p class="col-12 align-end">
+      Si elige riesgo IV o V recuerde que la productora realizará su afiliación a la ARL.
+    </p>
+  }
+  <app-checkbox-input
     [label]="'¿Sufre de alguna enfermedad?'"
     [controlName]="'illness'"
     [control]="getControl('illness')" 

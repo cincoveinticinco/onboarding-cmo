@@ -60,7 +60,6 @@ export class VendorService {
 
   updateVendor(values: any) {
     this.setHeaders();
-    console.log(values, '*****************************')
     return this.http.post(`${environment.apiUrl}cmo/update_vendor`, values, { headers: this.headers}).pipe(
       map((response: any) => response));
   }

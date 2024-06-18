@@ -4,7 +4,7 @@
 
 <p>Entre los suscritos, a saber, Clara María Ochoa Domínguez, mayor de edad, identificada
 con la cédula de ciudadanía No. 41.640.044, quien obra en calidad de representante legal
-de CMO STUDIOS S.A.S., sociedad identificada con NIT 901.717.539-4 (“LA PRODUCTORA), por una parte; y por la otra, <b style="text-transform: uppercase;">{{list?.vendorInfo?.name || '___________________________'}}</b>, mayor de edad, identificado con documento No. <b style="text-transform: uppercase;">{{list?.vendorInfo?.document || '___________________________'}}</b>, quien obra en su propio nombre (“EL RECEPTOR”), suscriben el presente acuerdo de confidencialidad (en adelante ‘Acuerdo’ o ‘Acuerdo de Confidencialidad’) con el fin de establecer los términos y condiciones que regirán la recepción de la información confidencial de LA PRODUCTORA relacionada con el desarrollo del proyecto audiovisual llamado “CASI AMOR”(el “PROYECTO AUDIOVISUAL”).</p>
+de CMO STUDIOS S.A.S., sociedad identificada con NIT 901.717.539-4 (“LA PRODUCTORA), por una parte; y por la otra, <b style="text-transform: uppercase;">{{lists?.vendorInfo?.name || '___________________________'}}</b>, mayor de edad, identificado con documento No. <b style="text-transform: uppercase;">{{lists?.vendorInfo?.document || '___________________________'}}</b>, quien obra en su propio nombre (“EL RECEPTOR”), suscriben el presente acuerdo de confidencialidad (en adelante ‘Acuerdo’ o ‘Acuerdo de Confidencialidad’) con el fin de establecer los términos y condiciones que regirán la recepción de la información confidencial de LA PRODUCTORA relacionada con el desarrollo del proyecto audiovisual llamado “CASI AMOR”(el “PROYECTO AUDIOVISUAL”).</p>
 
 <p>PRIMERA. OBJETO. EL RECEPTOR se obliga a no divulgar, mantener para sí mismo y
 usar exclusivamente para los fines dispuestos por LA PRODUCTORA, el contenido y/o
@@ -162,6 +162,7 @@ medios, exclusivamente:</p>
     <app-text-input 
       [label]="'Correo Electrónico'"
       [control]="getControl('confidential_responsible_email')"
+      [type]="'email'"
       class="col-4" />
   </div>
 </div>

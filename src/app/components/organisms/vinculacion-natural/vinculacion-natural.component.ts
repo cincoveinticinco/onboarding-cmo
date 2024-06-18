@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output, SimpleChanges } from '@angular/core';
 import { InitialDataComponent } from '../../molecules/initial-data/initial-data.component';
 import { DatosEmpresaComponent } from '../../molecules/datos-empresa/datos-empresa.component';
 import { DatosContratistaComponent } from '../../molecules/datos-contratista/datos-contratista.component';
@@ -18,6 +18,7 @@ import { VendorService } from '../../../services/vendor.service';
 import { GlobalService } from '../../../services/global.service';
 import { Subscription } from 'rxjs';
 import { file_types } from '../../../shared/interfaces/files_types';
+import { AdditionalInfoComponent } from '../../molecules/additional-info/additional-info.component';
 
 @Component({
   selector: 'app-vinculacion-natural',
@@ -38,7 +39,8 @@ import { file_types } from '../../../shared/interfaces/files_types';
     AutorizacionDatosPersonalesComponent,
     FirmaComponent,
     BlackButtonComponent,
-    PanelButtonsComponent
+    PanelButtonsComponent,
+    AdditionalInfoComponent,
   ],
   templateUrl: './vinculacion-natural.component.html',
   styleUrl: './vinculacion-natural.component.css'
@@ -51,7 +53,7 @@ export class VinculacionNaturalComponent {
 
   subs: Subscription[] = [];
 
-  constructor(private fb: FormBuilder, private _gS: GlobalService, private _vS: VendorService) {
+  constructor(private fb: FormBuilder, private _gS: GlobalService, private _vS: VendorService, private el: ElementRef) {
     this.naturalForm = this.fb.group({
       type: new FormControl('', [Validators.required]),
       date: new FormControl('', [Validators.required]),
@@ -66,7 +68,7 @@ export class VinculacionNaturalComponent {
       city: new FormControl('', [Validators.required]),
       department: new FormControl('', [Validators.required]),
       telephone: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
       emergency_contact_name: new FormControl('', [Validators.required]),
       emergency_contact_telephone: new FormControl('', [Validators.required]),
       emergency_contact_kinship: new FormControl('', [Validators.required]),
@@ -75,6 +77,7 @@ export class VinculacionNaturalComponent {
       layoffs: new FormControl('', [Validators.required]),
       arl: new FormControl('', [Validators.required]),
       risk_level: new FormControl('', [Validators.required]),
+      blood_type_id: new FormControl('', [Validators.required]),
       illness: new FormControl('', [Validators.required]),
       illness_description: new FormControl(''),
       medicines: new FormControl('', [Validators.required]),
@@ -86,9 +89,13 @@ export class VinculacionNaturalComponent {
       food_restrictions: new FormControl('', [Validators.required]),
       food_restrictions_description: new FormControl(''),
       is_pep: new FormControl('', [Validators.required]),
+      pep_start_date: new FormControl({ value: null, disabled: true }, Validators.required),
+      pep_end_date: new FormControl({ value: null, disabled: true }, Validators.required),
+      pep_position: new FormControl({ value: '', disabled: true }, Validators.required),
+      pep_term: new FormControl({ value: '', disabled: true }, Validators.required),
       confidential_responsible_address: new FormControl('', [Validators.required]),
-      confidential_responsible_email: new FormControl('', [Validators.required]),
-      accounting_responsible_email: new FormControl(''),
+      confidential_responsible_email: new FormControl('', [Validators.required, Validators.email]),
+      accounting_responsible_email: new FormControl('', Validators.email),
       income_tax_declarant: new FormControl('', [Validators.required]),
       dependents: new FormControl('', [Validators.required]),
       prepaid_medicine: new FormControl('', [Validators.required]),
@@ -97,8 +104,8 @@ export class VinculacionNaturalComponent {
       afc_account: new FormControl('', [Validators.required]),
       vat_responsible: new FormControl('', [Validators.required]),
       simple_regime: new FormControl('', [Validators.required]),
-      form_responsible_name: new FormControl('', [Validators.required]),
-      form_responsible_document: new FormControl('', [Validators.required]),
+      form_responsible_name: new FormControl({ value: '', disabled: true }),
+      form_responsible_document: new FormControl({ value: '', disabled: true }),
       signature: new FormControl('', [Validators.required]),
     });
   }
@@ -148,7 +155,7 @@ export class VinculacionNaturalComponent {
     this.subs.forEach(sub => sub.unsubscribe());
   }
 
-  @HostListener('submit', ['$event'])
+  /* @HostListener('submit', ['$event'])
   onFormSubmit(event: Event) {
     event.preventDefault();
     if (this.naturalForm.valid) {
@@ -162,6 +169,14 @@ export class VinculacionNaturalComponent {
       if (invalidElements.length > 0) {
         invalidElements[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
+    }
+  } */
+
+  @HostListener('submit', ['$event'])
+  onFormSubmit() {
+    const invalidElements = this.el.nativeElement.querySelectorAll('.ng-invalid:not(.ng-submitted)');
+    if (invalidElements.length > 0) {
+      invalidElements[0].focus();
     }
   }
 

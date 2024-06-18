@@ -4,23 +4,29 @@ import { TextInputComponent } from '../../atoms/text-input/text-input.component'
 import { CheckboxInputComponent } from '../../atoms/checkbox-input/checkbox-input.component';
 import { FormControl, FormGroup } from '@angular/forms';
 import { SelectInputComponent } from '../../atoms/select-input/select-input.component';
+import { PercentPipe } from '@angular/common';
 
 @Component({
   selector: 'app-datos-salud',
   standalone: true,
   imports: [
+    PercentPipe,
+
     SubtitleComponent,
     TextInputComponent,
     CheckboxInputComponent,
-    SelectInputComponent
+    SelectInputComponent,
   ],
   templateUrl: './datos-salud.component.html',
   styleUrl: './datos-salud.component.css'
 })
 export class DatosSaludComponent {
+
   @Input() form: FormGroup | undefined;
   @Input() lists: any = {};
-  
+
+  percentageRiskLevel: number = 0;
+
   getControl(controlName: string): FormControl {
     return this.form?.get(controlName) as FormControl;
   }
@@ -28,12 +34,8 @@ export class DatosSaludComponent {
   showDescription(controlName: string): '0' | '1' {
     return this.getControl(controlName).value
   }
-  
+
   getRiskPercentage() {
-    let risk_level = this.getControl('risk_level')
-    if(risk_level.value) {
-      let percentage = this.lists?.riskLevels.find((item: any) => item.id === risk_level.value)?.risk_percentage
-      return percentage
-    }
+    this.percentageRiskLevel = this.lists?.riskLevels?.find((item: any) => item.id == this.getControl('risk_level')?.value)?.risk_percentage;
   }
 }

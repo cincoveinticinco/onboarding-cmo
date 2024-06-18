@@ -65,18 +65,16 @@ export class FormsCmoComponent implements OnInit {
     this.loading = true;
     this.vendorService.getVendorInfo().subscribe({
       next: (response: any) => {
-        console.log('response', response);
         this.lists = {
           documentTypes: response.f_document_type_ids,
           economicActivities: response?.economic_activities,
           vendorInfo: response?.vendor_basic_info,
-          riskLevels: response?.arl_risk_levels
+          riskLevels: response?.arl_risk_levels,
+          bloodTypes: response?.blood_type || [],
         };
-        this.typePerson = response.vendor_basic_info?.f_person_type_id
-        console.log('typePerson', this.typePerson);
+        this.typePerson = response.vendor_basic_info?.f_person_type_id;
         this.vendorStatus = response?.vendor_status
         this.vendorService.setDocumentsList(response.document_vendor);
-        console.log('DOCS LIST', this.vendorService.getDocumentsList())
         this.getTitle();
         this.loading = false;
       },
@@ -85,12 +83,10 @@ export class FormsCmoComponent implements OnInit {
       }
 
     });
-    console.log('this.lists', this.lists);
   }
 
   sendForm(ev: any) {
     const formData = this.globalService.setVinculationForm(ev.form);
-    console.log('formData', formData);
     this.vendorService.updateVendor(formData).subscribe((response: any) => {
       return ev.nextForm && this.vendorService.setNextVendorStatus().subscribe((response: any) => {
         this.loadData();
@@ -108,7 +104,6 @@ export class FormsCmoComponent implements OnInit {
     );
 
     const documentId = this.globalService.getDocumentLink(fileIdDocument)?.document_id;
-    console.log(documentId, 'VALUE')
     if (!value) {
       this.vendorService.deleteVendorDocument({ document_id: documentId })
       .subscribe((data) => this.loading = false);
@@ -155,7 +150,6 @@ export class FormsCmoComponent implements OnInit {
           }
         ),
         map((response: any) => {
-          console.log('responsesssasasdaasd', response);
           this.linkDocument = response;
         })
       )

@@ -35,6 +35,9 @@ input:is([type="text"],[type="date"],[type="password"],[type="email"],[type="num
   background-color: white;
   text-transform: uppercase;
 }
+input:is([type="text"],[type="date"],[type="password"],[type="email"],[type="number"]):disabled {
+    background-color: #8b8b8b1c;
+}
 
 select {
   appearance: none;

@@ -7,7 +7,7 @@
       }}
     </small>
   } 
-  @if(!getErrors()){
+  @if(!getErrors() && description){
     <small class="description">
       {{ description }}
     </small>
@@ -18,7 +18,7 @@
       name="regimen_fiscal">
       <option disabled value="">SELECCIONE UNA OPCION</option>
       @for (opt of options; track opt) {
-          <option [value]="opt[(optionValue)]">{{opt[(optionName)]}}</option>
+          <option [value]="opt[optionValue]">{{opt[optionName]}}</option>
       } @empty {
           <option disabled>No hay opciones para mostrar</option>
       }
