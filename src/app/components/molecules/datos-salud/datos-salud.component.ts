@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { SubtitleComponent } from '../../atoms/subtitle/subtitle.component';
 import { TextInputComponent } from '../../atoms/text-input/text-input.component';
 import { CheckboxInputComponent } from '../../atoms/checkbox-input/checkbox-input.component';
@@ -20,12 +20,16 @@ import { PercentPipe } from '@angular/common';
   templateUrl: './datos-salud.component.html',
   styleUrl: './datos-salud.component.css'
 })
-export class DatosSaludComponent {
+export class DatosSaludComponent implements OnInit {
 
   @Input() form: FormGroup | undefined;
   @Input() lists: any = {};
 
   percentageRiskLevel: number = 0;
+
+  ngOnInit(): void {
+    this.getRiskPercentage();
+  }
 
   getControl(controlName: string): FormControl {
     return this.form?.get(controlName) as FormControl;

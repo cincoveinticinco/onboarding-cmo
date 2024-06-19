@@ -36,7 +36,7 @@
   <p class="col-6 align-end">
     {{percentageRiskLevel || 0 | percent: '1.0-2'}}
   </p>
-  @if (['4', '5'].includes(getControl('risk_level')?.value)) {
+  @if (['4', '5', 4, 5].includes(getControl('risk_level')?.value)) {
     <p class="col-12 align-end">
       Si elige riesgo IV o V recuerde que la productora realizará su afiliación a la ARL.
     </p>

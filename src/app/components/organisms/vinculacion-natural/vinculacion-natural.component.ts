@@ -155,23 +155,6 @@ export class VinculacionNaturalComponent {
     this.subs.forEach(sub => sub.unsubscribe());
   }
 
-  /* @HostListener('submit', ['$event'])
-  onFormSubmit(event: Event) {
-    event.preventDefault();
-    if (this.naturalForm.valid) {
-      return;
-    } else {
-      Object.values(this.naturalForm.controls).forEach((control) => {
-        control.markAsTouched();
-      });
-
-      const invalidElements = document.querySelectorAll('.ng-invalid');
-      if (invalidElements.length > 0) {
-        invalidElements[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }
-  } */
-
   @HostListener('submit', ['$event'])
   onFormSubmit() {
     const invalidElements = this.el.nativeElement.querySelectorAll('.ng-invalid:not(.ng-submitted)');

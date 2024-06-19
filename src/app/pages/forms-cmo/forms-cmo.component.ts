@@ -1,9 +1,9 @@
-import { ChangeDetectorRef, Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormHeaderComponent } from '../../components/molecules/form-header/form-header.component';
 import { TIPOPERSONA } from '../../shared/interfaces/typo_persona';
 import { PanelButtonsComponent } from '../../components/molecules/panel-buttons/panel-buttons.component';
 import { VinculacionNaturalComponent } from '../../components/organisms/vinculacion-natural/vinculacion-natural.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { VinculacionJuridicaComponent } from '../../components/organisms/vinculacion-juridica/vinculacion-juridica.component';
 import { VendorService } from '../../services/vendor.service';
 import { GlobalService } from '../../services/global.service';
@@ -48,7 +48,6 @@ export class FormsCmoComponent implements OnInit {
   constructor(
     private vendorService: VendorService,
     private globalService: GlobalService,
-    private cd: ChangeDetectorRef,
     private route: ActivatedRoute,
     private auth: AuthService
   ) {}
@@ -87,10 +86,18 @@ export class FormsCmoComponent implements OnInit {
 
   sendForm(ev: any) {
     const formData = this.globalService.setVinculationForm(ev.form);
-    this.vendorService.updateVendor(formData).subscribe((response: any) => {
-      return ev.nextForm && this.vendorService.setNextVendorStatus().subscribe((response: any) => {
-        this.loadData();
-      });
+    this.vendorService.updateVendor(formData).subscribe({
+      next: () => {
+        if (ev.nextForm) {
+          this.vendorService.setNextVendorStatus().subscribe(() => {
+            this.loadData();
+          });
+        }
+        this.globalService.openSnackBar('Cambios guardados', '', 5000);
+      },
+      error: () => {
+        this.globalService.openSnackBar('Fallo al guardar los datos', '', 5000);
+      }
     });
   }
 

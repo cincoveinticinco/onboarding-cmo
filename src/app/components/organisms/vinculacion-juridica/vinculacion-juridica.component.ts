@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input,  Output, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input,  Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { InitialDataComponent } from '../../molecules/initial-data/initial-data.component';
 import { BlackButtonComponent } from '../../atoms/black-button/black-button.component';
@@ -22,6 +22,7 @@ import { GlobalService } from '../../../services/global.service';
 import { VendorService } from '../../../services/vendor.service';
 import { file_types } from '../../../shared/interfaces/files_types';
 import { Subscription } from 'rxjs';
+import { AdditionalInfoComponent } from '../../molecules/additional-info/additional-info.component';
 
 @Component({
   selector: 'app-vinculacion-juridica',
@@ -46,7 +47,8 @@ import { Subscription } from 'rxjs';
     AcuerdoConfidencialidadComponent,
     InformacionFinancieraComponent,
     PersonaDiligenciaFormularioComponent,
-    PanelButtonsComponent
+    PanelButtonsComponent,
+    AdditionalInfoComponent,
   ],
   templateUrl: './vinculacion-juridica.component.html',
   styleUrls: ['./vinculacion-juridica.component.css']
@@ -59,7 +61,7 @@ export class VinculacionJuridicaComponent {
   @Output() onSubmitFile: EventEmitter<any> = new EventEmitter();
   subs: Subscription[] = [];
 
-  constructor(private fb: FormBuilder, private _gS: GlobalService, private _vS: VendorService) {
+  constructor(private fb: FormBuilder, private _gS: GlobalService, private _vS: VendorService, private el: ElementRef) {
     this.juridicaForm = this.fb.group({
       type: new FormControl('', [Validators.required]),
       date: new FormControl('', [Validators.required]),
@@ -156,19 +158,10 @@ export class VinculacionJuridicaComponent {
   }
 
   @HostListener('submit', ['$event'])
-  onFormSubmit(event: Event) {
-    event.preventDefault();
-    if (this.juridicaForm.valid) {
-      return;
-    } else {
-      Object.values(this.juridicaForm.controls).forEach((control) => {
-        control.markAsTouched();
-      });
-
-      const invalidElements = document.querySelectorAll('.ng-invalid');
-      if (invalidElements.length > 0) {
-        invalidElements[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+  onFormSubmit() {
+    const invalidElements = this.el.nativeElement.querySelectorAll('.ng-invalid:not(.ng-submitted)');
+    if (invalidElements.length > 0) {
+      invalidElements[0].focus();
     }
   }
 
