@@ -68,7 +68,7 @@ export class GlobalService {
       pep_term: data[('pep_term')],
       pep_position: data[('pep_position')],
       form_responsible_name: data[('form_responsible_name')],
-      form_responsible_document: data[('form_responsible_document')],
+      form_responsible_document: data[('form_responsible_document')] || data[('document')],
       form_responsible_position: data[('form_responsible_position')],
       cv_link: data[('cv_link')],
       info_additional: [
