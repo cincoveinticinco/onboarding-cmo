@@ -18,7 +18,7 @@
 			</p>
 			<app-vinculacion-juridica class="full-width" (notify)="sendForm($event)" [lists]="lists" (onSubmitFile)="submitFile($event)" />
 		}
-		@else if(vendorStatus == VENDORSTATUS.VINCULACION) {
+		@else if([VENDORSTATUS.VINCULACION, VENDORSTATUS.CORRECION_DOCS].includes(vendorStatus)) {
 		  <app-documentation-form />
 		}
 		@else if(vendorStatus == VENDORSTATUS.VERIFICACION){
