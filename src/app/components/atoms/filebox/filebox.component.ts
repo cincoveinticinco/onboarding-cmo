@@ -32,7 +32,6 @@ export class FileboxComponent implements ControlValueAccessor, Validator, OnInit
 
   ngOnInit() {
     if (this.control) {
-      console.log('Initializing FileboxComponent with control:', this.control);
       if(this.control.value) {
         this.value = this.control.value;
         this.view = 'filled';
@@ -47,8 +46,7 @@ export class FileboxComponent implements ControlValueAccessor, Validator, OnInit
   }
 
   getErrors(): string | null {
-    const touched = this.control.touched;
-    if (this.control.hasError('required') && touched) {
+    if (this.control.hasError('required')) {
       return 'Este campo es requerido *';
     }
     return null;

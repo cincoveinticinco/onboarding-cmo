@@ -23,7 +23,7 @@ export class DatosContratistaComponent {
   ngOnInit() {
     this.form?.controls['economic_activity'].disable();
   }
-  
+
   getControl(controlName: string): FormControl {
     return this.form?.get(controlName) as FormControl;
   }
@@ -34,8 +34,6 @@ export class DatosContratistaComponent {
 
   setEconomicActivity(event: any) {
     let id = event.target?.value;
-    console.log('setEconomicActivity', id)
-    console.log('setEconomicActivity', this.getEconomicActivity(id))
     if(id) {
       this.form?.get('economic_activity')?.setValue(this.getEconomicActivity(id));
     }
