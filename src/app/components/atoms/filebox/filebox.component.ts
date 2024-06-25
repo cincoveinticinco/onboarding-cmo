@@ -13,8 +13,10 @@ import { DialogComponent } from '../../../shared/components/dialog/dialog.compon
   styleUrls: ['./filebox.component.css'] // Corrected from 'styleUrl' to 'styleUrls'
 })
 export class FileboxComponent implements ControlValueAccessor, Validator, OnInit, OnDestroy {
+
   @Input() onlyPdf = false;
   @Input() control: FormControl = new FormControl();
+  @Input() allowedExtensions: string[] = ['pdf', 'PDF', 'jpeg', 'jpg', 'png'];
 
   private controlValueSubscription: Subscription | undefined;
   onChange = (value: any) => {};
@@ -23,11 +25,17 @@ export class FileboxComponent implements ControlValueAccessor, Validator, OnInit
   disabled = false;
   fileName: any;
   view = '';
+  acceptAllowedExtensions: string = '';
 
   constructor(@Optional() @Self() public ngControl: NgControl) {
     if (this.ngControl != null) {
       this.ngControl.valueAccessor = this;
     }
+  }
+
+  setAllowedExtensions() {
+    if (this.onlyPdf) this.allowedExtensions = ['pdf', 'PDF'];
+    this.acceptAllowedExtensions = this.allowedExtensions.map(ext => `.${ext}`).join(', ');
   }
 
   ngOnInit() {
@@ -37,6 +45,8 @@ export class FileboxComponent implements ControlValueAccessor, Validator, OnInit
         this.view = 'filled';
       }
     }
+
+    this.setAllowedExtensions();
   }
 
   ngOnDestroy() {
