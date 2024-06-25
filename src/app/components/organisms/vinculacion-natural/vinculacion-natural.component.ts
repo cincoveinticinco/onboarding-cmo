@@ -76,7 +76,7 @@ export class VinculacionNaturalComponent {
       afp: new FormControl('', [Validators.required]),
       layoffs: new FormControl('', [Validators.required]),
       arl: new FormControl('', [Validators.required]),
-      risk_level: new FormControl('', [Validators.required]),
+      risk_level: new FormControl({ value: '', disabled: true }, [Validators.required]),
       blood_type_id: new FormControl('', [Validators.required]),
       illness: new FormControl('', [Validators.required]),
       illness_description: new FormControl(''),

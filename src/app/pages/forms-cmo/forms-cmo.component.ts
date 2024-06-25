@@ -85,6 +85,7 @@ export class FormsCmoComponent implements OnInit {
   }
 
   sendForm(ev: any) {
+    this.loading = true;
     const formData = this.globalService.setVinculationForm(ev.form);
     this.vendorService.updateVendor(formData).subscribe({
       next: () => {
@@ -92,8 +93,11 @@ export class FormsCmoComponent implements OnInit {
           this.vendorService.setNextVendorStatus().subscribe(() => {
             this.loadData();
           });
+        } else {
+          this.loading = false;
         }
         this.globalService.openSnackBar('Cambios guardados', '', 5000);
+
       },
       error: () => {
         this.globalService.openSnackBar('Fallo al guardar los datos', '', 5000);
