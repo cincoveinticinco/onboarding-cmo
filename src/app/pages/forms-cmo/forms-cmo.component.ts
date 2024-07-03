@@ -60,8 +60,9 @@ export class FormsCmoComponent implements OnInit {
     })
   }
 
-  loadData() {
-    this.loading = true;
+  loadData(loading: boolean = true) {
+    if (loading) this.loading = true;
+
     this.vendorService.getVendorInfo().subscribe({
       next: (response: any) => {
         this.lists = {
@@ -102,6 +103,16 @@ export class FormsCmoComponent implements OnInit {
       error: () => {
         this.globalService.openSnackBar('Fallo al guardar los datos', '', 5000);
       }
+    });
+  }
+
+  autoSaveForm(ev: any) {
+    const formData = this.globalService.setVinculationForm(ev.form);
+
+    this.vendorService.updateVendor(formData).subscribe({
+      next: () => {
+        this.loadData(false);
+      },
     });
   }
 

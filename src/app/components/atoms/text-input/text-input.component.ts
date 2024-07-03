@@ -20,7 +20,7 @@ export class TextInputComponent implements OnInit {
   @Input() placeholder: string = '';
   @Input() control: FormControl = new FormControl();
   @Input() type: string = 'text';
-  @Input() pattern?: string = '';
+  @Input() pattern?: string | RegExp = '';
   @Input() mask?: string = '';
 
   getErrors(): string | null {

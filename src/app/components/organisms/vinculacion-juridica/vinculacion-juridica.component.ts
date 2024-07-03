@@ -56,9 +56,12 @@ import { AdditionalInfoComponent } from '../../molecules/additional-info/additio
 export class VinculacionJuridicaComponent {
   juridicaForm: FormGroup;
   @Input() lists: any = {};
+
   @Output() notify: EventEmitter<any> = new EventEmitter();
   @Output() save: EventEmitter<any> = new EventEmitter();
   @Output() onSubmitFile: EventEmitter<any> = new EventEmitter();
+  @Output() autoSaveForm: EventEmitter<any> = new EventEmitter();
+
   subs: Subscription[] = [];
 
   constructor(private fb: FormBuilder, private _gS: GlobalService, private _vS: VendorService, private el: ElementRef) {
@@ -122,6 +125,7 @@ export class VinculacionJuridicaComponent {
 
   ngOnInit() {
     this.subscribeToFormChanges();
+    this.setAutoSave();
   }
 
   subscribeToFormChanges() {
@@ -194,6 +198,26 @@ export class VinculacionJuridicaComponent {
         console.log(`Control: ${key}, Errors:`, controlErrors);
       }
     });
+  }
+
+  autoSaveChanges() {
+    setTimeout(() => {
+      const data = {
+        form: this.juridicaForm.value,
+        nextForm: false,
+        noNotifySaveChanges: true,
+      }
+      this.autoSaveForm.emit(data);
+    }, 0);
+  }
+
+  setAutoSave() {
+    this.juridicaForm.get('name')?.valueChanges.subscribe(() => this.autoSaveChanges());
+    this.juridicaForm.get('document')?.valueChanges.subscribe(() => this.autoSaveChanges());
+    this.juridicaForm.get('pep_start_date')?.valueChanges.subscribe(() => this.autoSaveChanges());
+    this.juridicaForm.get('pep_end_date')?.valueChanges.subscribe(() => this.autoSaveChanges());
+    this.juridicaForm.get('pep_position')?.valueChanges.subscribe(() => this.autoSaveChanges());
+    this.juridicaForm.get('pep_term')?.valueChanges.subscribe(() => this.autoSaveChanges());
   }
 
   ngOnDestroy() {

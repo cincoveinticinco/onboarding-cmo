@@ -43,9 +43,10 @@
     class="col-7"
   />
   <app-text-input
-    [label]="'Dirección de Residencia'"
+    [label]="'Dirección de Residencia (NO utilizar caracteres especiales)'"
     [control]="getControl('address')"
     class="col-12"
+    [pattern]="addressRegexp"
   />
   <app-text-input
     [label]="'Ciudad'"

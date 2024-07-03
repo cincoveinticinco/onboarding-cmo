@@ -34,6 +34,8 @@ export class DocumentationFormComponent implements OnInit {
   filesDynamic: {[key: number]: string} = {};
   subs: Subscription[] = [];
 
+  nonRequiredDocuments: number[] = [329];
+
   constructor(private _vS: VendorService, private fb: FormBuilder, private _gS: GlobalService, private router: Router) {
     this.documentForm = this.fb.group({});
   }
@@ -79,6 +81,7 @@ export class DocumentationFormComponent implements OnInit {
   setFormData() {
     this.documents.forEach((dc: any) => {
       this.documentForm.addControl(`document_${dc.id}`, new FormControl('', [Validators.required]));
+      if (this.nonRequiredDocuments.includes(dc.id)) this.documentForm.get(`document_${dc.id}`) ?.clearValidators()
       this.documentForm.get(`document_${dc.id}`)?.setValue(this.setDynamicFiles(dc));
       dc['class'] = '';
       if (dc.document_type.length > 120 ) dc['class'] = 'large-txt';

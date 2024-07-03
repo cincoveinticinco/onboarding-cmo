@@ -10,13 +10,13 @@
 			<p>
 				El presente documento deberá ser completado y suscrito por la persona natural que se vinculará a la sociedad CMO PRODUCCIONES S.A.S., CMO INTERNACIONAL S.A.S. y/o CMO STUDIOS S.A.S., o aquellas que deseen realizar una actualización de datos previamente registrados.
 			</p>
-			<app-vinculacion-natural class="full-width" (notify)="sendForm($event)" [lists]="lists" (onSubmitFile)="submitFile($event)" />
+			<app-vinculacion-natural class="full-width" (notify)="sendForm($event)" (autoSaveForm)="autoSaveForm($event)" [lists]="lists" (onSubmitFile)="submitFile($event)" />
 		}
 		@else if (typePerson == personEnnum.Juridica && vendorStatus == VENDORSTATUS.CREADO) {
 			<p>
 				El presente documento deberá ser completado y suscrito por el representante legal de la persona jurídica que se vinculará a la sociedad CMO PRODUCCIONES S.A.S., CMO INTERNACIONAL S.A.S. y/o CMO STUDIOS S.A.S., o aquellas que deseen realizar una actualización de datos previamente registrados.
 			</p>
-			<app-vinculacion-juridica class="full-width" (notify)="sendForm($event)" [lists]="lists" (onSubmitFile)="submitFile($event)" />
+			<app-vinculacion-juridica class="full-width" (notify)="sendForm($event)" (autoSaveForm)="autoSaveForm($event)" [lists]="lists" (onSubmitFile)="submitFile($event)" />
 		}
 		@else if([VENDORSTATUS.VINCULACION, VENDORSTATUS.CORRECION_DOCS].includes(vendorStatus)) {
 		  <app-documentation-form />

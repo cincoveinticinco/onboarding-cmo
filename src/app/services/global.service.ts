@@ -151,9 +151,9 @@ export class GlobalService {
   }
 
   fillInitialVinculationForm(form: any, data: any) {
-    form.get('name')?.setValue(data?.name || '');
+    form.get('name')?.setValue(data?.name || '', { emitEvent: false });
     form.get('document_type_id')?.setValue(data?.f_document_type_id || '');
-    form.get('document')?.setValue(data?.document || '');
+    form.get('document')?.setValue(data?.document || '', { emitEvent: false });
     form.get('ciiu')?.setValue(data?.ciiu || '');
     form.get('f_vendor_economic_act_id')?.setValue(data?.economic_activity_id || '');
     form.get('address')?.setValue(data?.address || '');
@@ -202,11 +202,11 @@ export class GlobalService {
     form.get('last_year_equity')?.setValue(data?.last_year_equity || '');
     form.get('last_close_expense')?.setValue(data?.last_close_expense || '');
     form.get('last_year_expenses')?.setValue(data?.last_year_expenses || '');
-    form.get('is_pep')?.setValue(data?.pep ? '1' : '0');
-    form.get('pep_start_date')?.setValue(data?.pep_start_date || null);
-    form.get('pep_end_date')?.setValue(data?.pep_end_date || null);
-    form.get('pep_term')?.setValue(data?.pep_term || '');
-    form.get('pep_position')?.setValue(data?.pep_position || '');
+    form.get('is_pep')?.setValue(data?.pep ? '1' : '0', { emitEvent: false });
+    form.get('pep_start_date')?.setValue(data?.pep_start_date || null, { emitEvent: false });
+    form.get('pep_end_date')?.setValue(data?.pep_end_date || null, { emitEvent: false });
+    form.get('pep_term')?.setValue(data?.pep_term || '', { emitEvent: false });
+    form.get('pep_position')?.setValue(data?.pep_position || '', { emitEvent: false });
     form.get('form_responsible_name')?.setValue(data?.form_responsible_name || '');
     form.get('form_responsible_document')?.setValue(data?.form_responsible_document || '');
     form.get('form_responsible_position')?.setValue(data?.form_responsible_position || '');

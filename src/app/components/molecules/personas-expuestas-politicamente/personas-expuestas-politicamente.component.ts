@@ -32,18 +32,18 @@ export class PersonasExpuestasPoliticamenteComponent implements OnInit {
 
   validatePepInputs() {
     if (this.getControl('is_pep')?.value == '1') {
-      this.getControl('pep_start_date')?.enable();
-      this.getControl('pep_end_date')?.enable();
-      this.getControl('pep_position')?.enable();
-      this.getControl('pep_term')?.enable();
+      this.getControl('pep_start_date')?.enable({ emitEvent: false });
+      this.getControl('pep_end_date')?.enable({ emitEvent: false });
+      this.getControl('pep_position')?.enable({ emitEvent: false });
+      this.getControl('pep_term')?.enable({ emitEvent: false });
     } else {
-      this.getControl('pep_start_date')?.disable();
-      this.getControl('pep_end_date')?.disable();
-      this.getControl('pep_position')?.disable();
-      this.getControl('pep_term')?.disable();
+      this.getControl('pep_start_date')?.disable({ emitEvent: false });
+      this.getControl('pep_end_date')?.disable({ emitEvent: false });
+      this.getControl('pep_position')?.disable({ emitEvent: false });
+      this.getControl('pep_term')?.disable({ emitEvent: false });
     }
 
-    this.form?.updateValueAndValidity();
+    this.form?.updateValueAndValidity({ emitEvent: false });
   }
 
 

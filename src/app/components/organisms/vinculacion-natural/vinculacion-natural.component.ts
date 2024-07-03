@@ -48,8 +48,10 @@ import { AdditionalInfoComponent } from '../../molecules/additional-info/additio
 export class VinculacionNaturalComponent {
   naturalForm: FormGroup;
   @Input() lists: any = {};
+
   @Output() notify: EventEmitter<any> = new EventEmitter();
   @Output() onSubmitFile: EventEmitter<any> = new EventEmitter();
+  @Output() autoSaveForm: EventEmitter<any> = new EventEmitter();
 
   subs: Subscription[] = [];
 
@@ -126,6 +128,8 @@ export class VinculacionNaturalComponent {
     this.naturalForm.controls['date'].disable();
     this.naturalForm.get('type')?.setValue('VINCULACION PERSONA NATURAL');
     this.naturalForm.controls['type'].disable();
+
+    this.setAutoSave();
   }
 
   subscribeToFormChanges() {
@@ -173,6 +177,26 @@ export class VinculacionNaturalComponent {
     } else {
       this.logFormErrors(this.naturalForm);
     }
+  }
+
+  autoSaveChanges() {
+    setTimeout(() => {
+      const data = {
+        form: this.naturalForm.value,
+        nextForm: false,
+        noNotifySaveChanges: true,
+      }
+      this.autoSaveForm.emit(data);
+    }, 0);
+  }
+
+  setAutoSave() {
+    this.naturalForm.get('name')?.valueChanges.subscribe(() => this.autoSaveChanges());
+    this.naturalForm.get('document')?.valueChanges.subscribe(() => this.autoSaveChanges());
+    this.naturalForm.get('pep_start_date')?.valueChanges.subscribe(() => this.autoSaveChanges());
+    this.naturalForm.get('pep_end_date')?.valueChanges.subscribe(() => this.autoSaveChanges());
+    this.naturalForm.get('pep_position')?.valueChanges.subscribe(() => this.autoSaveChanges());
+    this.naturalForm.get('pep_term')?.valueChanges.subscribe(() => this.autoSaveChanges());
   }
 
   saveForm() {

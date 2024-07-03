@@ -20,6 +20,8 @@ export class DatosContratistaComponent {
   @Input() form: FormGroup | undefined;
   @Input() lists: any = {};
 
+  addressRegexp = /^[a-zA-Z0-9\s]+$/;
+
   ngOnInit() {
     this.form?.controls['economic_activity'].disable();
   }
