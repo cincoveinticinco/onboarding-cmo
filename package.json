@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:onboarding-cmo": "node dist/onboarding-cmo/server/server.mjs",
-    "production": "ng build --base-href /onboarding-cmo/ --configuration production"
+    "production": "ng build --base-href /onboarding-cmo/ --configuration production",
+    "staging": "ng build --base-href /onboarding-cmo/ --configuration staging"
   },
   "private": true,
   "dependencies": {
