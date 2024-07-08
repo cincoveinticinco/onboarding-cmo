@@ -60,7 +60,6 @@ export class VinculacionJuridicaComponent {
   @Output() notify: EventEmitter<any> = new EventEmitter();
   @Output() save: EventEmitter<any> = new EventEmitter();
   @Output() onSubmitFile: EventEmitter<any> = new EventEmitter();
-  @Output() autoSaveForm: EventEmitter<any> = new EventEmitter();
 
   subs: Subscription[] = [];
 
@@ -200,24 +199,13 @@ export class VinculacionJuridicaComponent {
     });
   }
 
-  autoSaveChanges() {
-    setTimeout(() => {
-      const data = {
-        form: this.juridicaForm.value,
-        nextForm: false,
-        noNotifySaveChanges: true,
-      }
-      this.autoSaveForm.emit(data);
-    }, 0);
-  }
-
   setAutoSave() {
-    this.juridicaForm.get('name')?.valueChanges.subscribe(() => this.autoSaveChanges());
-    this.juridicaForm.get('document')?.valueChanges.subscribe(() => this.autoSaveChanges());
-    this.juridicaForm.get('pep_start_date')?.valueChanges.subscribe(() => this.autoSaveChanges());
-    this.juridicaForm.get('pep_end_date')?.valueChanges.subscribe(() => this.autoSaveChanges());
-    this.juridicaForm.get('pep_position')?.valueChanges.subscribe(() => this.autoSaveChanges());
-    this.juridicaForm.get('pep_term')?.valueChanges.subscribe(() => this.autoSaveChanges());
+    this.juridicaForm.get('name')?.valueChanges.subscribe((value) => this.juridicaForm.get('form_responsible_name')?.setValue(value, { emitEvent: false }));
+    this.juridicaForm.get('document')?.valueChanges.subscribe((value) => this.juridicaForm.get('form_responsible_document')?.setValue(value, { emitEvent: false }));
+    /* this.juridicaForm.get('pep_start_date')?.valueChanges.subscribe((value) => this.juridicaForm.get('name')?.setValue(value, { emitEvent: false }));
+    this.juridicaForm.get('pep_end_date')?.valueChanges.subscribe((value) => this.juridicaForm.get('name')?.setValue(value, { emitEvent: false }));
+    this.juridicaForm.get('pep_position')?.valueChanges.subscribe((value) => this.juridicaForm.get('name')?.setValue(value, { emitEvent: false }));
+    this.juridicaForm.get('pep_term')?.valueChanges.subscribe((value) => this.juridicaForm.get('name')?.setValue(value, { emitEvent: false })); */
   }
 
   ngOnDestroy() {

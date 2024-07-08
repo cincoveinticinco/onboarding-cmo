@@ -106,16 +106,6 @@ export class FormsCmoComponent implements OnInit {
     });
   }
 
-  autoSaveForm(ev: any) {
-    const formData = this.globalService.setVinculationForm(ev.form);
-
-    this.vendorService.updateVendor(formData).subscribe({
-      next: () => {
-        this.loadData(false);
-      },
-    });
-  }
-
   submitFile(ev: any) {
     this.loading = true;
     const { value, formControlName } = ev;

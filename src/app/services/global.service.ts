@@ -9,7 +9,7 @@ import { file_types } from '../shared/interfaces/files_types';
   providedIn: 'root'
 })
 export class GlobalService {
-  
+
   setVinculationForm(data: any) {
     var formData = {
       name: data[('name')],
@@ -210,7 +210,7 @@ export class GlobalService {
     form.get('form_responsible_name')?.setValue(data?.form_responsible_name || '');
     form.get('form_responsible_document')?.setValue(data?.form_responsible_document || '');
     form.get('form_responsible_position')?.setValue(data?.form_responsible_position || '');
-    form.get('signature')?.setValue(this.getDocumentLink(324));
+    form.get('signature')?.setValue(this.getDocumentLink(324), { emitEvent: false });
     form.get('cv_link')?.setValue(data?.cv_link || '');
 
     // Setting additional info

@@ -129,7 +129,7 @@ export class VendorService {
 
   deleteVendorDocument(formData: any) {
     this.setHeaders();
- 
+
     return this.http.delete(`${environment.apiUrl}cmo/delete_document_vendor`, {
       headers: this.headers,
       params: formData

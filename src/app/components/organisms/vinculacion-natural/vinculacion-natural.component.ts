@@ -12,13 +12,14 @@ import { AcuerdoConfidencialidadComponent } from '../../molecules/acuerdo-confid
 import { AutorizacionDatosPersonalesComponent } from '../../molecules/autorizacion-datos-personales/autorizacion-datos-personales.component';
 import { BlackButtonComponent } from '../../atoms/black-button/black-button.component';
 import { FirmaComponent } from '../../molecules/firma/firma.component';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PanelButtonsComponent } from '../../molecules/panel-buttons/panel-buttons.component';
 import { VendorService } from '../../../services/vendor.service';
 import { GlobalService } from '../../../services/global.service';
 import { Subscription } from 'rxjs';
 import { file_types } from '../../../shared/interfaces/files_types';
 import { AdditionalInfoComponent } from '../../molecules/additional-info/additional-info.component';
+import { AUTOCOMPLETE_CONTROLS } from '../../../shared/interfaces/autocomplete_controls';
 
 @Component({
   selector: 'app-vinculacion-natural',
@@ -46,13 +47,13 @@ import { AdditionalInfoComponent } from '../../molecules/additional-info/additio
   styleUrl: './vinculacion-natural.component.css'
 })
 export class VinculacionNaturalComponent {
-  naturalForm: FormGroup;
+
   @Input() lists: any = {};
 
   @Output() notify: EventEmitter<any> = new EventEmitter();
   @Output() onSubmitFile: EventEmitter<any> = new EventEmitter();
-  @Output() autoSaveForm: EventEmitter<any> = new EventEmitter();
 
+  naturalForm: FormGroup;
   subs: Subscription[] = [];
 
   constructor(private fb: FormBuilder, private _gS: GlobalService, private _vS: VendorService, private el: ElementRef) {
@@ -179,24 +180,22 @@ export class VinculacionNaturalComponent {
     }
   }
 
-  autoSaveChanges() {
-    setTimeout(() => {
-      const data = {
-        form: this.naturalForm.value,
-        nextForm: false,
-        noNotifySaveChanges: true,
-      }
-      this.autoSaveForm.emit(data);
-    }, 0);
-  }
-
   setAutoSave() {
-    this.naturalForm.get('name')?.valueChanges.subscribe(() => this.autoSaveChanges());
-    this.naturalForm.get('document')?.valueChanges.subscribe(() => this.autoSaveChanges());
-    this.naturalForm.get('pep_start_date')?.valueChanges.subscribe(() => this.autoSaveChanges());
-    this.naturalForm.get('pep_end_date')?.valueChanges.subscribe(() => this.autoSaveChanges());
-    this.naturalForm.get('pep_position')?.valueChanges.subscribe(() => this.autoSaveChanges());
-    this.naturalForm.get('pep_term')?.valueChanges.subscribe(() => this.autoSaveChanges());
+    AUTOCOMPLETE_CONTROLS.forEach(control => {
+      this.naturalForm.get(control.controlName)?.valueChanges?.subscribe((value) => {
+        this.lists.vendorInfo[control.controlName] = value;
+
+        if (control?.autocompleteControlName) {
+          this.naturalForm.get(control?.autocompleteControlName)?.setValue(value);
+        }
+      });
+    })
+    /* this.naturalForm.get('name')?.valueChanges.subscribe((value) => this.naturalForm.get('form_responsible_name')?.setValue(value, { emitEvent: false }));
+    this.naturalForm.get('document')?.valueChanges.subscribe((value) => this.naturalForm.get('form_responsible_document')?.setValue(value, { emitEvent: false }));
+    this.naturalForm.get('pep_start_date')?.valueChanges.subscribe((value) => this.naturalForm.get('name')?.setValue(value, { emitEvent: false }));
+    this.naturalForm.get('pep_end_date')?.valueChanges.subscribe((value) => this.naturalForm.get('name')?.setValue(value, { emitEvent: false }));
+    this.naturalForm.get('pep_position')?.valueChanges.subscribe((value) => this.naturalForm.get('name')?.setValue(value, { emitEvent: false }));
+    this.naturalForm.get('pep_term')?.valueChanges.subscribe((value) => this.naturalForm.get('name')?.setValue(value, { emitEvent: false })); */
   }
 
   saveForm() {
