@@ -189,13 +189,7 @@ export class VinculacionNaturalComponent {
           this.naturalForm.get(control?.autocompleteControlName)?.setValue(value);
         }
       });
-    })
-    /* this.naturalForm.get('name')?.valueChanges.subscribe((value) => this.naturalForm.get('form_responsible_name')?.setValue(value, { emitEvent: false }));
-    this.naturalForm.get('document')?.valueChanges.subscribe((value) => this.naturalForm.get('form_responsible_document')?.setValue(value, { emitEvent: false }));
-    this.naturalForm.get('pep_start_date')?.valueChanges.subscribe((value) => this.naturalForm.get('name')?.setValue(value, { emitEvent: false }));
-    this.naturalForm.get('pep_end_date')?.valueChanges.subscribe((value) => this.naturalForm.get('name')?.setValue(value, { emitEvent: false }));
-    this.naturalForm.get('pep_position')?.valueChanges.subscribe((value) => this.naturalForm.get('name')?.setValue(value, { emitEvent: false }));
-    this.naturalForm.get('pep_term')?.valueChanges.subscribe((value) => this.naturalForm.get('name')?.setValue(value, { emitEvent: false })); */
+    });
   }
 
   saveForm() {

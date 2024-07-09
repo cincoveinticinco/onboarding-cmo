@@ -23,6 +23,7 @@ import { VendorService } from '../../../services/vendor.service';
 import { file_types } from '../../../shared/interfaces/files_types';
 import { Subscription } from 'rxjs';
 import { AdditionalInfoComponent } from '../../molecules/additional-info/additional-info.component';
+import { AUTOCOMPLETE_CONTROLS } from '../../../shared/interfaces/autocomplete_controls';
 
 @Component({
   selector: 'app-vinculacion-juridica',
@@ -200,12 +201,15 @@ export class VinculacionJuridicaComponent {
   }
 
   setAutoSave() {
-    this.juridicaForm.get('name')?.valueChanges.subscribe((value) => this.juridicaForm.get('form_responsible_name')?.setValue(value, { emitEvent: false }));
-    this.juridicaForm.get('document')?.valueChanges.subscribe((value) => this.juridicaForm.get('form_responsible_document')?.setValue(value, { emitEvent: false }));
-    /* this.juridicaForm.get('pep_start_date')?.valueChanges.subscribe((value) => this.juridicaForm.get('name')?.setValue(value, { emitEvent: false }));
-    this.juridicaForm.get('pep_end_date')?.valueChanges.subscribe((value) => this.juridicaForm.get('name')?.setValue(value, { emitEvent: false }));
-    this.juridicaForm.get('pep_position')?.valueChanges.subscribe((value) => this.juridicaForm.get('name')?.setValue(value, { emitEvent: false }));
-    this.juridicaForm.get('pep_term')?.valueChanges.subscribe((value) => this.juridicaForm.get('name')?.setValue(value, { emitEvent: false })); */
+    AUTOCOMPLETE_CONTROLS.forEach(control => {
+      this.juridicaForm.get(control.controlName)?.valueChanges?.subscribe((value) => {
+        this.lists.vendorInfo[control.controlName] = value;
+
+        if (control?.autocompleteControlName) {
+          this.juridicaForm.get(control?.autocompleteControlName)?.setValue(value);
+        }
+      });
+    });
   }
 
   ngOnDestroy() {
