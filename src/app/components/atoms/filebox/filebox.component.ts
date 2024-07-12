@@ -1,5 +1,5 @@
 // File: filebox.component.ts
-import { Component, Input, Optional, Self, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, Optional, Self, OnDestroy, OnInit, Output, EventEmitter } from '@angular/core';
 import { AbstractControl, ControlValueAccessor, FormControl, NgControl, ReactiveFormsModule, ValidationErrors, Validator } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { DragAndDropFileDirective } from '../../../shared/directives/drag-and-drop-file.directive';
@@ -10,13 +10,15 @@ import { DialogComponent } from '../../../shared/components/dialog/dialog.compon
   standalone: true,
   imports: [DragAndDropFileDirective, DialogComponent, ReactiveFormsModule],
   templateUrl: './filebox.component.html',
-  styleUrls: ['./filebox.component.css'] // Corrected from 'styleUrl' to 'styleUrls'
+  styleUrls: ['./filebox.component.css']
 })
 export class FileboxComponent implements ControlValueAccessor, Validator, OnInit, OnDestroy {
 
   @Input() onlyPdf = false;
   @Input() control: FormControl = new FormControl();
   @Input() allowedExtensions: string[] = ['pdf', 'PDF', 'jpeg', 'jpg', 'png'];
+
+  @Output() onChanges = new EventEmitter<any>()
 
   private controlValueSubscription: Subscription | undefined;
   onChange = (value: any) => {};
@@ -56,7 +58,7 @@ export class FileboxComponent implements ControlValueAccessor, Validator, OnInit
   }
 
   getErrors(): string | null {
-    if (this.control.hasError('required')) {
+    if (this.control.hasError('required') && (this.control.dirty || this.control.touched)) {
       return 'Este campo es requerido *';
     }
     return null;

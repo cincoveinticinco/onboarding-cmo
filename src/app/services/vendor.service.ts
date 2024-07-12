@@ -42,7 +42,7 @@ export class VendorService {
   getDocumentsList() {
     return this._documentsList;
   }
-  
+
   setHeaders() {
     this.tokenSession = this.auth.getValueToken();
     this.headers = new HttpHeaders({

@@ -3,22 +3,23 @@
   <app-text-input 
     [label]="'Nombres y Apellidos'"
     [control]="getControl('form_responsible_name')"
-    class="col-4" 
+    class="col-4"
   />
-  <app-text-input 
+  <app-text-input
     [label]="'Número de documento'"
     [control]="getControl('form_responsible_document')"
-    class="col-4" 
+    class="col-4"
   />
-  <app-text-input 
+  <app-text-input
     [label]="'Cargo'"
     [control]="getControl('form_responsible_position')"
-    class="col-4" 
+    class="col-4"
   />
 </div>
+
 <div class="row">
   <label class="col-12">Adjuntar imagen con su firma</label>
-  <app-filebox 
+  <app-filebox
     [control]="getControl('signature')"
     class="col-12"
     [allowedExtensions]="['png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG']"

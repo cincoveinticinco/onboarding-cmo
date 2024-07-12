@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
@@ -23,6 +23,8 @@ export class TextInputComponent implements OnInit {
   @Input() pattern?: string | RegExp = '';
   @Input() mask?: string = '';
 
+  @Output() onBlur = new EventEmitter<any>();
+
   getErrors(): string | null {
     const touched = this.control.touched;
     if (this.control.hasError('required') && touched) {
@@ -32,6 +34,10 @@ export class TextInputComponent implements OnInit {
       return 'Correo electrónico inválido';
     }
     return this.control.valid ? null : 'Campo inválido';
+  }
+
+  blur() {
+    this.onBlur.emit();
   }
 
   ngOnInit(): void {

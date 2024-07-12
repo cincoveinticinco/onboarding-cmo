@@ -494,16 +494,6 @@ p.lbl-eng {
     z-index: 9999;
 }
 
-.large-txt {
-    overflow: hidden;
-    line-height: 1.4;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    text-align: justify;
-    height: auto;
-    margin-top: 5px;
-}
-
 .mat-mdc-snack-bar-action {
     color: var(--secondary-color) !important;
 }
@@ -517,4 +507,18 @@ p.lbl-eng {
 
 .grid {
 	display: grid;
+}
+
+.btn-add {
+    background-color: var(--light-border-box);
+    text-transform: uppercase;
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
 }

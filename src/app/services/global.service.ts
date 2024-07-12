@@ -70,7 +70,7 @@ export class GlobalService {
       form_responsible_name: data[('form_responsible_name')],
       form_responsible_document: data[('form_responsible_document')] || data[('document')],
       form_responsible_position: data[('form_responsible_position')],
-      cv_link: data[('cv_link')],
+      cv_link: data['cv_link'],
       info_additional: [
         {
           info_additional_type_id: 110,
@@ -298,9 +298,10 @@ export class GlobalService {
   }
 
   getDocumentLink(id: any) {
-    let documentsList = this._vS.getDocumentsList();
-    let document = documentsList.find((dl: any) => dl.id == id);
-    const file = document.link ? { name: document.link, url: document.link, document_id: document?.document_id } : null;
+    const documentsList = this._vS.getDocumentsList();
+    const document = documentsList.find(dl => dl?.id == id);
+    const file = document?.link ? { name: document.link, url: document.link, document_id: document?.document_id } : null;
+
     return file;
   }
 
