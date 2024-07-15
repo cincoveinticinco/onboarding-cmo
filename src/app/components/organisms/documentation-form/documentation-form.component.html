@@ -34,7 +34,7 @@
                                         [label]="'Nombre el documento'"
                                         [control]="$any(subDoc.get('name'))"
                                         class="col-8"
-                                        (onBlur)="submitFile(doc, subDoc)"
+                                        (onBlur)="updateDocument(doc, subDoc)"
                                     />
                                 }
 
@@ -42,7 +42,7 @@
                             </div>
 
                             @if (doc?.isArrayDocuments) {
-                                <button type="button" class="delete-button" (click)="deleteArraydoc(doc.id, i)">
+                                <button type="button" class="delete-button" (click)="deleteArraydoc(doc.id, i, subDoc)">
                                     <span class="material-symbols-outlined">
                                       delete
                                     </span>

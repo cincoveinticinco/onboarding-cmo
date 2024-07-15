@@ -99,8 +99,9 @@ export class DocumentationFormComponent implements OnInit {
   newDocGroup(doc: any, file?: any) {
     const newFileGroup = new FormGroup({
       document_id: new FormControl(file?.document_id || null),
-      name: new FormControl('', Validators.required),
+      name: new FormControl( file?.name || '', Validators.required),
       file: new FormControl(file ? this.setDynamicFiles(file) : null),
+      link: new FormControl(file?.link),
     });
 
     if (!this.nonRequiredDocuments.includes(doc.id)) {
@@ -114,7 +115,7 @@ export class DocumentationFormComponent implements OnInit {
       if (value) {
         this.submitFile(doc, newFileGroup)
       } else {
-        this.deleteFile(newFileGroup.get('document_id')?.value);
+        //this.deleteFile(newFileGroup.get('document_id')?.value);
       }
     })
 
@@ -191,11 +192,14 @@ export class DocumentationFormComponent implements OnInit {
         (uploadFile: any) => {
           if (!uploadFile) return of(false);
 
+          const link = uploadFile?.url ? `${this._vS.getVendorId()}/${nameFile}` : '';
+          file.get('link')?.setValue(link);
+
           return this._vS.updateVendorDocument({
             vendor_document_type_id: Number(uploadFile.id),
-            link: uploadFile.url
-              ? `${this._vS.getVendorId()}/${nameFile}`
-              : '',
+            link: link,
+            vendor_document_id: file.get('document_id')?.value,
+            name: file.get('name')?.value,
           });
         }
       )
@@ -209,12 +213,18 @@ export class DocumentationFormComponent implements OnInit {
   }
 
   updateDocument(doc: any, file: FormGroup) {
-    /* this._vS.updateVendorDocument({
+    const paramas = {
       vendor_document_type_id: doc.id,
-      link: uploadFile.url
-        ? `${this._vS.getVendorId()}/${nameFile}`
-        : '',
-    }) */
+      vendor_document_id: file.get('document_id')?.value,
+      link: file.get('link')?.value,
+      name: file.get('name')?.value,
+    }
+
+    this._vS.updateVendorDocument(paramas).subscribe({
+      next: (data: any) => {
+        file.get('document_id')?.setValue(data?.document_id);
+      }
+    })
   }
 
   deleteFile(documentId: number) {
@@ -240,7 +250,14 @@ export class DocumentationFormComponent implements OnInit {
     this.getArrayForm(doc.id).push(this.newDocGroup(doc));
   }
 
-  deleteArraydoc(docId: number, index: number) {
+  deleteArraydoc(docId: number, index: number, file: FormGroup) {
+
+    const currentFile = file?.get('document_id')?.value;
+
+    if (currentFile) {
+      this.deleteFile(currentFile);
+    }
+
     this.getArrayForm(docId).removeAt(index);
   }
 
