@@ -155,8 +155,8 @@ export class DocumentationFormComponent implements OnInit {
   submitFile(doc: any, file: FormGroup) {
     this.loading = true;
 
-    const currentFile = file.getRawValue();
-    const nameFile = this._gS.normalizeString(currentFile?.file?.name);
+    const currentFile = file.getRawValue()?.file;
+    const nameFile = this._gS.normalizeString(currentFile?.name);
     console.log(nameFile);
 
     this._vS.getPresignedPutURL(nameFile, this._vS.getVendorId()).pipe(
