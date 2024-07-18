@@ -113,7 +113,9 @@ export class DocumentationFormComponent implements OnInit {
 
     newFileGroup.controls.file.valueChanges.subscribe((value) => {
       if (value) {
-        this.submitFile(doc, newFileGroup)
+        setTimeout(() => {
+          this.submitFile(doc, newFileGroup)
+        }, 0);
       } else {
         if (!doc?.isArrayDocuments) this.deleteFile(newFileGroup.get('document_id')?.value);
       }
@@ -152,10 +154,11 @@ export class DocumentationFormComponent implements OnInit {
     return;
   }
 
-  submitFile(doc: any, file: FormGroup) {
+  submitFile(doc: any, currentFormGroup: FormGroup) {
     this.loading = true;
 
-    const currentFile = file.getRawValue()?.file;
+    const file = {...currentFormGroup.getRawValue()};
+    const currentFile = currentFormGroup.getRawValue()?.file;
     const nameFile = this._gS.normalizeString(currentFile?.name);
 
     this._vS.getPresignedPutURL(nameFile, this._vS.getVendorId()).pipe(
@@ -192,39 +195,40 @@ export class DocumentationFormComponent implements OnInit {
           if (!uploadFile) return of(false);
 
           const link = uploadFile?.url ? `${this._vS.getVendorId()}/${nameFile}` : '';
-          file.get('link')?.setValue(link);
+          currentFormGroup.get('link')?.setValue(link);
 
           return this._vS.updateVendorDocument({
             vendor_document_type_id: Number(uploadFile.id),
             link: link,
-            vendor_document_id: file.get('document_id')?.value,
-            name: file.get('name')?.value,
+            vendor_document_id: file?.document_id,
+            name: file?.name,
           });
         }
       )
     )
       .subscribe({
         next: (data: any) => {
-          file.get('document_id')?.setValue(data?.document_id);
-          file.get('document_id')?.updateValueAndValidity();
+          currentFormGroup.get('document_id')?.setValue(data?.document_id);
+          currentFormGroup.get('document_id')?.updateValueAndValidity();
 
           this.loading = false;
         }
       });
   }
 
-  updateDocument(doc: any, file: FormGroup, index: number) {
-    const paramas = {
+  updateDocument(doc: any, file: FormGroup) {
+    this.loading = true;
+    const params = {
       vendor_document_type_id: doc.id,
       vendor_document_id: file.get('document_id')?.value,
       link: file.get('link')?.value,
       name: file.get('name')?.value,
     }
 
-    this._vS.updateVendorDocument(paramas).subscribe({
+    this._vS.updateVendorDocument(params).subscribe({
       next: (data: any) => {
-        this.getArrayForm(doc.id).controls[index]?.get('document_id')?.setValue(data?.document_id);
-        this.getArrayForm(doc.id).controls[index]?.get('document_id')?.updateValueAndValidity();
+        file.get('document_id')?.setValue(data?.document_id);
+        this.loading = false;
       }
     })
   }
