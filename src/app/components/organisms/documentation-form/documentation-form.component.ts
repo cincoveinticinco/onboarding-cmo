@@ -115,7 +115,7 @@ export class DocumentationFormComponent implements OnInit {
       if (value) {
         this.submitFile(doc, newFileGroup)
       } else {
-        //this.deleteFile(newFileGroup.get('document_id')?.value);
+        if (!doc?.isArrayDocuments) this.deleteFile(newFileGroup.get('document_id')?.value);
       }
     })
 
