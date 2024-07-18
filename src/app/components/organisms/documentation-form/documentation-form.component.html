@@ -32,7 +32,7 @@
                                         [label]="'Nombre el documento'"
                                         [control]="$any(subDoc.get('name'))"
                                         class="col-8"
-                                        (onBlur)="updateDocument(doc, subDoc)"
+                                        (onBlur)="updateDocument(doc, subDoc, i)"
                                     />
                                 }
 

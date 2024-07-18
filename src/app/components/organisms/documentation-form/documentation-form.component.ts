@@ -213,7 +213,7 @@ export class DocumentationFormComponent implements OnInit {
       });
   }
 
-  updateDocument(doc: any, file: FormGroup) {
+  updateDocument(doc: any, file: FormGroup, index: number) {
     const paramas = {
       vendor_document_type_id: doc.id,
       vendor_document_id: file.get('document_id')?.value,
@@ -223,8 +223,8 @@ export class DocumentationFormComponent implements OnInit {
 
     this._vS.updateVendorDocument(paramas).subscribe({
       next: (data: any) => {
-        file.get('document_id')?.setValue(data?.document_id);
-        file.get('document_id')?.updateValueAndValidity();
+        this.getArrayForm(doc.id).controls[index]?.get('document_id')?.setValue(data?.document_id);
+        this.getArrayForm(doc.id).controls[index]?.get('document_id')?.updateValueAndValidity();
       }
     })
   }
