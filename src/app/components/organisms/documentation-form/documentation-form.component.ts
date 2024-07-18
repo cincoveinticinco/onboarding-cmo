@@ -207,6 +207,7 @@ export class DocumentationFormComponent implements OnInit {
       .subscribe({
         next: (data: any) => {
           file.get('document_id')?.setValue(data?.document_id);
+          file.get('document_id')?.updateValueAndValidity();
           this.loading = false;
         }
       });
@@ -223,6 +224,7 @@ export class DocumentationFormComponent implements OnInit {
     this._vS.updateVendorDocument(paramas).subscribe({
       next: (data: any) => {
         file.get('document_id')?.setValue(data?.document_id);
+        file.get('document_id')?.updateValueAndValidity();
       }
     })
   }
