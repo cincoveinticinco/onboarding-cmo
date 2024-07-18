@@ -157,7 +157,6 @@ export class DocumentationFormComponent implements OnInit {
 
     const currentFile = file.getRawValue()?.file;
     const nameFile = this._gS.normalizeString(currentFile?.name);
-    console.log(nameFile);
 
     this._vS.getPresignedPutURL(nameFile, this._vS.getVendorId()).pipe(
       catchError(() =>
@@ -194,12 +193,11 @@ export class DocumentationFormComponent implements OnInit {
 
           const link = uploadFile?.url ? `${this._vS.getVendorId()}/${nameFile}` : '';
           file.get('link')?.setValue(link);
-          file.updateValueAndValidity();
 
           return this._vS.updateVendorDocument({
             vendor_document_type_id: Number(uploadFile.id),
             link: link,
-            vendor_document_id: file.get('document_id')?.value,
+            vendor_document_id: file.get('document_id')?.value || this.getArrayForm(doc.id)?.get('document_id')?.value,
             name: file.get('name')?.value,
           });
         }
@@ -209,6 +207,7 @@ export class DocumentationFormComponent implements OnInit {
         next: (data: any) => {
           file.get('document_id')?.setValue(data?.document_id);
           file.get('document_id')?.updateValueAndValidity();
+
           this.loading = false;
         }
       });
