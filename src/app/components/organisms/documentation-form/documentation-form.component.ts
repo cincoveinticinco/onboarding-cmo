@@ -194,6 +194,7 @@ export class DocumentationFormComponent implements OnInit {
 
           const link = uploadFile?.url ? `${this._vS.getVendorId()}/${nameFile}` : '';
           file.get('link')?.setValue(link);
+          file.updateValueAndValidity();
 
           return this._vS.updateVendorDocument({
             vendor_document_type_id: Number(uploadFile.id),
