@@ -97,7 +97,7 @@ export class DocumentationFormComponent implements OnInit {
   }
 
   newDocGroup(doc: any, file?: any) {
-    const newFileGroup = new FormGroup({
+    let newFileGroup = new FormGroup({
       document_id: new FormControl(file?.document_id || null),
       name: new FormControl( file?.name || '', Validators.required),
       file: new FormControl(file ? this.setDynamicFiles(file) : null),
@@ -197,7 +197,7 @@ export class DocumentationFormComponent implements OnInit {
           return this._vS.updateVendorDocument({
             vendor_document_type_id: Number(uploadFile.id),
             link: link,
-            vendor_document_id: file.get('document_id')?.value || this.getArrayForm(doc.id)?.get('document_id')?.value,
+            vendor_document_id: file.get('document_id')?.value,
             name: file.get('name')?.value,
           });
         }
