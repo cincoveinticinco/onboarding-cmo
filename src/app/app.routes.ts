@@ -5,6 +5,9 @@ import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.com
 import { authGuard } from './guards/auth.guard';
 import { ThanksComponent } from './components/organisms/thanks/thanks.component';
 import { InvoiceLodgingComponent } from './pages/invoice-lodging/invoice-lodging.component';
+import { SendOcComponent } from './pages/send-oc/send-oc.component';
+import { ValidateOcInfoComponent } from './pages/validate-oc-info/validate-oc-info.component';
+import { OcInfoErrorComponent } from './pages/oc-info-error/oc-info-error.component';
 
 export const routes: Routes = [
     {
@@ -27,6 +30,18 @@ export const routes: Routes = [
     {
       path: 'facturascmo',
       component: InvoiceLodgingComponent,
+    },
+    {
+      path: 'sent-oc',
+      component: SendOcComponent
+    },
+    {
+      path: 'validate-oc',
+      component: ValidateOcInfoComponent
+    },
+    {
+      path: 'oc-error',
+      component: OcInfoErrorComponent
     },
 		{
 			path: '**',

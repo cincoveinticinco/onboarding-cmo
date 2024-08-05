@@ -18,7 +18,7 @@ export class TextInputComponent implements OnInit {
   @Input() label: string | undefined;
   @Input() description: string | undefined;
   @Input() placeholder: string = '';
-  @Input() control: FormControl = new FormControl();
+  @Input() control: any = new FormControl();
   @Input() type: string = 'text';
   @Input() pattern?: string | RegExp = '';
   @Input() mask?: string = '';
