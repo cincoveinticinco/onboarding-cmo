@@ -4,6 +4,7 @@ import { FormsCmoComponent } from './pages/forms-cmo/forms-cmo.component';
 import { PageNotFoundComponent } from './pages/page-not-found/page-not-found.component';
 import { authGuard } from './guards/auth.guard';
 import { ThanksComponent } from './components/organisms/thanks/thanks.component';
+import { InvoiceLodgingComponent } from './pages/invoice-lodging/invoice-lodging.component';
 
 export const routes: Routes = [
     {
@@ -22,6 +23,10 @@ export const routes: Routes = [
       data: {
           type: 'docs'
       }
+    },
+    {
+      path: 'facturascmo',
+      component: InvoiceLodgingComponent,
     },
 		{
 			path: '**',
