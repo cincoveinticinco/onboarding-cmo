@@ -51,6 +51,10 @@ export class VendorService {
     });
   }
 
+  getHeaders() {
+    return this.headers;
+  }
+
   getVendorInfo() {
     this.setHeaders();
     return this.http.get(`${environment.apiUrl}cmo/get_detail_vendor`, {
