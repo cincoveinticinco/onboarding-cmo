@@ -591,11 +591,12 @@ p.lbl-eng {
   background-color: #6D44CD;
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
+  padding: 17px 20px;
+  border-radius: 12px;
   cursor: pointer;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: normal;
+
 
   &:hover {
     background-color: var(--secondary-color);
