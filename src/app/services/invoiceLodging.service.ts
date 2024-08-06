@@ -16,4 +16,35 @@ export class InvoiceLodgingService {
       headers: this.vs.getHeaders()
     });
   }
+
+  // This function will retrieve three keys, purchaseOrders that haves an array of purchaseOrders ids, vendorEmail and the status of the request
+  getPurchaseOrders(vendorDocument: number) {
+    // send in params vendor_document
+    this.vs.setHeaders();
+    return this.http.get(`${environment.apiUrl}cmo/get_purchase_orders`, {
+      headers: this.vs.getHeaders(),
+      params: {
+        vendor_document: vendorDocument.toString()
+      }
+    });
+  }
+
+  sendPurchaseOrdersToEmail(formValues: {
+    email: string,
+    purchaseOrdersIds: string
+  }) {
+    this.vs.setHeaders();
+    return this.http.get(`${environment.apiUrl}cmo/send_purchase_orders_email`, {
+      headers: this.vs.getHeaders(),
+      params: {
+        email: formValues.email,
+        purchase_orders_ids: formValues.purchaseOrdersIds
+      }
+    });
+  }
+
+  authenticateUser(form: {
+
+  }) {}
+
 }
