@@ -3,6 +3,11 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import {  } from 'stream';
 
+export interface SelectOption {
+  optionValue: keyof SelectOption;
+  optionName: keyof SelectOption;
+}
+
 @Component({
   selector: 'app-select-input',
   standalone: true,
@@ -11,7 +16,7 @@ import {  } from 'stream';
   styleUrl: './select-input.component.css'
 })
 export class SelectInputComponent {
-  @Input() options: any[] = [];
+  @Input() options: SelectOption[] = [];
   @Input() description: string = '';
   @Input() label: string = '';
   @Input() optionValue: string = '';
