@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LogoComponent } from '../../components/atoms/logo/logo.component';
-import {MatTabsModule} from '@angular/material/tabs';
+import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TIPOPERSONA } from '../../shared/interfaces/typo_persona';
-import { SelectInputComponent } from '../../components/atoms/select-input/select-input.component';
+import { SelectInputComponent, SelectOption } from '../../components/atoms/select-input/select-input.component';
 import { TextInputComponent } from '../../components/atoms/text-input/text-input.component';
 import { Router } from '@angular/router';
 import { InvoiceLodgingService } from '../../services/invoiceLodging.service';
+import { TIPODOCUMENTO } from '../../shared/interfaces/typo_documentos';
+import { ValidateOcInfoComponent } from '../validate-oc-info/validate-oc-info.component';
 
 @Component({
   selector: 'app-invoice-lodging',
@@ -17,13 +19,23 @@ import { InvoiceLodgingService } from '../../services/invoiceLodging.service';
     ReactiveFormsModule,
     FormsModule,
     SelectInputComponent,
-    TextInputComponent
+    TextInputComponent,
+    ValidateOcInfoComponent
   ],
   templateUrl: './invoice-lodging.component.html',
   styleUrl: './invoice-lodging.component.css'
 })
-export class InvoiceLodgingComponent {
+export class InvoiceLodgingComponent implements OnInit {
   invoiceLodgingForm: FormGroup;
+  documentTypes: any[] = [];
+  formattedDocumentTypes: SelectOption[] = [];
+  loading: boolean = false;
+  formErrors: string[] = [];
+  TIPOPERSONA = TIPOPERSONA;
+  TIPODOCUMENTO = TIPODOCUMENTO;
+  userEmail: string = '';
+  purchaseOrdersIds: string[] = [];
+  validationPending: boolean = false;
 
   constructor(public fb: FormBuilder, public router: Router, private iS: InvoiceLodgingService) {
     this.invoiceLodgingForm = fb.group({
@@ -31,13 +43,33 @@ export class InvoiceLodgingComponent {
       documentType: new FormControl('', [Validators.required]),
       documentNumber: new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$')]),
       orderNumber: new FormControl('', [Validators.required]),
-    })
+    });
+  }
+
+  ngOnInit() {
+    this.loadDocumentTypes();
   }
 
   loadDocumentTypes() {
-    this.iS.getDocumentTypes().subscribe((data) => {
-      console.log(data);
-    })
+    this.loading = true;
+    this.iS.getDocumentTypes().subscribe((data: any) => {
+      this.documentTypes = data;
+      this.loading = false;
+      console.log(this.documentTypes);
+      this.filterDocumentTypes(this.getControl('personType').value);
+    });
+  }
+
+  filterDocumentTypes(typePersonId: TIPOPERSONA) {
+    if (typePersonId === TIPOPERSONA.Natural) {
+      this.formattedDocumentTypes = this.documentTypes
+        .filter(doc => doc.id !== TIPODOCUMENTO.NIT)
+        .map(item => ({optionValue: item.id, optionName: item.documentTypeEsp}));
+    } else {
+      this.formattedDocumentTypes = this.documentTypes
+        .filter(doc => doc.id === TIPODOCUMENTO.NIT)
+        .map(item => ({optionValue: item.id, optionName: item.documentTypeEsp}));
+    }
   }
 
   sendForm() {
@@ -51,21 +83,64 @@ export class InvoiceLodgingComponent {
   validatyDocumentTypeAndNumber() {
     const documentType = this.getControl('documentType').value;
     const documentNumber = this.getControl('documentNumber').value;
-    // si los campos esta llenos, navegar a la ruta /sent-oc, si no, touch los campos
-  
   
     if(documentType && documentNumber) {
-      this.router.navigate(['/sent-oc']);
-      return true
+      this.validationPending = true;
+      return true;
     } else {
       this.getControl('documentType').markAsTouched();
       this.getControl('documentNumber').markAsTouched();
+      
+      const error = 'Por favor, complete los campos de tipo de documento y número de documento para recibir la orden de compra';
+      this.formErrors.push(error);
+      setTimeout(() => {
+        this.formErrors = this.formErrors.filter((item) => item !== error);
+      }, 5000);
       return false;
     }
   }
 
-  ngOnInit() {
-    this.loadDocumentTypes();
+  onTabChange(event: MatTabChangeEvent) {
+    const selectedIndex = event.index;
+    if (selectedIndex === 0) {
+      this.changePersonTypeValue(TIPOPERSONA.Natural);
+    } else if (selectedIndex === 1) {
+      this.changePersonTypeValue(TIPOPERSONA.Juridica);
+    }
   }
 
+  receivePurchaseOrders() {
+    if(this.validatyDocumentTypeAndNumber()) {
+      const vendorDocument = this.getControl('documentNumber').value;
+      this.iS.getPurchaseOrders(vendorDocument).subscribe(
+        (response: any) => {
+          setTimeout(() => {
+            this.validationPending = false;
+          }, 2000);
+          if (response.status === 200) {
+            setTimeout(() => {
+              this.router.navigate(['/sent-oc'], { 
+                state: { email: response.vendorEmail, purchaseOrdersIds: response.purchaseOrders } 
+              });
+            }, 2000);
+          } else {
+            setTimeout(() => {
+              this.router.navigate(['/oc-error']);
+            }, 2000);
+          }
+        },
+        (error) => {
+          this.validationPending = false;
+          this.router.navigate(['/oc-error']);
+        }
+      );
+    }
+  }
+
+  changePersonTypeValue(typePersonId: TIPOPERSONA) {
+    this.getControl('documentType').setValue('');
+    this.getControl('documentNumber').setValue('');
+    this.getControl('personType').setValue(typePersonId);
+    this.filterDocumentTypes(typePersonId);
+  }
 }
