@@ -602,3 +602,7 @@ p.lbl-eng {
     background-color: var(--secondary-color);
   }
 }
+
+a {
+  cursor: pointer;
+}
