@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 import { InvoiceLodgingService } from '../../services/invoiceLodging.service';
 import { TIPODOCUMENTO } from '../../shared/interfaces/typo_documentos';
 import { ValidateOcInfoComponent } from '../validate-oc-info/validate-oc-info.component';
+import { delay, tap } from 'rxjs';
+import { AuthOcService } from '../../services/auth-oc.service';
 
 @Component({
   selector: 'app-invoice-lodging',
@@ -37,7 +39,7 @@ export class InvoiceLodgingComponent implements OnInit {
   purchaseOrdersIds: string[] = [];
   validationPending: boolean = false;
 
-  constructor(public fb: FormBuilder, public router: Router, private iS: InvoiceLodgingService) {
+  constructor(public fb: FormBuilder, public router: Router, private iS: InvoiceLodgingService, private auth: AuthOcService) {
     this.invoiceLodgingForm = fb.group({
       personType: new FormControl(TIPOPERSONA.Natural, [Validators.required]),
       documentType: new FormControl('', [Validators.required]),
@@ -48,6 +50,21 @@ export class InvoiceLodgingComponent implements OnInit {
 
   ngOnInit() {
     this.loadDocumentTypes();
+    this.validateSession();
+  }
+
+  validateSession() {
+    this.auth.getSession().then((isLoggedIn: any) => {
+      if (isLoggedIn) {
+        const vendor_id = this.iS.getVendorId();
+        console.log('vendor_id', vendor_id);
+        if (vendor_id) {
+          this.router.navigate(['/oc-forms', vendor_id]);
+        }
+        return true;
+      }
+      return false;
+    });
   }
 
   loadDocumentTypes() {
@@ -73,7 +90,28 @@ export class InvoiceLodgingComponent implements OnInit {
   }
 
   sendForm() {
-    console.log(this.invoiceLodgingForm.value);
+    if(this.invoiceLodgingForm.valid) {
+      this.validationPending = true;
+      this.iS.authenticateUser(this.invoiceLodgingForm.value).pipe(
+        delay(2000), // Espera 2 segundos
+        tap((response) => {
+          if (response.status === 200) {
+            console.log('SENDING')
+            const vendorId = response.vendor_id;
+            this.router.navigate(['/oc-forms', vendorId]);
+          } else {
+            this.router.navigate(['/oc-error']);
+          }
+        })
+      ).subscribe(() => {
+        this.validationPending = false;
+      });
+    } else {
+      this.getControl('personType').markAsTouched();
+      this.getControl('documentType').markAsTouched();
+      this.getControl('documentNumber').markAsTouched();
+      this.getControl('orderNumber').markAsTouched();
+    }
   }
 
   getControl(controlName: string) {
