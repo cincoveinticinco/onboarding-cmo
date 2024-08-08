@@ -1,28 +1,41 @@
 import { Injectable } from '@angular/core';
 import { VendorService } from './vendor.service';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { tap } from 'rxjs';
+import { AuthOcService } from './auth-oc.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InvoiceLodgingService {
 
-  constructor(private vs: VendorService, private http: HttpClient) { }
+  tokenSession: any = null;
+  vendorId: any = null;
+  private headers: HttpHeaders | undefined;
+
+  constructor(private http: HttpClient, private auth: AuthOcService) { }
+
+  setHeaders() {
+    this.tokenSession = this.auth.getValueToken();
+    this.headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.tokenSession}`
+    });
+  }
 
   getDocumentTypes() {
-    this.vs.setHeaders();
-    return this.http.get(`${environment.apiUrl}cmo/get_document_types`, {
-      headers: this.vs.getHeaders()
-    });
+    return this.http.get(`${environment.apiUrl}cmo/get_document_types`);
+  }
+
+  saveSession(tokenSession: string) {
+    localStorage.setItem('id_vendor_oc_token', tokenSession);
   }
 
   // This function will retrieve three keys, purchaseOrders that haves an array of purchaseOrders ids, vendorEmail and the status of the request
   getPurchaseOrders(vendorDocument: number) {
     // send in params vendor_document
-    this.vs.setHeaders();
     return this.http.get(`${environment.apiUrl}cmo/get_purchase_orders`, {
-      headers: this.vs.getHeaders(),
       params: {
         vendor_document: vendorDocument.toString()
       }
@@ -33,18 +46,38 @@ export class InvoiceLodgingService {
     email: string,
     purchaseOrdersIds: string
   }) {
-    this.vs.setHeaders();
     return this.http.get(`${environment.apiUrl}cmo/send_purchase_orders_email`, {
-      headers: this.vs.getHeaders(),
       params: {
         email: formValues.email,
         purchase_orders_ids: formValues.purchaseOrdersIds
       }
     });
   }
+  getVendorId() {
+    return localStorage.getItem('id_vendor_oc_id');
+  }
 
   authenticateUser(form: {
+    documentType: string,
+    documentNumber: string,
+    orderNumber: string
+  }) {
+    const params = {
+      f_document_type_id: form.documentType,
+      document_number: form.documentNumber,
+      order_number: form.orderNumber
+    }
 
-  }) {}
+    return this.http.get(`${environment.apiUrl}cmo/authenticate_oc_user`, {
+      params
+    }).pipe(
+      tap((res: any) => {
+        if(res.status === 200) {
+          this.saveSession(res.token);
+          localStorage.setItem('id_vendor_oc_id', res.vendor_id);
+        }
+      })
+    )
+  }
 
 }
