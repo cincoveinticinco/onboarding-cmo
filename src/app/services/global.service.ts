@@ -324,5 +324,19 @@ export class GlobalService {
     return `${day}/${month}/${year}`;
   }
 
+  fillInitialInvoiceNaturalForm(form: any, data: any) {
+    console.log(data, form);
+    form.get('personType')?.setValue(data?.personType || '');
+    form.get('documentType')?.setValue(data?.documentTypeEsp || '');
+    form.get('documentNumber')?.setValue(data?.documentNumber || '');
+    form.get('fullName')?.setValue(data?.fullName || '');
+    form.get('address')?.setValue(data?.address || '');
+    form.get('email')?.setValue(data?.email || '');
+    form.get('position')?.setValue(data?.position || '');
+    form.get('bankBranch')?.setValue(data?.bankBranch || '');
+    form.get('bankKey')?.setValue(data?.bankKey || '');
+    form.get('bankAccountType')?.setValue(data?.bankAccountType || '');
+  }
+
   constructor(private _vS: VendorService, private _snackBar: MatSnackBar) { }
 }
