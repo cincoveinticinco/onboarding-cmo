@@ -20,6 +20,7 @@ import { InvoiceLodgingService } from '../../services/invoiceLodging.service';
 })
 export class SendOcComponent {
   sendOcForm: FormGroup;
+  emailSent: boolean = false;
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -50,10 +51,14 @@ export class SendOcComponent {
   }
 
   sendForm() {
-    this.iS.sendPurchaseOrdersToEmail(this.sendOcForm.value).subscribe((response) => {
-      console.log(this.sendOcForm.value, '*********');
-      console.log(response);
-    });
+    this.iS.sendPurchaseOrdersToEmail(this.sendOcForm.value).subscribe(
+      (response) => {
+        this.emailSent = true;
+      });
+  }
+
+  backToHome() {
+    this.router.navigate(['/facturascmo']);
   }
 
   getControl(controlName: string) {
