@@ -1,5 +1,5 @@
 @if (currentStep === 1) {
   <app-inf-step-one [invoiceNaturalForm]="invoiceNaturalForm" [vendorInfo]="vendorInfo" (formSubmit)="sendForm()" (previousStep)="previousStep"></app-inf-step-one>
 } @else if (currentStep === 2) {
-  <app-inf-step-two [invoiceNaturalForm]="invoiceNaturalForm" [vendorInfo]="vendorInfo" (formSubmit)="sendForm()"></app-inf-step-two>
+  <app-inf-step-two [invoiceNaturalForm]="invoiceNaturalForm" [vendorInfo]="vendorInfo" (formSubmit)="sendForm()" (previousStep)="previousStep()"></app-inf-step-two>
 }

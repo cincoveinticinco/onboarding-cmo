@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SubtitleComponent } from '../../atoms/subtitle/subtitle.component';
+import { Component, EventEmitter, Input, Output, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { GlobalService } from '../../../services/global.service';
+import { SubtitleComponent } from '../../atoms/subtitle/subtitle.component';
 import { CheckboxInputComponent } from '../../atoms/checkbox-input/checkbox-input.component';
 import { CommonModule } from '@angular/common';
 import { TextInputComponent } from '../../atoms/text-input/text-input.component';
@@ -25,112 +25,105 @@ import { FileboxComponent } from '../../atoms/filebox/filebox.component';
   templateUrl: './invoice-natural-form.component.html',
   styleUrls: ['./invoice-natural-form.component.css']
 })
-export class InvoiceNaturalFormComponent {
-  invoiceNaturalForm: FormGroup;
-  @Input() currentStep: number = 1
-  disabledControls: string[] = [
-    'personType', 'documentType', 'documentNumber', 'fullName', 'address', 'email', 'position', 'bankBranch', 'bankKey', 'bankAccountType', 'contractNumber'
-  ]
+export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
+  @Input() currentStep: number | undefined;
   @Input() vendorInfo: any;
-  
+  @Output() handleStepChange = new EventEmitter<'next' | 'previous'>();
+
+  invoiceNaturalForm: FormGroup;
+  private disabledControls: string[] = [
+    'personType', 'documentType', 'documentNumber', 'fullName', 'address', 'email', 'position', 
+    'bankBranch', 'bankKey', 'bankAccountType', 'contractNumber'
+  ];
 
   constructor(
     private formBuilder: FormBuilder,
-    private gS: GlobalService
+    private globalService: GlobalService
   ) {
-    this.invoiceNaturalForm = formBuilder.group({
-      orderIds: formBuilder.array([formBuilder.control('')]),
-      personType: formBuilder.control(''),
-      documentType: formBuilder.control(''),
-      documentNumber: formBuilder.control(''),
-      fullName: formBuilder.control(''),
-      address: formBuilder.control(''),
-      email: formBuilder.control('', Validators.email),
-      position: formBuilder.control(''),
-      bankBranch: formBuilder.control(''),
-      bankKey: formBuilder.control(''),
-      bankAccountType: formBuilder.control(''),
-      signatureAuth: formBuilder.control('', Validators.requiredTrue),
-      signature: formBuilder.control('', Validators.required),
-      contractNumber: formBuilder.control(''),
-      phone: formBuilder.control(''),
-      institutionalEmail: formBuilder.control('', Validators.email),
-      incomeTaxReturn: formBuilder.control(''),
-      exceedsIncome: formBuilder.control(''),
-      taxCondition: formBuilder.control(''),
-      medicalPrepaid: formBuilder.control(''),
-      medicalPrepaidFile: formBuilder.control(''),
-      housingCredit: formBuilder.control(''),
-      housingCreditFile: formBuilder.control(''),
-      dependents: formBuilder.control(''),
-      afcContributions: formBuilder.control(''),
-      afcContributionsEntity: formBuilder.control(''),
-      afcContributionsAccountNumber: formBuilder.control(''),
-      afcContributionsFile: formBuilder.control(''),
-      afcContributionsValue: formBuilder.control(0),
-      voluntaryPensionContributions: formBuilder.control(''),
-      voluntaryPensionContributionsEntity: formBuilder.control(''),
-      voluntaryPensionContributionsAccountNumber: formBuilder.control(''),
-      voluntaryPensionContributionsFile: formBuilder.control(''),
-      voluntaryPensionContributionsValue: formBuilder.control(0),
-      signatureAuthTwo: formBuilder.control('', Validators.requiredTrue),
-      signatureTwo: formBuilder.control('', Validators.required),
+    this.invoiceNaturalForm = this.formBuilder.group({
+      orderIds: this.formBuilder.array([this.formBuilder.control('')]),
+      personType: this.formBuilder.control({ value: '', disabled: true }),
+      documentType: this.formBuilder.control({ value: '', disabled: true }),
+      documentNumber: this.formBuilder.control({ value: '', disabled: true }),
+      fullName: this.formBuilder.control({ value: '', disabled: true }),
+      address: this.formBuilder.control({ value: '', disabled: true }),
+      email: this.formBuilder.control({ value: '', disabled: true }, Validators.email),
+      position: this.formBuilder.control({ value: '', disabled: true }),
+      bankBranch: this.formBuilder.control({ value: '', disabled: true }),
+      bankKey: this.formBuilder.control({ value: '', disabled: true }),
+      bankAccountType: this.formBuilder.control({ value: '', disabled: true }),
+      signatureAuth: this.formBuilder.control('', Validators.requiredTrue),
+      signature: this.formBuilder.control('', Validators.required),
+      contractNumber: this.formBuilder.control({ value: '', disabled: true }),
+      phone: this.formBuilder.control(''),
+      institutionalEmail: this.formBuilder.control('', Validators.email),
+      incomeTaxReturn: this.formBuilder.control(''),
+      exceedsIncome: this.formBuilder.control(''),
+      taxCondition: this.formBuilder.control(''),
+      medicalPrepaid: this.formBuilder.control(''),
+      medicalPrepaidFile: this.formBuilder.control(''),
+      housingCredit: this.formBuilder.control(''),
+      housingCreditFile: this.formBuilder.control(''),
+      dependents: this.formBuilder.control(''),
+      afcContributions: this.formBuilder.control(''),
+      afcContributionsEntity: this.formBuilder.control(''),
+      afcContributionsAccountNumber: this.formBuilder.control(''),
+      afcContributionsFile: this.formBuilder.control(''),
+      afcContributionsValue: this.formBuilder.control(0),
+      voluntaryPensionContributions: this.formBuilder.control(''),
+      voluntaryPensionContributionsEntity: this.formBuilder.control(''),
+      voluntaryPensionContributionsAccountNumber: this.formBuilder.control(''),
+      voluntaryPensionContributionsFile: this.formBuilder.control(''),
+      voluntaryPensionContributionsValue: this.formBuilder.control(0),
+      signatureAuthTwo: this.formBuilder.control('', Validators.requiredTrue),
+      signatureTwo: this.formBuilder.control('', Validators.required),
     });
   }
 
-  ngOnInit(){
-    // disable fields
+  ngOnInit(): void {
     this.disabledControls.forEach(control => {
       this.invoiceNaturalForm.get(control)?.disable();
     });
   }
 
-  ngOnChanges() {
-    if (this.vendorInfo) {
-        this.gS.fillInitialInvoiceNaturalForm(this.invoiceNaturalForm, this.vendorInfo);
-        // Todos los campos no son editables
-        this.invoiceNaturalForm.get('signatureAuth')?.enable();
-        this.invoiceNaturalForm.get('signature')?.enable();
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['vendorInfo'] && this.vendorInfo) {
+      this.globalService.fillInitialInvoiceNaturalForm(this.invoiceNaturalForm, this.vendorInfo);
+      this.invoiceNaturalForm.get('signatureAuth')?.enable();
+      this.invoiceNaturalForm.get('signature')?.enable();
     }
-}
+  }
 
-  getOrderIds() {
+  getOrderIds(): FormArray {
     return this.invoiceNaturalForm.get('orderIds') as FormArray;
   }
 
-  addOrderId() {
+  addOrderId(): void {
     this.getOrderIds().push(this.formBuilder.control(''));
   }
 
-  getControl(controlName: string) {
+  getControl(controlName: string): FormControl {
     return this.invoiceNaturalForm.get(controlName) as FormControl;
   }
 
-  sendForm() {
+  sendForm(): void {
     console.log('Form sent', this.invoiceNaturalForm.value);
     this.nextStep();
   }
 
-  setCheckboxControl(event: any, controlName: string) {
+  setCheckboxControl(event: any, controlName: string): void {
     this.invoiceNaturalForm.get(controlName)?.setValue(event.target.checked);
   }
 
-  getValue(controlName: string) {
+  getValue(controlName: string): any {
     return this.invoiceNaturalForm.get(controlName)?.value;
-    
   }
 
-  nextStep() {
-    if(this.currentStep < 3) {
-      this.currentStep++;
-      console.log(this.currentStep)
-    }
+  nextStep(): void {
+    this.handleStepChange.emit('next');
   }
 
-  previousStep() {
-    if(this.currentStep > 1) {
-      this.currentStep--;
-      console.log(this.currentStep)
-    }
+  previousStep(): void {
+    this.handleStepChange.emit('previous');
   }
 }
