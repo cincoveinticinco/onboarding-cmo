@@ -1,2 +1,14 @@
-<p>oc-forms-cmo works!</p>
+@if(loading){
+  <div class="loader">
+      <div class="custom-loader"></div>
+  </div>
+} @else {
 <app-panel-buttons (saveForm)="saveForm()" [isOc]="true"></app-panel-buttons>
+<div class="form-container">
+  <app-logo></app-logo>
+  <h1 class="form-title">CONFIRMACIÓN DE RADICACIÓN</h1>
+  <h3 class="form-subtitle"> PASO {{currentStep}}/3</h3>
+  <p>Para continuar con el proceso de radicación, por favor complete el siguiente formulario</p>
+  <app-invoice-natural-form [vendorInfo]="vendorInfo" [currentStep]="currentStep"></app-invoice-natural-form>
+</div>
+}
