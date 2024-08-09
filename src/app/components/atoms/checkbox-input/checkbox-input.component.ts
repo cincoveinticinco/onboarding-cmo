@@ -17,6 +17,14 @@ export class CheckboxInputComponent {
   @Input() controlName: string = '';
   @Input() description: string = '';
   @Input() form: FormGroup | undefined;
+  @Input() customCheckboxLabel: {
+    true: string,
+    false: string
+  } = {
+    true: 'Si',
+    false: 'No'
+  };
+  @Input() boldLabel: boolean = true;
 
   getErrors(): string | null {
     const touched = this.control.touched;

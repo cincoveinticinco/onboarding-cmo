@@ -1,24 +1,24 @@
 <div class="input-container">
-  <label >{{ label }}</label>
+  <label [ngClass]="boldLabel ? 'bold' : 'not-bold'">{{ label }}</label>
   <div *ngIf="control.errors && (control.dirty || control.touched)">
     <small class="error">{{ getErrors() }}</small>
   </div>
   <div class="input-choose-option">
-    <label>
+    <label class="checkbox-label">
       <input
         name="{{ controlName }}"
         (ngModelChange)="setDescriptionControl($event, controlName)"
         [formControl]="control"
         type="radio"
-        [value]="'1'"> Sí
+        [value]="'1'"> {{customCheckboxLabel.true}}
     </label>
-    <label>
+    <label class="checkbox-label">
       <input
         name="{{ controlName }}"
         [formControl]="control"
         (ngModelChange)="setDescriptionControl($event, controlName)"
         type="radio"
-        [value]="'0'"> No
+        [value]="'0'">  {{customCheckboxLabel.false}}
     </label>
   </div>
   <div *ngIf="!getErrors()">

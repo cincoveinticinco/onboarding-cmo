@@ -4,12 +4,15 @@
   }
 
   <label
-      class="content-file-input"
+      class="content-file-input margin-top"
       appDragAndDropFile
       [extensiones_permitidas]="allowedExtensions"
       (onChangeFile)="onDragFileChange($event)"
       >
-    <span>Arrastar y soltar o <a>buscar</a></span>
+    <div class="label-content">
+      <img src="/assets/images/Upload.svg" alt="upload" class="upload">
+      <p>Arrastre y suelte el archivo aquí o <a>Haga clic para examinar los archivos</a></p>
+    </div>
     <input
       type="file"
       [accept]="acceptAllowedExtensions"

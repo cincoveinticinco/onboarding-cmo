@@ -1,5 +1,5 @@
 button:not(.mat-mdc-snack-bar-action), .button:not(.mat-mdc-snack-bar-action) {
-  background-color: var(--primary-color);
+  background-color: var(--dark-color);
   text-transform: uppercase;
   display: block;
   border: none;
@@ -29,7 +29,7 @@ button:not(.mat-mdc-snack-bar-action), .button:not(.mat-mdc-snack-bar-action) {
   &.form-button{
     border-radius: 34px;
     background: var(--background-light-color);
-    color: var(--primary-color);
+    color: var(--dark-color);
     font-weight: normal;
     font-size: var(--small-font-size);
     margin-top: 5px;

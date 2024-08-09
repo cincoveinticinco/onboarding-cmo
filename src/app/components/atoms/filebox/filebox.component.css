@@ -1,6 +1,6 @@
 .content-file-input{
-    background-color: var(--light-box);
-    border: 2px dashed var(--light-border-box);
+    background-color: white !important;
+    border: 2px solid var(--light-border-box);
     padding: 1rem;
     border-radius: 7px;
     margin: 0.2rem auto 0.5rem;
@@ -8,7 +8,25 @@
     font-weight: normal;
     font-size: var(--primary-font-size);
     color: var(--font-color);
-    height: 56px;
+    height: 124px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+
+    .label-content {
+      width: 300px;
+      p {
+        text-align: center;
+      }
+
+      .upload {
+        margin: 12px;
+        height: 24px;
+        width: 24px;
+      }
+    }
 
     input{
       display: none;
