@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Carattere&display=swap');
 /* You can add global styles to this file, and also import other style files */
 * {
   --content-height: calc(100vh - 42px);
@@ -8,11 +9,12 @@
   --size-gap:0.75rem;
   --small-font-size: 0.625rem;
 
-  --primary-color: #000000;
+  --dark-color: #000000;
+  --primary-color: #6D44CD;
   --secondary-color: #482684;
   --background-light-color: #E5E5E5;
   --light-box: #E0F6FD;
-  --light-border-box: #35C5FA;
+  --light-border-box: #BEC0C4;
   --alert-color: #fe5050;
   --success-color: #00F21C;
   --alert-background: rgb(253 79 83 / 9%);
@@ -68,7 +70,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-	color: var(--primary-color);
+	color: var(--dark-color);
 }
 
 h1 {
@@ -85,11 +87,11 @@ p {
     margin-top: 0;
     line-height: 1.2;
 	  margin: 12px 0;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 a {
-    color: var(--secondary-color);
+    color: var(--primary-color) !important;
     text-decoration: underline;
 }
 
@@ -179,7 +181,7 @@ app-header{
 
 label {
     font-weight: bold;
-    color: var(--primary-color);
+    color: var(--dark-color);
     font-size: var(--small-font-size);
     overflow: hidden;
     width: 100%;
@@ -233,7 +235,7 @@ p.lbl-eng {
 
 .section-title {
   font-size: var(--subtitle-font-size);
-  color: var(--primary-color);
+  color: var(--dark-color);
   border: 1px solid var(--font-color);
   border-width: 1px 0 1px 0px;
   padding: 12px 0px;
@@ -450,7 +452,7 @@ p.lbl-eng {
 }
 
 .payment-table th {
-    color: var(--primary-color);
+    color: var(--dark-color);
 }
 
 .loader{
@@ -468,9 +470,9 @@ p.lbl-eng {
   width:50px;
   height:24px;
   background:
-    radial-gradient(circle closest-side, var(--primary-color) 90%,#0000) 0%   50%,
-    radial-gradient(circle closest-side,var(--primary-color) 90%,#0000) 50%  50%,
-    radial-gradient(circle closest-side,var(--primary-color) 90%,#0000) 100% 50%;
+    radial-gradient(circle closest-side, var(--dark-color) 90%,#0000) 0%   50%,
+    radial-gradient(circle closest-side,var(--dark-color) 90%,#0000) 50%  50%,
+    radial-gradient(circle closest-side,var(--dark-color) 90%,#0000) 100% 50%;
   background-size:calc(100%/3) 12px;
   background-repeat: no-repeat;
   animation:d3 1s infinite linear;
@@ -603,6 +605,78 @@ p.lbl-eng {
   }
 }
 
+.btn-black {
+  background-color: #000000;
+  color: white;
+  border: none;
+  padding: 17px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: normal;
+
+  &:hover {
+    background-color: #333333;
+  }
+}
+
+.btn-gray {
+  background-color: #5E6366;
+  color: white;
+  border: none;
+  padding: 17px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: normal;
+
+  &:hover {
+    background-color: #333333;
+  }
+}
+
 a {
   cursor: pointer;
+}
+
+.margin-top {
+  margin-top: 1rem !important;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.checkbox-container input[type="checkbox"] {
+  height: 24px;
+  width: 24px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 1px solid #CFD3D4 !important;
+  outline: none;
+  cursor: pointer;
+}
+
+.checkbox-container input[type="checkbox"]:checked {
+  background-color: var(--secondary-color) !important;
+  border-color: var(--secondary-color);
+}
+
+.checkbox-container input[type="checkbox"]:checked::before {
+  content: "✓";
+  display: block;
+  width: 100%;
+  height: 100%;
+  line-height: 24px;
+  text-align: center;
+  color: #fff;
+}
+
+.purple-text {
+  color: #6D44CD;
 }
