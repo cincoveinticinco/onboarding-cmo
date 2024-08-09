@@ -1,208 +1,226 @@
-<form [formGroup]="invoiceNaturalForm" (ngSubmit)="onSubmit()">
-  <app-subtitle [subtitle]="'DECLARACIÓN FUNDAMENTADA'"></app-subtitle>
-  <div class="row">
-    <app-text-input
-      label="Nombres y Apellidos"
-      [control]="getControl('fullName')"
-      type="text"
-      class="col-6"
-    ></app-text-input>
-    
-    <app-text-input
-      label="Tipo de Documento"
-      [control]="getControl('documentType')"
-      type="text"
-      class="col-6"
-    ></app-text-input>
-    
-    <app-text-input
-      label="Número de Documento"
-      [control]="getControl('documentNumber')"
-      type="text"
-      class="col-6"
-    ></app-text-input>
-    
-    <app-text-input
-      label="Número de Contrato"
-      [control]="getControl('contractNumber')"
-      type="text"
-      class="col-6"
-    ></app-text-input>
-    
-    <app-text-input
-      label="Dirección"
-      [control]="getControl('address')"
-      type="text"
-      class="col-6"
-    ></app-text-input>
-    
-    <app-text-input
-      label="Teléfono"
-      [control]="getControl('phone')"
-      type="tel"
-      class="col-6"
-    ></app-text-input>
-    
-    <app-text-input
-      label="Correo Personal"
-      [control]="getControl('email')"
-      type="email"
-      class="col-6"
-    ></app-text-input>
-    
-    <app-text-input
-      label="Correo Institucional"
-      [control]="getControl('institutionalEmail')"
-      type="email"
-      class="col-6"
-    ></app-text-input>
-  </div> 
-  <app-subtitle [subtitle]="'DECLARACIÓN FUNDAMENTADA'"></app-subtitle>
-  
-  <app-checkbox-input
-    label="1. Estoy obligado a presentar declaración de renta por el año gravable inmediatamente anterior:"
-    [control]="getControl('incomeTaxReturn')"
-    controlName="incomeTaxReturn"
-    [form]="invoiceNaturalForm"
-    [boldLabel]="false"
-  ></app-checkbox-input>
-  
-  <app-checkbox-input
-    label="2. La totalidad de mi ingreso base de cotización por el respectivo periodo excede el tope de los 25 salarios mínimos legales mensuales vigentes:"
-    [control]="getControl('exceedsIncome')"
-    controlName="exceedsIncome"
-    [form]="invoiceNaturalForm"
-    [boldLabel]="false"
-  ></app-checkbox-input>
-  
-  <app-checkbox-input
-    label="3. Respecto al Impuesto Sobre las Ventas-IVA mi condición tributaria es:"
-    [control]="getControl('taxCondition')"
-    controlName="taxCondition"
-    [form]="invoiceNaturalForm"
-    [customCheckboxLabel]="{
-      true: 'Responsable',
-      false: 'No responsable'
-    }"
-    [boldLabel]="false"
-  ></app-checkbox-input>
-
-  <app-subtitle [subtitle]="'DEDUCCIONES'"></app-subtitle>
-  <app-checkbox-input
-    [label]="'1. Certificación por concepto de medicina prepagada. (se deberá enviar el certificado del valor pagado en el año inmediatamente anterior en el cual el contribuyente debe tener la titularidad del contrato.)'"
-    [control]="getControl('medicalPrepaid')"
-    [controlName]="'medicalPrepaid'"
-    [form]="invoiceNaturalForm"
-    [boldLabel]="false"
-  ></app-checkbox-input>
-  @if (getValue('medicalPrepaid') === '1') {
-    <label>*Adjuntar soporte</label>
-    <app-filebox
-      [control]="getControl('medicalPrepaidFile')"
-    ></app-filebox>
-  }
-  <app-checkbox-input
-    [label]="'2. Certificación por concepto de intereses o corrección monetaria en créditos de vivienda. (Anexar certificado de la entidad financiera o bancaria, a 31 de diciembre del año inmediatamente anterior)'"
-    [control]="getControl('housingCredit')"
-    [controlName]="'housingCredit'"
-    [form]="invoiceNaturalForm"
-    [boldLabel]="false"
-  ></app-checkbox-input>
-  @if (getValue('housingCredit') === '1') {
-    <label>*Adjuntar soporte</label>
-    <app-filebox
-      [control]="getControl('housingCreditFile')"
-    ></app-filebox>
-  }
-  <app-checkbox-input
-    [label]="'3.Información de dependientes. (Diligencie el formato al continuar)'"
-    [control]="getControl('dependents')"
-    [controlName]="'dependents'"
-    [form]="invoiceNaturalForm"
-    [boldLabel]="false"
-  ></app-checkbox-input>
-
-  <app-subtitle [subtitle]="'RENTAS EXTRAS'"></app-subtitle>
-
-  <app-checkbox-input
-    [label]="'1. Aportes AFC'"
-    [control]="getControl('afcContributions')"
-    [controlName]="'afcContributions'"
-    [form]="invoiceNaturalForm"
-    [boldLabel]="false"
-  ></app-checkbox-input>
-  
-  @if(getValue('afcContributions') === '1') {
+@if (!renderDependantsForm) {
+  <form [formGroup]="invoiceNaturalForm" (ngSubmit)="onSubmit()">
+    <app-subtitle [subtitle]="'DECLARACIÓN FUNDAMENTADA'"></app-subtitle>
     <div class="row">
       <app-text-input
-        label="Nombre de la Entidad"
-        [control]="getControl('afcContributionsEntity')"
+        label="Nombres y Apellidos"
+        [control]="getControl('fullName')"
         type="text"
         class="col-6"
       ></app-text-input>
+      
       <app-text-input
-        label="Número de Cuenta"
-        [control]="getControl('afcContributionsAccountNumber')"
+        label="Tipo de Documento"
+        [control]="getControl('documentType')"
         type="text"
         class="col-6"
       ></app-text-input>
+      
       <app-text-input
-        label="Valor"
-        [control]="getControl('afcContributionsValue')"
-        type="number"
+        label="Número de Documento"
+        [control]="getControl('documentNumber')"
+        type="text"
         class="col-6"
       ></app-text-input>
-      <label class="col-12">*Adjuntar soporte</label>
+      
+      <app-text-input
+        label="Número de Contrato"
+        [control]="getControl('contractNumber')"
+        type="text"
+        class="col-6"
+      ></app-text-input>
+      
+      <app-text-input
+        label="Dirección"
+        [control]="getControl('address')"
+        type="text"
+        class="col-6"
+      ></app-text-input>
+      
+      <app-text-input
+        label="Teléfono"
+        [control]="getControl('phone')"
+        type="tel"
+        class="col-6"
+      ></app-text-input>
+      
+      <app-text-input
+        label="Correo Personal"
+        [control]="getControl('email')"
+        type="email"
+        class="col-6"
+      ></app-text-input>
+      
+      <app-text-input
+        label="Correo Institucional"
+        [control]="getControl('institutionalEmail')"
+        type="email"
+        class="col-6"
+      ></app-text-input>
+    </div> 
+    <app-subtitle [subtitle]="'DECLARACIÓN FUNDAMENTADA'"></app-subtitle>
+    
+    <app-checkbox-input
+      label="1. Estoy obligado a presentar declaración de renta por el año gravable inmediatamente anterior:"
+      [control]="getControl('incomeTaxReturn')"
+      controlName="incomeTaxReturn"
+      [form]="invoiceNaturalForm"
+      [boldLabel]="false"
+    ></app-checkbox-input>
+    
+    <app-checkbox-input
+      label="2. La totalidad de mi ingreso base de cotización por el respectivo periodo excede el tope de los 25 salarios mínimos legales mensuales vigentes:"
+      [control]="getControl('exceedsIncome')"
+      controlName="exceedsIncome"
+      [form]="invoiceNaturalForm"
+      [boldLabel]="false"
+    ></app-checkbox-input>
+    
+    <app-checkbox-input
+      label="3. Respecto al Impuesto Sobre las Ventas-IVA mi condición tributaria es:"
+      [control]="getControl('taxCondition')"
+      controlName="taxCondition"
+      [form]="invoiceNaturalForm"
+      [customCheckboxLabel]="{
+        true: 'Responsable',
+        false: 'No responsable'
+      }"
+      [boldLabel]="false"
+    ></app-checkbox-input>
+  
+    <app-subtitle [subtitle]="'DEDUCCIONES'"></app-subtitle>
+    <app-checkbox-input
+      [label]="'1. Certificación por concepto de medicina prepagada. (se deberá enviar el certificado del valor pagado en el año inmediatamente anterior en el cual el contribuyente debe tener la titularidad del contrato.)'"
+      [control]="getControl('medicalPrepaid')"
+      [controlName]="'medicalPrepaid'"
+      [form]="invoiceNaturalForm"
+      [boldLabel]="false"
+    ></app-checkbox-input>
+    @if (getValue('medicalPrepaid') === '1') {
+      <label>*Adjuntar soporte</label>
       <app-filebox
-        class="col-12"
-        [control]="getControl('afcContributionsFile')"
+        [control]="getControl('medicalPrepaidFile')"
       ></app-filebox>
-    </div>
-  }
-  <!-- similar to afc for Aportes Pensiones Voluntarias. -->
-  <app-checkbox-input
-    [label]="'2. Aportes Pensiones Voluntarias'"
-    [control]="getControl('voluntaryPensionContributions')"
-    [controlName]="'voluntaryPensionContributions'"
-    [form]="invoiceNaturalForm"
-    [boldLabel]="false"
-  ></app-checkbox-input>
-  @if(getValue('voluntaryPensionContributions') === '1') {
-    <div class="row">
-      <app-text-input
-        label="Nombre de la Entidad"
-        [control]="getControl('voluntaryPensionContributionsEntity')"
-        type="text"
-        class="col-6"
-      ></app-text-input>
-      <app-text-input
-        label="Número de Cuenta"
-        [control]="getControl('voluntaryPensionContributionsAccountNumber')"
-        type="text"
-        class="col-6"
-      ></app-text-input>
-      <app-text-input
-        label="Valor"
-        [control]="getControl('voluntaryPensionContributionsValue')"
-        type="number"
-        class="col-6"
-      ></app-text-input>
-      <label class="col-12">*Adjuntar soporte</label>
+    }
+    <app-checkbox-input
+      [label]="'2. Certificación por concepto de intereses o corrección monetaria en créditos de vivienda. (Anexar certificado de la entidad financiera o bancaria, a 31 de diciembre del año inmediatamente anterior)'"
+      [control]="getControl('housingCredit')"
+      [controlName]="'housingCredit'"
+      [form]="invoiceNaturalForm"
+      [boldLabel]="false"
+    ></app-checkbox-input>
+    @if (getValue('housingCredit') === '1') {
+      <label>*Adjuntar soporte</label>
       <app-filebox
-        class="col-12"
-        [control]="getControl('voluntaryPensionContributionsFile')"
+        [control]="getControl('housingCreditFile')"
       ></app-filebox>
-    </div>
+    }
+    <app-checkbox-input
+      [label]="'3.Información de dependientes. (Diligencie el formato al continuar)'"
+      [control]="getControl('dependents')"
+      [controlName]="'dependents'"
+      [form]="invoiceNaturalForm"
+      [boldLabel]="false"
+    ></app-checkbox-input>
+  
+    <app-subtitle [subtitle]="'RENTAS EXTRAS'"></app-subtitle>
+  
+    <app-checkbox-input
+      [label]="'1. Aportes AFC'"
+      [control]="getControl('afcContributions')"
+      [controlName]="'afcContributions'"
+      [form]="invoiceNaturalForm"
+      [boldLabel]="false"
+    ></app-checkbox-input>
+    
+    @if(getValue('afcContributions') === '1') {
+      <div class="row">
+        <app-text-input
+          label="Nombre de la Entidad"
+          [control]="getControl('afcContributionsEntity')"
+          type="text"
+          class="col-6"
+        ></app-text-input>
+        <app-text-input
+          label="Número de Cuenta"
+          [control]="getControl('afcContributionsAccountNumber')"
+          type="text"
+          class="col-6"
+        ></app-text-input>
+        <app-text-input
+          label="Valor"
+          [control]="getControl('afcContributionsValue')"
+          type="number"
+          class="col-6"
+        ></app-text-input>
+        <label class="col-12">*Adjuntar soporte</label>
+        <app-filebox
+          class="col-12"
+          [control]="getControl('afcContributionsFile')"
+        ></app-filebox>
+      </div>
+    }
+    <!-- similar to afc for Aportes Pensiones Voluntarias. -->
+    <app-checkbox-input
+      [label]="'2. Aportes Pensiones Voluntarias'"
+      [control]="getControl('voluntaryPensionContributions')"
+      [controlName]="'voluntaryPensionContributions'"
+      [form]="invoiceNaturalForm"
+      [boldLabel]="false"
+    ></app-checkbox-input>
+    @if(getValue('voluntaryPensionContributions') === '1') {
+      <div class="row">
+        <app-text-input
+          label="Nombre de la Entidad"
+          [control]="getControl('voluntaryPensionContributionsEntity')"
+          type="text"
+          class="col-6"
+        ></app-text-input>
+        <app-text-input
+          label="Número de Cuenta"
+          [control]="getControl('voluntaryPensionContributionsAccountNumber')"
+          type="text"
+          class="col-6"
+        ></app-text-input>
+        <app-text-input
+          label="Valor"
+          [control]="getControl('voluntaryPensionContributionsValue')"
+          type="number"
+          class="col-6"
+        ></app-text-input>
+        <label class="col-12">*Adjuntar soporte</label>
+        <app-filebox
+          class="col-12"
+          [control]="getControl('voluntaryPensionContributionsFile')"
+        ></app-filebox>
+      </div>
+    }
+    <app-electronic-signature-auth 
+      [form]="invoiceNaturalForm"
+      [controlNames]="{
+        signature: 'signatureTwo',
+        signatureAuth: 'signatureAuthTwo'
+      }"></app-electronic-signature-auth>
+      <div class="row margin-top buttons-wrapper">
+        <button mat-raised-button type="button" class="col-4 btn-gray" (click)="handlePreviousStep()">REGRESAR</button>
+        <button mat-raised-button type="button" class="col-4 btn-purpple">DESCARGAR DOCUMENTO</button>
+        <button mat-raised-button type="submit" class="col-4 btn-black">CONTINUAR</button>
+      </div>
+  </form>
+} @else {
+  @for (dependent of getDependentsForms(); track dependent) {
+    <app-inf-dependant-certification
+      [dependantForm]="dependent"
+      [dependentIndex]="$index + 1"
+    ></app-inf-dependant-certification>
   }
-  <app-electronic-signature-auth 
-    [form]="invoiceNaturalForm"
-    [controlNames]="{
-      signature: 'signatureTwo',
-      signatureAuth: 'signatureAuthTwo'
-    }"></app-electronic-signature-auth>
-    <div class="row margin-top buttons-wrapper">
-      <button mat-raised-button type="button" class="col-4 btn-gray">REGRESAR</button>
-      <button mat-raised-button type="button" class="col-4 btn-purpple">DESCARGAR DOCUMENTO</button>
-      <button mat-raised-button type="submit" class="col-4 btn-black">CONTINUAR</button>
-    </div>
-</form>
+  <div class="add-dependent-wrapper">
+    <a (click)="addNewDependantFormGroup()" class="margin-top">Agregar dependiente</a>
+  </div>
+  <div class="row margin-top buttons-wrapper padding-bottom">
+    <button mat-raised-button type="button" class="col-4 btn-gray" (click)="handlePreviousStep()">REGRESAR</button>
+    <button mat-raised-button type="button" class="col-4 btn-purpple">DESCARGAR DOCUMENTO</button>
+    <button mat-raised-button type="submit" class="col-4 btn-black" (click)="onSubmit()">CONTINUAR</button>
+  </div>
+  
+}
