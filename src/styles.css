@@ -643,6 +643,10 @@ a {
   margin-top: 1rem !important;
 }
 
+.margin-bottom {
+  margin-bottom: 1rem !important;
+}
+
 .checkbox-container {
   display: flex;
   align-items: flex-start;
