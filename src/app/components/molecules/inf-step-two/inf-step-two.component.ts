@@ -73,11 +73,13 @@ export class InfStepTwoComponent {
 
   onSubmit() {
     const haveDependants = this.getValue('dependents');
-    if(haveDependants) {
+    if(haveDependants && !this.renderDependantsForm) {
       const formIsValid = this.invoiceNaturalForm.valid;
-      this.goToDependantsForm();
-    } else {
-      this.formSubmit.emit();
+      return this.goToDependantsForm();
+    }
+
+    if(this.renderDependantsForm) {
+      return this.formSubmit.emit();
     }
   }
 
