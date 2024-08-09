@@ -9,6 +9,6 @@
   <h1 class="form-title">CONFIRMACIÓN DE RADICACIÓN</h1>
   <h3 class="form-subtitle"> PASO {{currentStep}}/3</h3>
   <p>Para continuar con el proceso de radicación, por favor complete el siguiente formulario</p>
-  <app-invoice-natural-form [vendorInfo]="vendorInfo" [currentStep]="currentStep"></app-invoice-natural-form>
+  <app-invoice-natural-form [vendorInfo]="vendorInfo" [currentStep]="currentStep" (handleStepChange)="handleStepChange($event)"></app-invoice-natural-form>
 </div>
 }
