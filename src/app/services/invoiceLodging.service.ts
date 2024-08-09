@@ -45,6 +45,7 @@ export class InvoiceLodgingService {
     email: string,
     purchaseOrdersIds: string
   }) {
+    console.log(formValues)
     return this.http.get(`${environment.apiUrl}cmo/send_purchase_orders_email`, {
       params: {
         email: formValues.email,
@@ -72,11 +73,18 @@ export class InvoiceLodgingService {
     }).pipe(
       tap((res: any) => {
         if(res.status === 200) {
-          this.saveSession(res.token);
+          this.saveSession(res.vendor_token);
           localStorage.setItem('id_vendor_oc_id', res.vendor_id);
         }
       })
     )
+  }
+
+  getFormInitialData() {
+    this.setHeaders();
+    return this.http.get(`${environment.apiUrl}cmo/get_form_initial_data`, {
+      headers: this.headers
+    });
   }
 
 }
