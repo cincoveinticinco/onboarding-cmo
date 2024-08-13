@@ -1,4 +1,4 @@
-@if (!renderDependantsForm) {
+@if (!renderDependentsForm) {
   <form [formGroup]="invoiceNaturalForm" (ngSubmit)="onSubmit()">
     <app-subtitle [subtitle]="'DECLARACIÓN FUNDAMENTADA'"></app-subtitle>
     <div class="row">
@@ -215,7 +215,7 @@
     ></app-inf-dependant-certification>
   }
   <div class="add-dependent-wrapper">
-    <a (click)="addNewDependantFormGroup()" class="margin-top">Agregar dependiente</a>
+    <a (click)="addNewDependentFormGroup()" class="margin-top">Agregar dependiente</a>
   </div>
   <div class="row margin-top buttons-wrapper padding-bottom">
     <button mat-raised-button type="button" class="col-4 btn-gray" (click)="handlePreviousStep()">REGRESAR</button>

@@ -48,16 +48,16 @@ export class InfStepTwoComponent {
   @Output() formSubmit = new EventEmitter<void>();
   @Output() previousStep = new EventEmitter<void>();
 
-  dependents: FormArray;
+  renderDependentsForm: boolean = false;
 
-  constructor( private formBuilder: FormBuilder) {
-    this.dependents = formBuilder.array([]);
-  }
-
-  renderDependantsForm: boolean = false;
+  constructor(private formBuilder: FormBuilder) {}
 
   getControl(controlName: string) {
     return this.invoiceNaturalForm?.get(controlName) as FormControl;
+  }
+
+  getDependents(): FormArray {
+    return this.invoiceNaturalForm.get('dependentsInfo') as FormArray;
   }
 
   getValue(controlName: string) {
@@ -65,26 +65,26 @@ export class InfStepTwoComponent {
   }
 
   goToDependantsForm() {
-    this.renderDependantsForm = true;
-    if(this.dependents.length === 0) {
-      this.addNewDependantFormGroup();
+    this.renderDependentsForm = true;
+    if(this.getDependents().length === 0) {
+      this.addNewDependentFormGroup();
     }
   }
 
   onSubmit() {
     const haveDependants = this.getValue('dependents');
-    if(haveDependants && !this.renderDependantsForm) {
+    if(haveDependants && !this.renderDependentsForm) {
       const formIsValid = this.invoiceNaturalForm.valid;
       return this.goToDependantsForm();
     }
 
-    if(this.renderDependantsForm) {
+    if(this.renderDependentsForm || !haveDependants) {
       return this.formSubmit.emit();
     }
   }
 
-  addNewDependantFormGroup() {
-    this.dependents.push(this.formBuilder.group({
+  addNewDependentFormGroup() {
+    this.getDependents().push(this.formBuilder.group({
       dependantDocumentTypeId: [''],
       dependantDocumentNumber: [''],
       dependantFullName: [''],
@@ -104,12 +104,12 @@ export class InfStepTwoComponent {
   }
 
   getDependentsForms() {
-    return this.dependents.controls as FormGroup[];
+    return this.getDependents().controls as FormGroup[];
   }
 
   handlePreviousStep() {
-    if(this.renderDependantsForm) {
-      this.renderDependantsForm = false;
+    if(this.renderDependentsForm) {
+      this.renderDependentsForm = false;
     }
 
     this.previousStep.emit();

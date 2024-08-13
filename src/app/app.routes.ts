@@ -12,6 +12,7 @@ import { authoOcGuard } from './guards/auth-oc.guard';
 import { InvoiceNaturalFormComponent } from './components/organisms/invoice-natural-form/invoice-natural-form.component';
 import { InvoiceJuridicaFormComponent } from './components/organisms/invoice-juridica-form/invoice-juridica-form.component';
 import { OcFormsCmoComponent } from './pages/oc-forms-cmo/oc-forms-cmo.component';
+import { OcFormSuccessComponent } from './components/oc-form-success/oc-form-success.component';
 
 export const routes: Routes = [
     {
@@ -47,6 +48,10 @@ export const routes: Routes = [
       path: 'oc-forms/:id',
       canActivate: [authoOcGuard],
       component: OcFormsCmoComponent
+    },
+    {
+      path: 'oc-forms-cmo/success',
+      component: OcFormSuccessComponent,
     },
     {
       path: 'oc-error',

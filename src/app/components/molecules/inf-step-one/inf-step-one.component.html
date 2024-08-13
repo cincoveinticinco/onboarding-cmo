@@ -1,4 +1,21 @@
 <form [formGroup]="invoiceNaturalForm" (ngSubmit)="onSubmit()" id="invoice-natural-form">
+  @for(poControl of getPurchaseOrdersControls(); track poControl) {
+    <div class="row">
+      <app-select-input
+        [label]="'Orden de compra'"
+        [control]="poControl"
+        [options]="selectOptionsPo || []"
+        [optionName]="'optionName'"
+        [optionValue]="'optionValue'"
+        class="col-6"
+      ></app-select-input>
+      @if($index === getPurchaseOrdersControls().length - 1 && selectOptionsPo && $index < selectOptionsPo.length - 1) {
+        <a class="col-6 flex-column justify-end align-center" (click)="addPurchaseOrderControl()">
+          + Agregar nuevo número de orden
+        </a>
+      }
+    </div>
+  }
   <div class="row">
     <app-text-input
       [label]="'Tipo de persona'"

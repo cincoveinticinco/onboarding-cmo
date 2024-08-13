@@ -30,6 +30,7 @@ export class SendOcComponent {
     this.sendOcForm = this.fb.group({
       email: [''],
       purchaseOrdersIds: [''],
+      document: [0]
     });
   }
 
@@ -37,12 +38,13 @@ export class SendOcComponent {
     this.route.paramMap.subscribe(() => {
       const email = window.history.state.email;
       const purchaseOrdersIds = window.history.state.purchaseOrdersIds;
-      console.log(email);
-      console.log(purchaseOrdersIds);
+      const document = window.history.state.document;
+
       if (email && purchaseOrdersIds) {
         this.sendOcForm.patchValue({
           email,
-          purchaseOrdersIds: purchaseOrdersIds.join(', ')
+          purchaseOrdersIds: purchaseOrdersIds.join(', '),
+          document
         });
       } else {
         this.router.navigate(['/oc-error']);

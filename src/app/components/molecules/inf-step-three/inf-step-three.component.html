@@ -1,1 +1,21 @@
-<p>inf-step-three works!</p>
+<form [formGroup]="invoiceNaturalForm" (ngSubmit)="onSubmit()">
+  <app-subtitle [subtitle]="'DOCUMENTOS PRECARGADOS'"></app-subtitle>
+  <p><b>Documento Soporte</b> <a>  Ver aquí</a></p>
+  <br>¿Desea adjuntar otro documento?
+  @for(oc of vendorInfo.selectedOrders; track vendorInfo.selectedOrders.id) {
+  <br><p><b>{{oc.consecutive_codes}}</b>  <a>Ver aquí</a></p>
+  }
+  <br><b>RUT</b><a>Ver aquí</a>
+  <br><p>Desea actualizar el documento?  <a>click aquí</a></p>
+  <br><b>Anexo 1. Certificación de dependiente #1</b>
+  <br><p>Desea actualizar el documento? <a>click aquí</a></p>
+  <app-subtitle [subtitle]="'Documentos solicitados'"></app-subtitle>
+
+  <label>Seguridad Social*</label>
+  <app-filebox [control]="getControl('socialSecurity')"></app-filebox>
+  @for(anexo of getOtherAnexesControls(); track $index) {
+    <label>Anexo {{$index}}*</label>
+    <app-filebox [control]="anexo"></app-filebox>
+  }
+  <a (click)="addNewAnexFormGroup()">+ Agregar anexo</a>
+</form>

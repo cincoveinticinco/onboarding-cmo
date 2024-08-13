@@ -43,13 +43,15 @@ export class InvoiceLodgingService {
 
   sendPurchaseOrdersToEmail(formValues: {
     email: string,
-    purchaseOrdersIds: string
+    purchaseOrdersIds: string,
+    document: number
   }) {
     console.log(formValues)
     return this.http.get(`${environment.apiUrl}cmo/send_purchase_orders_email`, {
       params: {
         email: formValues.email,
-        purchase_orders_ids: formValues.purchaseOrdersIds
+        purchase_orders_ids: formValues.purchaseOrdersIds,
+        document: formValues.document.toString()
       }
     });
   }

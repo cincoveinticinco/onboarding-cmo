@@ -3,7 +3,7 @@ import { LogoComponent } from '../../components/atoms/logo/logo.component';
 import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TIPOPERSONA } from '../../shared/interfaces/typo_persona';
-import { SelectInputComponent, SelectOption } from '../../components/atoms/select-input/select-input.component';
+import { SelectInputComponent } from '../../components/atoms/select-input/select-input.component';
 import { TextInputComponent } from '../../components/atoms/text-input/text-input.component';
 import { Router } from '@angular/router';
 import { InvoiceLodgingService } from '../../services/invoiceLodging.service';
@@ -11,6 +11,7 @@ import { TIPODOCUMENTO } from '../../shared/interfaces/typo_documentos';
 import { ValidateOcInfoComponent } from '../validate-oc-info/validate-oc-info.component';
 import { delay, tap } from 'rxjs';
 import { AuthOcService } from '../../services/auth-oc.service';
+import { SelectOption } from '../../components/molecules/inf-step-one/inf-step-one.component';
 
 @Component({
   selector: 'app-invoice-lodging',
@@ -158,7 +159,7 @@ export class InvoiceLodgingComponent implements OnInit {
           if (response.status === 200) {
             setTimeout(() => {
               this.router.navigate(['/sent-oc'], { 
-                state: { email: response.vendorEmail, purchaseOrdersIds: response.purchaseOrders } 
+                state: { email: response.vendorEmail, purchaseOrdersIds: response.purchaseOrders, document: vendorDocument } 
               });
             }, 2000);
           } else {

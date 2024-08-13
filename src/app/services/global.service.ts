@@ -338,5 +338,16 @@ export class GlobalService {
     form.get('bankAccountType')?.setValue(data?.bankAccountType || '');
   }
 
+  fillInitialInvoiceJuridicaForm(form: any, data: any) {
+    console.log(data, form);
+    form.get('personType')?.setValue(data?.personType || '');
+    form.get('documentType')?.setValue(data?.documentTypeEsp || '');
+    form.get('documentNumber')?.setValue(data?.documentNumber || '');
+    form.get('companyName')?.setValue(data?.companyName || '');
+    form.get('address')?.setValue(data?.address || '');
+    form.get('email')?.setValue(data?.email || '');
+  }
+
+
   constructor(private _vS: VendorService, private _snackBar: MatSnackBar) { }
 }

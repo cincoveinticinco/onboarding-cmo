@@ -8,6 +8,10 @@ import { TextInputComponent } from '../../atoms/text-input/text-input.component'
 import { InfStepOneComponent } from '../../molecules/inf-step-one/inf-step-one.component';
 import { InfStepTwoComponent } from '../../molecules/inf-step-two/inf-step-two.component';
 import { FileboxComponent } from '../../atoms/filebox/filebox.component';
+import { InfStepThreeComponent } from '../../molecules/inf-step-three/inf-step-three.component';
+import { SelectOption } from '../../molecules/inf-step-one/inf-step-one.component';
+import { PurchaseOrders } from '../../../pages/oc-forms-cmo/oc-forms-cmo.component';
+import { get } from 'http';
 
 @Component({
   selector: 'app-invoice-natural-form',
@@ -20,15 +24,19 @@ import { FileboxComponent } from '../../atoms/filebox/filebox.component';
     TextInputComponent,
     InfStepOneComponent,
     InfStepTwoComponent,
+    InfStepThreeComponent,
     FileboxComponent
   ],
   templateUrl: './invoice-natural-form.component.html',
   styleUrls: ['./invoice-natural-form.component.css']
 })
 export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
-  @Input() currentStep: number | undefined;
+  @Input() currentStep?: number;
   @Input() vendorInfo: any;
+  @Input() purchaseOrders?: PurchaseOrders[];
+  @Input() selectedPurchaseOrders?: PurchaseOrders[];
   @Output() handleStepChange = new EventEmitter<'next' | 'previous'>();
+  formattedOcOptions: SelectOption[] = [];
 
   invoiceNaturalForm: FormGroup;
   private disabledControls: string[] = [
@@ -41,7 +49,7 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
     private globalService: GlobalService
   ) {
     this.invoiceNaturalForm = this.formBuilder.group({
-      orderIds: this.formBuilder.array([this.formBuilder.control('')]),
+      orderIds: this.formBuilder.array([]),
       personType: this.formBuilder.control({ value: '', disabled: true }),
       documentType: this.formBuilder.control({ value: '', disabled: true }),
       documentNumber: this.formBuilder.control({ value: '', disabled: true }),
@@ -77,12 +85,19 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
       voluntaryPensionContributionsValue: this.formBuilder.control(0),
       signatureAuthTwo: this.formBuilder.control('', Validators.requiredTrue),
       signatureTwo: this.formBuilder.control('', Validators.required),
+      dependentsInfo: this.formBuilder.array([]),
+      otherAnexes: this.formBuilder.array([]),
+      socialSecurity: this.formBuilder.control(''),
     });
   }
 
   ngOnInit(): void {
     this.disabledControls.forEach(control => {
       this.invoiceNaturalForm.get(control)?.disable();
+    });
+    this.selectedPurchaseOrders?.forEach((po: PurchaseOrders, index: number) => {
+      this.addPurchaseOrderControl();
+      this.fillPurchaseOrderControl(index, po.id);
     });
   }
 
@@ -98,12 +113,30 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
     return this.invoiceNaturalForm.get('orderIds') as FormArray;
   }
 
+  updateFormattedOcOptions(): void {
+    const selectedOrderIds = this.getOrderIds().value;
+    const availablePurchaseOrders = this.purchaseOrders?.filter(
+      (po: PurchaseOrders) => !selectedOrderIds.includes(po.id)
+    ) || [];
+    this.formattedOcOptions = this.getFormattedOcOptions(availablePurchaseOrders);
+    console.log('Formatted options', this.formattedOcOptions);
+  }
+
   addOrderId(): void {
     this.getOrderIds().push(this.formBuilder.control(''));
   }
 
   getControl(controlName: string): FormControl {
     return this.invoiceNaturalForm.get(controlName) as FormControl;
+  }
+
+  getFormattedOcOptions(purchaseOrders: any): SelectOption[] {
+    const formattedPo = purchaseOrders.map((order: any) => ({
+      optionValue: parseInt(order.id),
+      optionName: order.consecutiveCodes
+    })) || [];
+
+    return formattedPo;
   }
 
   sendForm(): void {
@@ -118,6 +151,26 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
   getValue(controlName: string): any {
     return this.invoiceNaturalForm.get(controlName)?.value;
   }
+
+  addPurchaseOrderControl(): void {
+    this.getOrderIds().push(this.formBuilder.control(0));
+    this.updateFormattedOcOptions();
+  }
+
+  fillPurchaseOrderControl(index: number, value: number): void {
+    this.getOrderIds().at(index).setValue(value);
+  }
+
+  disablePurchaseOrderCOntrol(index: number): void {
+    this.getOrderIds().at(index).disable();
+  }
+
+  getSelectedPurchaseOrders(): any {
+    return this.getValue('orderIds').map((orderId: string) => {
+      return this.purchaseOrders?.find((po: any) => po.id === orderId);
+    });
+  }
+
 
   nextStep(): void {
     this.handleStepChange.emit('next');
