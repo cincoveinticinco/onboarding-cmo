@@ -96,7 +96,8 @@ a {
 }
 
 .flex-column {
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .align-center {
@@ -105,9 +106,33 @@ a {
 }
 
 .align-end {
-    display: flex;
-    align-items: flex-end;
+  display: flex;
+  align-items: flex-end;
+}
 
+.align-start {
+  display: flex;
+  align-items: flex-start;
+}
+
+.justify-center {
+  display: flex;
+  justify-content: center;
+}
+
+.justify-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.justify-around {
+  display: flex;
+  justify-content: space-around;
+}
+
+.justify-end {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .error {
