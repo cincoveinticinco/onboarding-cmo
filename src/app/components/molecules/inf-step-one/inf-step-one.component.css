@@ -25,3 +25,8 @@ table {
 .justify-end {
   margin-bottom: 12px;
 }
+
+.red {
+  color: red;
+  margin-left: -12px;
+}

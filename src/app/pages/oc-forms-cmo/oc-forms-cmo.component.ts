@@ -28,6 +28,7 @@ export class OcFormsCmoComponent implements OnInit {
   purchaseOrders: PurchaseOrders[] = []; // Purchase orders related to vendor
   selectedPurchaseOrders: PurchaseOrders[] = []; // Purchase orders selected by user to be included in the form
   personType: number | undefined;
+  purchaseOrdersProjections: any[] = [];
   PERSON_TYPES = TIPOPERSONA;
 
   constructor(
@@ -54,6 +55,7 @@ export class OcFormsCmoComponent implements OnInit {
         this.personType = response.fPersonTypeId;
         this.purchaseOrders = response.purchaseOrders;
         this.selectedPurchaseOrders = response.selectedOrders;
+        this.purchaseOrdersProjections = response.poProjections;
         this.loading = false;
       },
       () => {
@@ -68,13 +70,14 @@ export class OcFormsCmoComponent implements OnInit {
   }
 
   handleStepChange(event: 'next' | 'previous'): void {
-    if (event === 'next' && this.currentStep < 3) {
+    if (event === 'next' && this.currentStep <= 3) {
       this.currentStep++;
+      console.log('Current step', this.currentStep);
     } else if (event === 'previous' && this.currentStep > 1) {
       this.currentStep--;
     }
 
-    if(event === 'next' && this.currentStep === 3) {
+    if(event === 'next' && this.currentStep > 3) {
       this.saveForm();
     }
   }

@@ -4,13 +4,19 @@
       <app-select-input
         [label]="'Orden de compra'"
         [control]="poControl"
-        [options]="selectOptionsPo || []"
+        [options]="availableOptions[$index] || []"
         [optionName]="'optionName'"
         [optionValue]="'optionValue'"
         class="col-6"
       ></app-select-input>
+      @if($index > 0) {
+        <a class="col-1 flex-column justify-end align-center" (click)="deletePurchaseOrderControl($index)">
+          <!-- icono de trash rojo de material angular -->
+           <mat-icon class="red">delete_outline</mat-icon>
+        </a>
+      }
       @if($index === getPurchaseOrdersControls().length - 1 && selectOptionsPo && $index < selectOptionsPo.length - 1) {
-        <a class="col-6 flex-column justify-end align-center" (click)="addPurchaseOrderControl()">
+        <a class="col-5 flex-column justify-end align-center" (click)="addPurchaseOrderControl()">
           + Agregar nuevo número de orden
         </a>
       }
@@ -71,32 +77,38 @@
           Descripción
         </th>
         <th>
-          Cantidad Días
-        </th>
-        <th>
           Vr. Día
         </th>
         <th>
           Vr. Total
         </th>
+        <th>
+          IVA
+        </th>
+        <th>
+          Retención
+        </th>
       </tr>
       <!-- should iterate in selectedOrders -->
-      @for( order of vendorInfo.selectedOrders; track order) {
+      @for( order of getProjectionsForSelectedOrders(); track order) {
         <tr>
           <td>
-            {{ order.consecutive_codes }}
+            {{ order.consecutive_code }}
           </td>
           <td>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+            {{ order.description }}
           </td>
           <td>
-            {{ order.days }}
+            {{ fromNumberToCop(order.value) }}
           </td>
           <td>
-            {{ order.dayValue }}
+            {{ fromNumberToCop(order.total) }}
           </td>
           <td>
-            {{ order.totalValue }}
+            {{ fromNumberToCop(order.taxes_addition_value) }}
+          </td>
+          <td>
+            {{ fromNumberToCop(order.taxes_not_addition_value) }}
           </td>
         </tr>
       }

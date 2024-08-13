@@ -37,6 +37,7 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
   @Input() selectedPurchaseOrders?: PurchaseOrders[];
   @Output() handleStepChange = new EventEmitter<'next' | 'previous'>();
   formattedOcOptions: SelectOption[] = [];
+  @Input() poProjections: any[] = [];
 
   invoiceNaturalForm: FormGroup;
   private disabledControls: string[] = [
@@ -153,12 +154,12 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
   }
 
   addPurchaseOrderControl(): void {
-    this.getOrderIds().push(this.formBuilder.control(0));
+    this.getOrderIds().push(this.formBuilder.control('', [Validators.required]));
     this.updateFormattedOcOptions();
   }
 
   fillPurchaseOrderControl(index: number, value: number): void {
-    this.getOrderIds().at(index).setValue(value);
+    this.getOrderIds().at(index).setValue(value.toString());
   }
 
   disablePurchaseOrderCOntrol(index: number): void {
