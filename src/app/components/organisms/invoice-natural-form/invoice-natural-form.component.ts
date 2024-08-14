@@ -63,26 +63,26 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
       signatureAuth: this.formBuilder.control('', Validators.requiredTrue),
       signature: this.formBuilder.control('', Validators.required),
       contractNumber: this.formBuilder.control({ value: '', disabled: true }),
-      phone: this.formBuilder.control(''),
-      institutionalEmail: this.formBuilder.control('', Validators.email),
-      incomeTaxReturn: this.formBuilder.control(''),
-      exceedsIncome: this.formBuilder.control(''),
-      taxCondition: this.formBuilder.control(''),
-      medicalPrepaid: this.formBuilder.control(''),
+      phone: this.formBuilder.control('', [Validators.required]),
+      institutionalEmail: this.formBuilder.control('', [Validators.required, Validators.email]),
+      incomeTaxReturn: this.formBuilder.control('', [Validators.required]),
+      exceedsIncome: this.formBuilder.control('', [Validators.required]),
+      taxCondition: this.formBuilder.control('', [Validators.required]),
+      medicalPrepaid: this.formBuilder.control('', [Validators.required]),
       medicalPrepaidFile: this.formBuilder.control(''),
-      housingCredit: this.formBuilder.control(''),
+      housingCredit: this.formBuilder.control('', [Validators.required]),
       housingCreditFile: this.formBuilder.control(''),
-      dependents: this.formBuilder.control(''),
-      afcContributions: this.formBuilder.control(''),
+      dependents: this.formBuilder.control('', [Validators.required]),
+      afcContributions: this.formBuilder.control('', [Validators.required]),
       afcContributionsEntity: this.formBuilder.control(''),
       afcContributionsAccountNumber: this.formBuilder.control(''),
       afcContributionsFile: this.formBuilder.control(''),
-      afcContributionsValue: this.formBuilder.control(0),
-      voluntaryPensionContributions: this.formBuilder.control(''),
+      afcContributionsValue: this.formBuilder.control(''),
+      voluntaryPensionContributions: this.formBuilder.control('', [Validators.required]),
       voluntaryPensionContributionsEntity: this.formBuilder.control(''),
       voluntaryPensionContributionsAccountNumber: this.formBuilder.control(''),
       voluntaryPensionContributionsFile: this.formBuilder.control(''),
-      voluntaryPensionContributionsValue: this.formBuilder.control(0),
+      voluntaryPensionContributionsValue: this.formBuilder.control(''),
       signatureAuthTwo: this.formBuilder.control('', Validators.requiredTrue),
       signatureTwo: this.formBuilder.control('', Validators.required),
       dependentsInfo: this.formBuilder.array([]),
@@ -218,10 +218,42 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
     return { isValid, firstInvalidControl };
   }
 
+  validateStepTwo(): { isValid: boolean; firstInvalidControl: string | null } {
+    let isValid = true;
+    let firstInvalidControl: string | null = null;
+
+    const controlsToValidate = [
+      'phone', 'institutionalEmail', 'incomeTaxReturn', 'exceedsIncome', 'taxCondition', 'medicalPrepaid', 'medicalPrepaidFile', 'housingCredit', 'housingCreditFile', 'dependents', 'afcContributions', 'afcContributionsEntity', 'afcContributionsAccountNumber', 'afcContributionsFile', 'afcContributionsValue', 'voluntaryPensionContributions', 'voluntaryPensionContributionsEntity', 'voluntaryPensionContributionsAccountNumber', 'voluntaryPensionContributionsFile', 'voluntaryPensionContributionsValue', 'signatureAuthTwo', 'signatureTwo'
+    ];
+
+    for (let i = 0; i < controlsToValidate.length; i++) {
+      const control = this.getControl(controlsToValidate[i]);
+      if ((control.invalid) && control) {
+        control.markAsTouched();
+        console.log('ERROR IN CONTROL', controlsToValidate[i]);
+        if (isValid) {
+          firstInvalidControl = controlsToValidate[i];
+          isValid = false;
+        }
+      } else {
+        control.setErrors(null);
+      }
+    }
+
+    return { isValid, firstInvalidControl };
+  }
+
 
   nextStep(): void {
     if (this.currentStep === 1) {
       const { isValid, firstInvalidControl } = this.validateStepOne();
+      if (isValid) {
+        this.handleStepChange.emit('next');
+      } else if (firstInvalidControl) {
+        this.scrollToError(firstInvalidControl);
+      }
+    } else if (this.currentStep === 2) {
+      const { isValid, firstInvalidControl } = this.validateStepTwo();
       if (isValid) {
         this.handleStepChange.emit('next');
       } else if (firstInvalidControl) {

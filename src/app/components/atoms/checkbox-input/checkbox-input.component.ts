@@ -25,6 +25,7 @@ export class CheckboxInputComponent {
     false: 'No'
   };
   @Input() boldLabel: boolean = true;
+  @Input() controlersWhenTrue: string[] = []; // There will be some controllers that will be required only when the checkbox is true, this input is used when there are more than one controller that depends on the checkbox
 
   getErrors(): string | null {
     const touched = this.control.touched;
@@ -43,6 +44,32 @@ export class CheckboxInputComponent {
       else {
         this.form.get(`${nameControl}_description`)?.removeValidators(Validators.required);
         this.form.get(`${nameControl}_description`)?.updateValueAndValidity();
+      }
+    }
+
+    if(this.controlersWhenTrue.length > 0) {
+      this.controlersWhenTrue.forEach(controlName => {
+        if (control) {
+          this.form?.get(controlName)?.setValidators(Validators.required);
+          this.form?.get(controlName)?.updateValueAndValidity();
+        }
+        else {
+          this.form?.get(controlName)?.removeValidators(Validators.required);
+          this.form?.get(controlName)?.updateValueAndValidity();
+        }
+      });
+    }
+  }
+
+  setFileControl(control: any, nameControl: string) {
+    if(this.form) {
+      if (control) {
+        this.form.get(`${nameControl}File`)?.setValidators(Validators.required);
+        this.form.get(`${nameControl}File`)?.updateValueAndValidity();
+      }
+      else {
+        this.form.get(`${nameControl}File`)?.removeValidators(Validators.required);
+        this.form.get(`${nameControl}File`)?.updateValueAndValidity();
       }
     }
   }

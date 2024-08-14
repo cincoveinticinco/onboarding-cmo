@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Form, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Form, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SubtitleComponent } from '../../atoms/subtitle/subtitle.component';
 import { TextInputComponent } from '../../atoms/text-input/text-input.component';
 import { CheckboxInputComponent } from '../../atoms/checkbox-input/checkbox-input.component';
@@ -45,8 +45,19 @@ export interface DependantForm {
 export class InfStepTwoComponent {
   @Input() invoiceNaturalForm!: FormGroup;
   @Input() vendorInfo: any;
+  @Input() validateStep: any;
   @Output() formSubmit = new EventEmitter<void>();
   @Output() previousStep = new EventEmitter<void>();
+
+  // scroll to top when render the component
+
+  ngOnInit() {
+    this.scrollToTop();
+  }
+
+  private scrollToTop() {
+    window.scrollTo(0, 0);
+  }
 
   renderDependentsForm: boolean = false;
 
@@ -74,7 +85,10 @@ export class InfStepTwoComponent {
   onSubmit() {
     const haveDependants = this.getValue('dependents');
     if(haveDependants && !this.renderDependentsForm) {
-      const formIsValid = this.invoiceNaturalForm.valid;
+      const { isValid, firstInvalidControl } = this.validateStep()
+      if(!isValid) {
+        return this.formSubmit.emit();
+      }
       return this.goToDependantsForm();
     }
 
@@ -85,21 +99,21 @@ export class InfStepTwoComponent {
 
   addNewDependentFormGroup() {
     this.getDependents().push(this.formBuilder.group({
-      dependantDocumentTypeId: [''],
-      dependantDocumentNumber: [''],
-      dependantFullName: [''],
-      dependantKinship: [''],
-      decreaseInTaxBase: [''],
-      minorChildren: [''],
-      minorChildrenFile: [''],
-      childrenStudyCertificateFile: [''],
-      childrenStudyCertificate: [''],
-      childrenMedicineCertificate: [''],
-      childrenMedicineCertificateFile: [''],
-      partnerMedicineCertificate: [''],
-      partnerMedicineCertificateFile: [''],
-      familyMedicineCertificate: [''],
-      familyMedicineCertificateFile: ['']
+      dependantDocumentTypeId: ['', [Validators.required]],
+      dependantDocumentNumber: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
+      dependantFullName: ['', [Validators.required]],
+      dependantKinship: ['', [Validators.required]],
+      decreaseInTaxBase: ['', [Validators.required]],
+      minorChildren: ['', [Validators.required]],
+      minorChildrenFile: ['', [Validators.required]],
+      childrenStudyCertificateFile: ['', [Validators.required]],
+      childrenStudyCertificate: ['', [Validators.required]],
+      childrenMedicineCertificate: ['', [Validators.required]],
+      childrenMedicineCertificateFile: ['', [Validators.required]],
+      partnerMedicineCertificate: ['', [Validators.required]],
+      partnerMedicineCertificateFile: ['', [Validators.required]],
+      familyMedicineCertificate: ['', [Validators.required]],
+      familyMedicineCertificateFile: ['', [Validators.required]]
     }));
   }
 
@@ -110,6 +124,7 @@ export class InfStepTwoComponent {
   handlePreviousStep() {
     if(this.renderDependentsForm) {
       this.renderDependentsForm = false;
+      return;
     }
 
     this.previousStep.emit();

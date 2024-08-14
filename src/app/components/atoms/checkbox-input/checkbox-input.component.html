@@ -7,7 +7,7 @@
     <label class="checkbox-label">
       <input
         name="{{ controlName }}"
-        (ngModelChange)="setDescriptionControl($event, controlName)"
+        (ngModelChange)="setDescriptionControl($event, controlName); setFileControl($event, controlName)"
         [formControl]="control"
         type="radio"
         [value]="'1'"> {{customCheckboxLabel.true}}

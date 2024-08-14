@@ -38,10 +38,12 @@
       ></app-text-input>
       
       <app-text-input
-        label="Teléfono"
+        [pattern]="'^[0-9+-]+$'"
         [control]="getControl('phone')"
+        label="Teléfono"
         type="tel"
         class="col-6"
+        id="phone"
       ></app-text-input>
       
       <app-text-input
@@ -56,6 +58,7 @@
         [control]="getControl('institutionalEmail')"
         type="email"
         class="col-6"
+        id="institutionalEmail"
       ></app-text-input>
     </div> 
     <app-subtitle [subtitle]="'DECLARACIÓN FUNDAMENTADA'"></app-subtitle>
@@ -66,6 +69,7 @@
       controlName="incomeTaxReturn"
       [form]="invoiceNaturalForm"
       [boldLabel]="false"
+      id="incomeTaxReturn"
     ></app-checkbox-input>
     
     <app-checkbox-input
@@ -74,6 +78,7 @@
       controlName="exceedsIncome"
       [form]="invoiceNaturalForm"
       [boldLabel]="false"
+      id="exceedsIncome"
     ></app-checkbox-input>
     
     <app-checkbox-input
@@ -86,6 +91,7 @@
         false: 'No responsable'
       }"
       [boldLabel]="false"
+      id="taxCondition"
     ></app-checkbox-input>
   
     <app-subtitle [subtitle]="'DEDUCCIONES'"></app-subtitle>
@@ -95,10 +101,12 @@
       [controlName]="'medicalPrepaid'"
       [form]="invoiceNaturalForm"
       [boldLabel]="false"
+      id="medicalPrepaid"
     ></app-checkbox-input>
     @if (getValue('medicalPrepaid') === '1') {
       <label>*Adjuntar soporte</label>
       <app-filebox
+        id="medicalPrepaidFile"
         [control]="getControl('medicalPrepaidFile')"
       ></app-filebox>
     }
@@ -108,11 +116,13 @@
       [controlName]="'housingCredit'"
       [form]="invoiceNaturalForm"
       [boldLabel]="false"
+      id="housingCredit"
     ></app-checkbox-input>
     @if (getValue('housingCredit') === '1') {
       <label>*Adjuntar soporte</label>
       <app-filebox
         [control]="getControl('housingCreditFile')"
+        id="housingCreditFile"
       ></app-filebox>
     }
     <app-checkbox-input
@@ -121,6 +131,7 @@
       [controlName]="'dependents'"
       [form]="invoiceNaturalForm"
       [boldLabel]="false"
+      id="dependents"
     ></app-checkbox-input>
   
     <app-subtitle [subtitle]="'RENTAS EXTRAS'"></app-subtitle>
@@ -129,6 +140,7 @@
       [label]="'1. Aportes AFC'"
       [control]="getControl('afcContributions')"
       [controlName]="'afcContributions'"
+      [controlersWhenTrue]="['afcContributionsEntity', 'afcContributionsAccountNumber', 'afcContributionsValue', 'afcContributionsFile']"
       [form]="invoiceNaturalForm"
       [boldLabel]="false"
     ></app-checkbox-input>
@@ -140,23 +152,27 @@
           [control]="getControl('afcContributionsEntity')"
           type="text"
           class="col-6"
+          id="afcContributionsEntity"
         ></app-text-input>
         <app-text-input
           label="Número de Cuenta"
           [control]="getControl('afcContributionsAccountNumber')"
           type="text"
           class="col-6"
+          id="afcContributionsAccountNumber"
         ></app-text-input>
         <app-text-input
           label="Valor"
           [control]="getControl('afcContributionsValue')"
-          type="number"
+          type="currency"
           class="col-6"
+          id="afcContributionsValue"
         ></app-text-input>
         <label class="col-12">*Adjuntar soporte</label>
         <app-filebox
           class="col-12"
           [control]="getControl('afcContributionsFile')"
+          id="afcContributionsFile"
         ></app-filebox>
       </div>
     }
@@ -167,6 +183,8 @@
       [controlName]="'voluntaryPensionContributions'"
       [form]="invoiceNaturalForm"
       [boldLabel]="false"
+      [controlersWhenTrue]="['voluntaryPensionContributionsEntity', 'voluntaryPensionContributionsAccountNumber', 'voluntaryPensionContributionsValue', 'voluntaryPensionContributionsFile']"
+      id="voluntaryPensionContributions"
     ></app-checkbox-input>
     @if(getValue('voluntaryPensionContributions') === '1') {
       <div class="row">
@@ -175,27 +193,32 @@
           [control]="getControl('voluntaryPensionContributionsEntity')"
           type="text"
           class="col-6"
+          id="voluntaryPensionContributionsEntity"
         ></app-text-input>
         <app-text-input
           label="Número de Cuenta"
           [control]="getControl('voluntaryPensionContributionsAccountNumber')"
           type="text"
           class="col-6"
+          id="voluntaryPensionContributionsAccountNumber"
         ></app-text-input>
         <app-text-input
           label="Valor"
           [control]="getControl('voluntaryPensionContributionsValue')"
-          type="number"
+          type="currency"
           class="col-6"
+          id="voluntaryPensionContributionsValue"
         ></app-text-input>
         <label class="col-12">*Adjuntar soporte</label>
         <app-filebox
           class="col-12"
           [control]="getControl('voluntaryPensionContributionsFile')"
+          id="voluntaryPensionContributionsFile"
         ></app-filebox>
       </div>
     }
-    <app-electronic-signature-auth 
+    <app-electronic-signature-auth
+      id="signatureTwo"
       [form]="invoiceNaturalForm"
       [controlNames]="{
         signature: 'signatureTwo',
@@ -222,5 +245,4 @@
     <button mat-raised-button type="button" class="col-4 btn-purpple">DESCARGAR DOCUMENTO</button>
     <button mat-raised-button type="submit" class="col-4 btn-black" (click)="onSubmit()">CONTINUAR</button>
   </div>
-  
 }

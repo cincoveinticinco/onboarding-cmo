@@ -21,13 +21,23 @@
       [allowNegativeNumbers]="true"
       thousandSeparator="."
     />
-  } @else {
+  } @else if(type === 'tel') {
     <input
       [placeholder]="placeholder"
       [formControl]="control"
-      [type]="type"
-      [pattern]="pattern || ''"
+      type="tel"
+      mask="000 000 0000"
+      [showMaskTyped]="true"
+      [dropSpecialCharacters]="false"
       (blur)="blur()"
     />
+  } @else {
+      <input
+        [placeholder]="placeholder"
+        [formControl]="control"
+        [type]="type"
+        [pattern]="pattern || ''"
+        (blur)="blur()"
+      />
   }
 </div>
