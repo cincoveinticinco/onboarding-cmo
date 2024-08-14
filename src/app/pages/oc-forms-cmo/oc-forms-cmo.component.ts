@@ -59,7 +59,7 @@ export class OcFormsCmoComponent implements OnInit {
         this.loading = false;
       },
       () => {
-        
+        this.authService.logOut();
       }
     );
   }
