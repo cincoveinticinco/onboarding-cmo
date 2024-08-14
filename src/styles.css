@@ -17,6 +17,7 @@
   --light-border-box: #BEC0C4;
   --alert-color: #fe5050;
   --success-color: #00F21C;
+  --dark-success-color: #32936F  ;
   --alert-background: rgb(253 79 83 / 9%);
   --font-color: #707070;
   --font-border-color: #70707029;
@@ -662,6 +663,10 @@ p.lbl-eng {
 
 a {
   cursor: pointer;
+
+  &:hover {
+    color: var(--secondary-color) !important;
+  }
 }
 
 .margin-top {

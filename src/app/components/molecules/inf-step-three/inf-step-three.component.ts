@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SubtitleComponent } from '../../atoms/subtitle/subtitle.component';
 import { FileboxComponent } from '../../atoms/filebox/filebox.component';
 
@@ -42,6 +42,6 @@ export class InfStepThreeComponent {
   }
 
   addNewAnexFormGroup() {
-    this.getOtherAnexesArray().push(new FormControl(''));
+    this.getOtherAnexesArray().push(new FormControl('', [Validators.required]));
   }
 }

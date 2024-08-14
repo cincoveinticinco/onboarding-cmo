@@ -87,7 +87,7 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
       signatureTwo: this.formBuilder.control('', Validators.required),
       dependentsInfo: this.formBuilder.array([]),
       otherAnexes: this.formBuilder.array([]),
-      socialSecurity: this.formBuilder.control(''),
+      socialSecurity: this.formBuilder.control('', [Validators.required]),
     });
   }
 
@@ -243,6 +243,46 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
     return { isValid, firstInvalidControl };
   }
 
+  validateStepThree(): { isValid: boolean; firstInvalidControl: string | null } {
+    let isValid = true;
+    let firstInvalidControl: string | null = null;
+
+    const otherAnexes = this.invoiceNaturalForm.get('otherAnexes') as FormArray;
+
+    for (let i = 0; i < otherAnexes.length; i++) {
+      const control = otherAnexes.at(i);
+      if (control.invalid) {
+        control.markAsTouched();
+        console.log('ERROR IN CONTROL', control);
+        if (isValid) {
+          firstInvalidControl = `otherAnexes-${i}`;
+          isValid = false;
+        }
+      } else {
+        control.setErrors(null);
+      }
+    }
+    const controlsToValidate = [
+      'socialSecurity'
+    ];
+
+    for (let i = 0; i < controlsToValidate.length; i++) {
+      const control = this.getControl(controlsToValidate[i]);
+      if ((control.invalid) && control) {
+        control.markAsTouched();
+        console.log('ERROR IN CONTROL', controlsToValidate[i]);
+        if (isValid) {
+          firstInvalidControl = controlsToValidate[i];
+          isValid = false;
+        }
+      } else {
+        control.setErrors(null);
+      }
+    }
+
+    return { isValid, firstInvalidControl };
+  }
+
 
   nextStep(): void {
     if (this.currentStep === 1) {
@@ -256,6 +296,13 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
       const { isValid, firstInvalidControl } = this.validateStepTwo();
       if (isValid) {
         this.handleStepChange.emit('next');
+      } else if (firstInvalidControl) {
+        this.scrollToError(firstInvalidControl);
+      }
+    } else if (this.currentStep === 3) {
+      const { isValid, firstInvalidControl } = this.validateStepThree();
+      if (isValid) {
+        this.sendForm();
       } else if (firstInvalidControl) {
         this.scrollToError(firstInvalidControl);
       }

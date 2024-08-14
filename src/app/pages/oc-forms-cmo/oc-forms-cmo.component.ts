@@ -24,7 +24,7 @@ export interface PurchaseOrders {
 export class OcFormsCmoComponent implements OnInit {
   loading = false;
   vendorInfo: any = {};
-  currentStep = 2;
+  currentStep = 3;
   purchaseOrders: PurchaseOrders[] = []; // Purchase orders related to vendor
   selectedPurchaseOrders: PurchaseOrders[] = []; // Purchase orders selected by user to be included in the form
   personType: number | undefined;
