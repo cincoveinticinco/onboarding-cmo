@@ -11,7 +11,6 @@ import { FileboxComponent } from '../../atoms/filebox/filebox.component';
 import { InfStepThreeComponent } from '../../molecules/inf-step-three/inf-step-three.component';
 import { SelectOption } from '../../molecules/inf-step-one/inf-step-one.component';
 import { PurchaseOrders } from '../../../pages/oc-forms-cmo/oc-forms-cmo.component';
-import { get } from 'http';
 
 @Component({
   selector: 'app-invoice-natural-form',
@@ -172,9 +171,73 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
     });
   }
 
+  validateStepOne(): { isValid: boolean; firstInvalidControl: string | null } {
+    let isValid = true;
+    let firstInvalidControl: string | null = null;
+    const signatureAuth = this.getControl('signatureAuth');
+    const signature = this.getControl('signature');
+  
+    const orderIdsControls = this.getOrderIds().controls as FormControl[];
+  
+    for (let i = 0; i < orderIdsControls.length; i++) {
+      const control = orderIdsControls[i];
+      if (!control.value) {
+        control.setErrors({ required: true });
+        control.markAsTouched();
+        firstInvalidControl = `purchaseOrder-${i}`;
+        isValid = false;
+        return { isValid, firstInvalidControl };
+      } else {
+        control.setErrors(null);
+      }
+    }
+  
+    // Validate signatureAuth
+    if (!signatureAuth.value) {
+      signatureAuth.setErrors({ required: true });
+      signatureAuth.markAsTouched();
+      if (isValid) {
+        firstInvalidControl = 'signatureAuth';
+        isValid = false;
+      }
+    } else {
+      signatureAuth.setErrors(null);
+    }
+
+    if (!signature.value) {
+      signature.setErrors({ required: true });
+      signature.markAsTouched();
+      if (isValid) {
+        firstInvalidControl = 'signature';
+        isValid = false;
+      }
+    } else {
+      signature.setErrors(null);
+    }
+  
+    return { isValid, firstInvalidControl };
+  }
+
 
   nextStep(): void {
-    this.handleStepChange.emit('next');
+    if (this.currentStep === 1) {
+      const { isValid, firstInvalidControl } = this.validateStepOne();
+      if (isValid) {
+        this.handleStepChange.emit('next');
+      } else if (firstInvalidControl) {
+        this.scrollToError(firstInvalidControl);
+      }
+    }
+  }
+
+  scrollToError(controlName: string): void {
+    console.log('Scrolling to', controlName);
+    setTimeout(() => {
+      const element = document.getElementById(controlName);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
   }
 
   previousStep(): void {

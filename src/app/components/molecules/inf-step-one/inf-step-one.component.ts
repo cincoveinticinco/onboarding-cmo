@@ -90,8 +90,6 @@ export class InfStepOneComponent {
         ...this.availableOptions,
         [`${this.getOrderIds().length - 1}`]: filteredOptions
       }
-
-      console.log(this.availableOptions);
     }
   }
 
@@ -99,7 +97,6 @@ export class InfStepOneComponent {
     const ids = this.invoiceNaturalForm.get('orderIds')?.value;
     const projections = this.poProjections.filter((projection: any) => ids.includes(projection.f_purchase_order_id.toString()
     ));
-    console.log(this.poProjections, ids)
     return projections
   }
 

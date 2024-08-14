@@ -8,6 +8,7 @@
         [optionName]="'optionName'"
         [optionValue]="'optionValue'"
         class="col-6"
+        [id]="'purchaseOrder-' + $index"
       ></app-select-input>
       @if($index > 0) {
         <a class="col-1 flex-column justify-end align-center" (click)="deletePurchaseOrderControl($index)">
@@ -142,6 +143,7 @@
   </div>
   <app-electronic-signature-auth 
     [form]="invoiceNaturalForm"
+    [id]="'signatureAuth'"
     [controlNames]="{
       signature: 'signature',
       signatureAuth: 'signatureAuth'
