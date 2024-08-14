@@ -81,4 +81,11 @@ export class OcFormsCmoComponent implements OnInit {
       this.saveForm();
     }
   }
+
+  getFormattedOcOptions(purchaseOrders: PurchaseOrders[]): any[] {
+    return purchaseOrders.map((order: any) => ({
+      optionValue: order.id,
+      optionName: order.consecutiveCodes   
+    })) || [];
+  }
 }

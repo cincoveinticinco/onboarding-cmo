@@ -1,3 +1,12 @@
 .padding-bottom {
   padding-bottom: 100px;
 }
+
+.red {
+  color: red;
+  margin-left: -12px;
+}
+
+.margin-bottom {
+  margin-bottom: 12px !important;
+}

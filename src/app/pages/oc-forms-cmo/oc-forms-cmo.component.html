@@ -24,6 +24,11 @@
     <h1 class="form-title">CONFIRMACIÓN DE RADICACIÓN</h1>
     <h3 class="form-subtitle"> PASO {{currentStep}}/1</h3>
     <p>Para continuar con el proceso de radicación, por favor complete el siguiente formulario</p>
-    <app-invoice-juridica-form [vendorInfo]="vendorInfo"></app-invoice-juridica-form>
+    <app-invoice-juridica-form 
+      [vendorInfo]="vendorInfo"
+      [purchaseOrders]="purchaseOrders" 
+      [selectedPurchaseOrders]="selectedPurchaseOrders"
+      [selectOptionsPo]="getFormattedOcOptions(purchaseOrders)"
+    ></app-invoice-juridica-form>
   </div>
 }
