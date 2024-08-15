@@ -6,7 +6,7 @@ import { FileboxComponent } from '../../atoms/filebox/filebox.component';
 import { CommonModule } from '@angular/common';
 import { VENDORFORMSTATUS } from '../../../shared/interfaces/typo_vendor_form_status';
 import { GlobalService } from '../../../services/global.service';
-import { Subscription, catchError, map, of, switchMap } from 'rxjs';
+import { Subscription, catchError, map, of, switchMap, throwError } from 'rxjs';
 import { HttpEventType } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BlackButtonComponent } from '../../atoms/black-button/black-button.component';
@@ -114,7 +114,7 @@ export class DocumentationFormComponent implements OnInit {
     newFileGroup.controls.file.valueChanges.subscribe((value) => {
       if (value) {
         setTimeout(() => {
-          this.submitFile(doc, newFileGroup)
+          this.submitFile(doc, newFileGroup);
         }, 0);
       } else {
         if (!doc?.isArrayDocuments) this.deleteFile(newFileGroup.get('document_id')?.value);
@@ -162,9 +162,16 @@ export class DocumentationFormComponent implements OnInit {
     const nameFile = this._gS.normalizeString(currentFile?.name);
 
     this._vS.getPresignedPutURL(nameFile, this._vS.getVendorId()).pipe(
-      catchError(() =>
-        of({ id: doc.id, file: currentFile?.file, name: currentFile?.name, key: '', url: '' })
-      ),
+      catchError(() => {
+        if (environment?.stage != 'local') {
+          currentFormGroup.get('file')?.setValue(null, { emitEvent: false });
+          this.loading = false;
+          this._gS.openSnackBar('Fallo al guardar el documento, intente de nuevo', '', 5000);
+          return throwError(() => new Error('Error al obtener la URL de subida.'));
+        } else {
+          return of({ id: doc.id, file: currentFile?.file, name: currentFile?.name, key: '', url: '' });
+        }
+      }),
       map((putUrl: any) => ({
         ...putUrl,
         id: doc.id,
@@ -186,7 +193,16 @@ export class DocumentationFormComponent implements OnInit {
         }
         return this._vS.uploadFileUrlPresigned(<File>blobFile, uploadFile.url, uploadFile.file.type)
           .pipe(
-            catchError((_) => of({ ...currentFile?.file, name: currentFile?.name, url: '' })),
+            catchError(() => {
+              if (environment?.stage != 'local') {
+                currentFormGroup.get('file')?.setValue(null, { emitEvent: false });
+                this.loading = false;
+                this._gS.openSnackBar('Fallo al guardar el documento, intente de nuevo', '', 5000);
+                return throwError(() => new Error('Error al subir el archivo.'));
+              } else {
+                return of({ ...currentFile?.file, name: currentFile?.name, url: '' });
+              }
+            }),
             map((value) => value.type == HttpEventType.Response ? uploadFile : null)
           );
       }),
@@ -205,15 +221,14 @@ export class DocumentationFormComponent implements OnInit {
           });
         }
       )
-    )
-      .subscribe({
-        next: (data: any) => {
-          currentFormGroup.get('document_id')?.setValue(data?.document_id);
-          currentFormGroup.get('document_id')?.updateValueAndValidity();
+    ).subscribe({
+      next: (data: any) => {
+        currentFormGroup.get('document_id')?.setValue(data?.document_id);
+        currentFormGroup.get('document_id')?.updateValueAndValidity();
 
-          this.loading = false;
-        }
-      });
+        this.loading = false;
+      }
+    });
   }
 
   updateDocument(doc: any, file: FormGroup) {
