@@ -7,27 +7,31 @@
       [control]="getControl('dependantDocumentTypeId')"
       [options]="[]"
       class="col-6"
+      [id]="'dependantDocumentTypeId-' + dependentIndex"
     ></app-select-input>
     <app-text-input
       [label]="'Número de documento'"
       [control]="getControl('dependantDocumentNumber')"
       [type]="'number'"
       class="col-6"
+      [id]="'dependantDocumentNumber-' + dependentIndex"
     ></app-text-input>
     <app-text-input
       [label]="'Nombres y Apellidos'"
       [control]="getControl('dependantFullName')"
       [type]="'text'"
+      [id]="'dependantFullName-' + dependentIndex"
       class="col-6"></app-text-input>
     <app-text-input
       [label]="'Parentesco'"
       [control]="getControl('dependantKinship')"
       [type]="'text'"
+      [id]="'dependantKinship-' + dependentIndex"
       class="col-6"></app-text-input>
   </div>
   <div class="row">
     <div class="checkbox-container">
-      <input type="checkbox" class="col-1" [formControl]="getControl('decreaseInTaxBase')">
+      <input type="checkbox" class="col-1" [formControl]="getControl('decreaseInTaxBase')" [id]="'decreaseInTaxBase-' + dependentIndex">
     </div>
     <p class="col-11">
       Las Partes aceptan que el presente documento será firmado electrónicamente haciendo uso de cualquier herramienta de firma electrónica. Bajo ese entendido, Las Partes declaran y aceptan que la firma electrónica que figure en este documento es una manifestación de su consentimiento y voluntad para obligarse en los términos y condiciones dispuestos en el presente documento. </p>
@@ -38,10 +42,12 @@
     [boldLabel]="false"
     [control]="getControl('minorChildren')"
     [controlName]="'minorChildren'"
+    [id]="'minorChildren-' + dependentIndex"
   ></app-checkbox-input>
   @if(getValue('minorChildren') === '1') {
     <app-filebox
       [control]="getControl('minorChildrenFile')"
+      [id]="'minorChildrenFile-' + dependentIndex"
     ></app-filebox>
   }
   <app-checkbox-input
@@ -49,10 +55,12 @@
     [boldLabel]="false"
     [control]="getControl('childrenStudyCertificate')"
     [controlName]="'childrenStudyCertificate'"
+    [id]="'childrenStudyCertificate-' + dependentIndex"
   ></app-checkbox-input>
   @if(getValue('childrenStudyCertificate') === '1') {
     <app-filebox
       [control]="getControl('childrenStudyCertificateFile')"
+      [id]="'childrenStudyCertificateFile-' + dependentIndex"
     ></app-filebox>
   }
   <app-checkbox-input
@@ -60,10 +68,12 @@
     [boldLabel]="false"
     [control]="getControl('childrenMedicineCertificate')"
     [controlName]="'childrenMedicineCertificate'"
+    [id]="'childrenMedicineCertificate-' + dependentIndex"
   ></app-checkbox-input>
   @if(getValue('childrenMedicineCertificate') === '1') {
     <app-filebox
       [control]="getControl('childrenMedicineCertificateFile')"
+      [id]="'childrenMedicineCertificate-' + dependentIndex"
     ></app-filebox>
   }
   <app-checkbox-input
@@ -71,10 +81,12 @@
     [boldLabel]="false"
     [control]="getControl('partnerMedicineCertificate')"
     [controlName]="'partnerMedicineCertificate'"
+    [id]="'partnerMedicineCertificate-' + dependentIndex"
   ></app-checkbox-input>
   @if(getValue('partnerMedicineCertificate') === '1') {
     <app-filebox
       [control]="getControl('partnerMedicineCertificateFile')"
+      [id]="'partnerMedicineCertificateFile-' + dependentIndex"
     ></app-filebox>
   }
   <app-checkbox-input
@@ -82,10 +94,12 @@
     [boldLabel]="false"
     [control]="getControl('familyMedicineCertificate')"
     [controlName]="'familyMedicineCertificate'"
+    [id]="'familyMedicineCertificate-' + dependentIndex"
   ></app-checkbox-input>
   @if(getValue('familyMedicineCertificate') === '1') {
     <app-filebox
       [control]="getControl('familyMedicineCertificateFile')"
+      [id]="'familyMedicineCertificateFile-' + dependentIndex"
     ></app-filebox>
   }
 </form>

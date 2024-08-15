@@ -24,9 +24,9 @@ export interface PurchaseOrders {
 export class OcFormsCmoComponent implements OnInit {
   loading = false;
   vendorInfo: any = {};
-  currentStep = 3;
-  purchaseOrders: PurchaseOrders[] = []; // Purchase orders related to vendor
-  selectedPurchaseOrders: PurchaseOrders[] = []; // Purchase orders selected by user to be included in the form
+  currentStep = 2
+  purchaseOrders: PurchaseOrders[] = [];
+  selectedPurchaseOrders: PurchaseOrders[] = [];
   personType: number | undefined;
   purchaseOrdersProjections: any[] = [];
   PERSON_TYPES = TIPOPERSONA;
@@ -59,7 +59,7 @@ export class OcFormsCmoComponent implements OnInit {
         this.loading = false;
       },
       () => {
-        
+        this.authService.logOut();
       }
     );
   }

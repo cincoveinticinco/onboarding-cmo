@@ -49,7 +49,7 @@ export class CheckboxInputComponent {
 
     if(this.controlersWhenTrue.length > 0) {
       this.controlersWhenTrue.forEach(controlName => {
-        if (control) {
+        if (this.form?.get(this.controlName)?.value === '1') {
           this.form?.get(controlName)?.setValidators(Validators.required);
           this.form?.get(controlName)?.updateValueAndValidity();
         }
@@ -63,11 +63,13 @@ export class CheckboxInputComponent {
 
   setFileControl(control: any, nameControl: string) {
     if(this.form) {
-      if (control) {
+      if (this.form.get(this.controlName)?.value === '1') {
+        console.log('control', `${nameControl}File`);
         this.form.get(`${nameControl}File`)?.setValidators(Validators.required);
         this.form.get(`${nameControl}File`)?.updateValueAndValidity();
       }
       else {
+        console.log('control', `${nameControl}File`);
         this.form.get(`${nameControl}File`)?.removeValidators(Validators.required);
         this.form.get(`${nameControl}File`)?.updateValueAndValidity();
       }

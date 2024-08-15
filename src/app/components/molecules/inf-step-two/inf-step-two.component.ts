@@ -83,18 +83,7 @@ export class InfStepTwoComponent {
   }
 
   onSubmit() {
-    const haveDependants = this.getValue('dependents');
-    if(haveDependants && !this.renderDependentsForm) {
-      const { isValid, firstInvalidControl } = this.validateStep()
-      if(!isValid) {
-        return this.formSubmit.emit();
-      }
-      return this.goToDependantsForm();
-    }
-
-    if(this.renderDependentsForm || !haveDependants) {
-      return this.formSubmit.emit();
-    }
+    this.formSubmit.emit();  
   }
 
   addNewDependentFormGroup() {
@@ -105,17 +94,55 @@ export class InfStepTwoComponent {
       dependantKinship: ['', [Validators.required]],
       decreaseInTaxBase: ['', [Validators.required]],
       minorChildren: ['', [Validators.required]],
-      minorChildrenFile: ['', [Validators.required]],
-      childrenStudyCertificateFile: ['', [Validators.required]],
+      minorChildrenFile: [''],
+      childrenStudyCertificateFile: [''],
       childrenStudyCertificate: ['', [Validators.required]],
       childrenMedicineCertificate: ['', [Validators.required]],
-      childrenMedicineCertificateFile: ['', [Validators.required]],
+      childrenMedicineCertificateFile: [''],
       partnerMedicineCertificate: ['', [Validators.required]],
-      partnerMedicineCertificateFile: ['', [Validators.required]],
+      partnerMedicineCertificateFile: [''],
       familyMedicineCertificate: ['', [Validators.required]],
-      familyMedicineCertificateFile: ['', [Validators.required]]
+      familyMedicineCertificateFile: ['']
     }));
   }
+
+  validateDependentForm() {
+    const dependentsForms = this.getDependentsForms();
+    let isValid = true;
+    let firstInvalidControl: any = null;
+
+    dependentsForms.forEach((dependentForm: FormGroup) => {
+      Object.keys(dependentForm.controls).forEach((controlName, index) => {
+        const control = dependentForm.get(controlName);
+        if(control?.invalid) {
+          isValid = false;
+          control.markAsTouched()
+          control.markAsPristine();
+          control.markAsDirty();
+          const setInvalidControl = (controlName: any)  => {
+            if(!firstInvalidControl) {
+              firstInvalidControl = `${controlName}-${index + 1}`;
+            }
+          }
+          setInvalidControl(controlName);
+        }
+      });
+    });
+
+    return { isValid, firstInvalidControl }
+  }
+
+  scrollToError(controlName: string | null): void {
+      console.log('Scrolling to', controlName);
+      setTimeout(() => {
+        if (controlName) {
+          const element = document.getElementById(controlName);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }
+      });
+    }
 
   getDependentsForms() {
     return this.getDependents().controls as FormGroup[];

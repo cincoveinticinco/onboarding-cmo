@@ -24,6 +24,14 @@ export class InfDependantCertificationComponent {
   @Input() dependantForm: any;
   @Input() dependentIndex: number = 0;
 
+  ngOnInit() {
+    this.scrollToTop();
+  }
+
+  private scrollToTop() {
+    window.scrollTo(0, 0);
+  }
+
   getControl(controlName: string) {
     return this.dependantForm?.get(controlName);
   }

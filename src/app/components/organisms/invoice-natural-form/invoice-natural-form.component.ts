@@ -11,6 +11,15 @@ import { FileboxComponent } from '../../atoms/filebox/filebox.component';
 import { InfStepThreeComponent } from '../../molecules/inf-step-three/inf-step-three.component';
 import { SelectOption } from '../../molecules/inf-step-one/inf-step-one.component';
 import { PurchaseOrders } from '../../../pages/oc-forms-cmo/oc-forms-cmo.component';
+import { InvoiceLodgingService } from '../../../services/invoiceLodging.service';
+import { VendorService } from '../../../services/vendor.service';
+import { catchError, filter, from, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
+import { HttpEventType } from '@angular/common/http';
+import { ValidateOcInfoComponent } from '../../../pages/validate-oc-info/validate-oc-info.component';
+
+const oc_file_types: string[] = [
+  'medicalPrepaidFile'
+]
 
 @Component({
   selector: 'app-invoice-natural-form',
@@ -24,7 +33,8 @@ import { PurchaseOrders } from '../../../pages/oc-forms-cmo/oc-forms-cmo.compone
     InfStepOneComponent,
     InfStepTwoComponent,
     InfStepThreeComponent,
-    FileboxComponent
+    FileboxComponent,
+    ValidateOcInfoComponent
   ],
   templateUrl: './invoice-natural-form.component.html',
   styleUrls: ['./invoice-natural-form.component.css']
@@ -38,6 +48,8 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
   formattedOcOptions: SelectOption[] = [];
   @Input() poProjections: any[] = [];
 
+  loading = false;
+
   invoiceNaturalForm: FormGroup;
   private disabledControls: string[] = [
     'personType', 'documentType', 'documentNumber', 'fullName', 'address', 'email', 'position', 
@@ -46,7 +58,9 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
 
   constructor(
     private formBuilder: FormBuilder,
-    private globalService: GlobalService
+    private globalService: GlobalService,
+    private ilService: InvoiceLodgingService,
+    private vendorService: VendorService
   ) {
     this.invoiceNaturalForm = this.formBuilder.group({
       orderIds: this.formBuilder.array([]),
@@ -284,7 +298,7 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
   }
 
 
-  nextStep(): void {
+  async nextStep(): Promise<void> {
     if (this.currentStep === 1) {
       const { isValid, firstInvalidControl } = this.validateStepOne();
       if (isValid) {
@@ -295,7 +309,15 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
     } else if (this.currentStep === 2) {
       const { isValid, firstInvalidControl } = this.validateStepTwo();
       if (isValid) {
-        this.handleStepChange.emit('next');
+        const filesToUploadStepTwo = ['medicalPrepaidFile', 'housingCreditFile', 'afcContributionsFile', 'voluntaryPensionContributionsFile'];
+        try {
+          await this.uploadFiles(filesToUploadStepTwo);
+          this.loading = false;
+          this.handleStepChange.emit('next');
+        } catch (error) {
+          console.error('Error uploading files:', error);
+          // Manejar el error según sea necesario
+        }
       } else if (firstInvalidControl) {
         this.scrollToError(firstInvalidControl);
       }
@@ -317,6 +339,92 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
         element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
+  }
+
+  submitFile(event: {
+    value: File;
+    formControlName: string;
+  }): Observable<any> {
+    const {value, formControlName} = event;
+    console.log('event', event);
+  
+    const control = this.getControl(formControlName);
+  
+    // get vendor id
+    const vendorId = this.ilService.getVendorId();
+  
+    if (!value) {
+      // Function to delete file in the backend
+      // Implement file deletion logic here
+      return of(null);
+    } else {
+      const nameFile = this.globalService.normalizeString(value.name);
+      if (vendorId) {
+        return this.ilService.getPresignedPutURLOc(nameFile, vendorId).pipe(
+          catchError((error) => {
+            return of({ id: formControlName, file: value, key: '', url: '' });
+          }),
+          switchMap((putUrl: any) => {
+            if (!putUrl.url) {
+              // Handle local case: create a local URL
+              const localUrl = `${vendorId}/${nameFile}`;
+              return of({ localUrl, putUrl });
+            }
+            return from(value.arrayBuffer()).pipe(
+              map(arrayBuffer => ({ arrayBuffer, putUrl }))
+            );
+          }),
+          switchMap((result: any) => {
+            if (result.localUrl) {
+              // Local case: return the local URL
+              return of({ url: result.localUrl });
+            }
+            if (!result.arrayBuffer) return of(null);
+            return this.vendorService.uploadFileUrlPresigned(
+              new Blob([result.arrayBuffer]), 
+              result.putUrl.url, 
+              value.type
+            ).pipe(
+              catchError(error => {
+                console.error('Error uploading file:', error);
+                return of(null);
+              }),
+              map(response => response.type === HttpEventType.Response ? result.putUrl : null)
+            );
+          }),
+          filter(result => result !== null),
+          tap((result: any) => {
+            console.log('File processed successfully:', result);
+            const url = result?.url || `${vendorId}/${nameFile}`;
+            control.setValue(url);
+            console.log(this.invoiceNaturalForm, 'TEST CONTROL');
+          })
+        );
+      } else {
+        console.error('No vendor ID available');
+        return throwError('No vendor ID available');
+      }
+    }
+  }
+
+  async uploadFiles(controlNames: string[]): Promise<void> {
+    this.loading = true;
+    const uploadPromises = controlNames.map((controlName: string) => {
+      return new Promise<void>((resolve) => {
+        const control = this.getControl(controlName);
+        const file = control.value.file;
+        if (file) {
+          this.submitFile({ value: file, formControlName: controlName }).subscribe(
+            () => resolve(),
+            () => resolve() 
+          );
+        } else {
+          resolve();
+        }
+      });
+    });
+  
+    await Promise.all(uploadPromises);
   }
 
   previousStep(): void {

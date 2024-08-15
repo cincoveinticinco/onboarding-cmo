@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { tap } from 'rxjs';
+import { map, tap } from 'rxjs';
 import { AuthOcService } from './auth-oc.service';
 
 @Injectable({
@@ -57,6 +57,17 @@ export class InvoiceLodgingService {
   }
   getVendorId() {
     return localStorage.getItem('id_vendor_oc_id');
+  }
+
+  getPresignedPutURLOc(filename: string, folder: string) {
+    this.setHeaders();
+    let params = {
+			'filename': filename,
+			'vendor_id': folder
+		};
+		return this.http
+			.post(`${environment.apiUrl}finance/getPresignedUrlService`, params, { headers: this.headers })
+			.pipe(map(response => response));
   }
 
   authenticateUser(form: {
