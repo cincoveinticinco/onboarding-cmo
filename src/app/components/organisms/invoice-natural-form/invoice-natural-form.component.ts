@@ -16,6 +16,7 @@ import { VendorService } from '../../../services/vendor.service';
 import { catchError, filter, from, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { HttpEventType } from '@angular/common/http';
 import { ValidateOcInfoComponent } from '../../../pages/validate-oc-info/validate-oc-info.component';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-invoice-natural-form',
@@ -372,8 +373,15 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
       const nameFile = this.globalService.normalizeString(value.name);
       if (vendorId) {
         return this.ilService.getPresignedPutURLOc(nameFile, vendorId).pipe(
-          catchError((error) => {
-            return of({ id: value, file: value, key: '', url: '' });
+          catchError(() => {
+            if (environment?.stage != 'local') {
+              control.setValue(null, { emitEvent: false });
+              this.loading = false;
+              this.globalService.openSnackBar('Fallo al guardar el documento, intente de nuevo', '', 5000);
+              return throwError(() => new Error('Error al obtener la URL de subida.'));
+            } else {
+              return of({ id: value, file: value, key: '', url: '' });
+            }
           }),
           switchMap((putUrl: any) => {
             if (!putUrl.url) {
@@ -396,9 +404,15 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
               result.putUrl.url, 
               value.type
             ).pipe(
-              catchError(error => {
-                console.error('Error uploading file:', error);
-                return of(null);
+              catchError(() => {
+                if (environment?.stage != 'local') {
+                  control.setValue(null, { emitEvent: false });
+                  this.loading = false;
+                  this.globalService.openSnackBar('Fallo al guardar el documento, intente de nuevo', '', 5000);
+                  return throwError(() => new Error('Error al subir el archivo.'));
+                } else {
+                  return of(null);
+                }
               }),
               map(response => response.type === HttpEventType.Response ? result.putUrl : null)
             );
