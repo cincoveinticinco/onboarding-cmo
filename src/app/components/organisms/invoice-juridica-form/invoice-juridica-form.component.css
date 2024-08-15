@@ -10,3 +10,22 @@
 .margin-bottom {
   margin-bottom: 12px !important;
 }
+
+.green-anchor {
+  color: var(--dark-success-color) !important;
+
+  &:hover {
+    color: var(--success-color) !important;
+  }
+}
+
+a {
+  margin-left: 6px;
+  text-decoration: none;
+  text-transform: capitalize;
+  text-wrap: nowrap;
+}
+
+p {
+  margin: 0 !important
+}

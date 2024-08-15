@@ -61,7 +61,7 @@
   </div>
   <app-subtitle [subtitle]="'DOCUMENTOS PRECARGADOS'"></app-subtitle>
   <p><b>RUT</b> <a>  Ver aquí</a></p>
-  <br><p>¿Desea actualizar el documento? <a>click aquí</a></p>
+  <br><p>¿Desea actualizar el documento? <a class="green-anchor">click aquí</a></p>
   @for(oc of vendorInfo.selectedOrders; track vendorInfo.selectedOrders.id) {
     <br><p><b>{{oc.consecutive_codes}}</b>  <a>Ver aquí</a></p>
   }
