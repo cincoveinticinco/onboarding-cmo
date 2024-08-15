@@ -7,6 +7,7 @@ import { AuthOcService } from '../../services/auth-oc.service';
 import { InvoiceLodgingService } from '../../services/invoiceLodging.service';
 import { TIPOPERSONA } from '../../shared/interfaces/typo_persona';
 import { InvoiceJuridicaFormComponent } from '../../components/organisms/invoice-juridica-form/invoice-juridica-form.component';
+import { GlobalService } from '../../services/global.service';
 
 export interface PurchaseOrders {
   id: number,
@@ -24,7 +25,7 @@ export interface PurchaseOrders {
 export class OcFormsCmoComponent implements OnInit {
   loading = false;
   vendorInfo: any = {};
-  currentStep = 2
+  currentStep = 1
   purchaseOrders: PurchaseOrders[] = [];
   selectedPurchaseOrders: PurchaseOrders[] = [];
   personType: number | undefined;
@@ -33,7 +34,7 @@ export class OcFormsCmoComponent implements OnInit {
 
   constructor(
     private authService: AuthOcService, 
-    private invoiceLodgingService: InvoiceLodgingService, 
+    private invoiceLodgingService: InvoiceLodgingService,
     private router: Router
   ) {}
 
@@ -64,21 +65,17 @@ export class OcFormsCmoComponent implements OnInit {
     );
   }
 
-  saveForm(): void {
-    console.log('Form saved', this.vendorInfo);
+  saveForm(form: any): void {
+    console.log(form, '***************************');
     this.router.navigate(['/oc-forms-cmo/success']);
   }
 
-  handleStepChange(event: 'next' | 'previous'): void {
+  handleStepChange(event: 'next' | 'previous', form: any = null): void {
     if (event === 'next' && this.currentStep <= 3) {
       this.currentStep++;
       console.log('Current step', this.currentStep);
     } else if (event === 'previous' && this.currentStep > 1) {
       this.currentStep--;
-    }
-
-    if(event === 'next' && this.currentStep > 3) {
-      this.saveForm();
     }
   }
 

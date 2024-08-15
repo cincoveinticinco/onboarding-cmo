@@ -277,7 +277,6 @@ export class GlobalService {
       }
     }
   }
-  
 
   getQuestionData(id: any, answers: any[], controlName?: string, form?: any) {
     let answer = answers.find((an: any) => an.id == id);
@@ -346,6 +345,121 @@ export class GlobalService {
     form.get('companyName')?.setValue(data?.companyName || '');
     form.get('address')?.setValue(data?.address || '');
     form.get('email')?.setValue(data?.email || '');
+  }
+
+  setInvoiceNaturalForm(formValue: any, vendorId: number, registerNumber: number | null = null): any {
+    console.log(formValue, '//////////////////////')
+    const params: any = {
+      consecutive_number: registerNumber,
+      sign_text: formValue?.signature,
+      po_vendor: formValue?.orderIds,
+      f_vendor_id: vendorId,
+      telephone: formValue?.phone,
+      institutional_email: formValue?.institutionalEmail,
+      info_additional: [
+        {
+          info_additional_type_id: 'incomeTaxReturn',
+          value: formValue?.incomeTaxReturn,
+          description: 'Income Tax Return'
+        },
+        {
+          info_additional_type_id: 'exceedsIncome',
+          value: formValue?.exceedsIncome,
+          description: 'Exceeds Income'
+        },
+        {
+          info_additional_type_id: 'taxCondition',
+          value: formValue?.taxCondition,
+          description: 'Tax Condition'
+        },
+        {
+          info_additional_type_id: 'medicalPrepaid',
+          value: formValue?.medicalPrepaid,
+          description: 'Medical Prepaid',
+          document: formValue?.medicalPrepaidFile?.url
+        },
+        {
+          info_additional_type_id: 'housingCredit',
+          value: formValue?.housingCredit,
+          description: 'Housing Credit',
+          document: formValue?.housingCreditFile?.url
+        },
+        {
+          info_additional_type_id: 'afcContributions',
+          value: formValue?.afcContributions,
+          description: 'AFC Contributions',
+          document: formValue?.afcContributionsFile?.url
+        },
+        {
+          info_additional_type_id: 'voluntaryPensionContributions',
+          value: formValue?.voluntaryPensionContributions,
+          description: 'Voluntary Pension Contributions',
+          document: formValue?.voluntaryPensionContributionsFile?.url
+        }
+      ],
+      dependents_info: formValue.dependentsInfo && formValue?.dependentsInfo.map((dependent: any) => ({
+        documentType: dependent?.documentType,
+        document: dependent?.document,
+        name: dependent?.name,
+        kinship: dependent?.kinship,
+        infoAdditional: [
+          {
+            info_additional_type_id: 'minorChildren',
+            value: dependent?.minorChildren,
+            description: 'Minor Children',
+            document: dependent?.minorChildrenFile?.url
+          },
+          {
+            info_additional_type_id: 'childrenStudyCertificate',
+            value: dependent?.childrenStudyCertificate,
+            description: 'Children Study Certificate',
+            document: dependent?.childrenStudyCertificateFile?.url
+          },
+          {
+            info_additional_type_id: 'childrenMedicineCertificate',
+            value: dependent?.childrenMedicineCertificate,
+            description: 'Children Medicine Certificate',
+            document: dependent?.childrenMedicineCertificateFile?.url
+          },
+          {
+            info_additional_type_id: 'partnerMedicineCertificate',
+            value: dependent?.partnerMedicineCertificate,
+            description: 'Partner Medicine Certificate',
+            document: dependent?.partnerMedicineCertificateFile?.url
+          },
+          {
+            info_additional_type_id: 'familyMedicineCertificate',
+            value: dependent?.familyMedicineCertificate,
+            description: 'Family Medicine Certificate',
+            document: dependent?.familyMedicineCertificateFile?.url
+          }
+        ]
+      }))
+    };
+  
+    // Añadir otros anexos si existen
+    if (formValue.otherAnexes && formValue.otherAnexes.length > 0) {
+      formValue.otherAnexes.forEach((anexo: any, index: number) => {
+        params.info_additional.push({
+          info_additional_type_id: `otherAnex${index + 1}`,
+          value: 1,
+          description: anexo.description,
+          document: anexo.file?.url
+        });
+      });
+    }
+  
+    // Añadir seguridad social
+    if (formValue.socialSecurity) {
+      params.info_additional.push({
+        info_additional_type_id: 'socialSecurity',
+        value: 1,
+        description: 'Social Security',
+        document: formValue.socialSecurity?.url
+      });
+    }
+  
+    return params;
   }
 
 

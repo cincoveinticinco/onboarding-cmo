@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Form, FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SubtitleComponent } from '../../atoms/subtitle/subtitle.component';
 import { TextInputComponent } from '../../atoms/text-input/text-input.component';
 import { CheckboxInputComponent } from '../../atoms/checkbox-input/checkbox-input.component';
@@ -46,6 +46,7 @@ export class InfStepTwoComponent {
   @Input() invoiceNaturalForm!: FormGroup;
   @Input() vendorInfo: any;
   @Input() validateStep: any;
+  @Input() loading: boolean = false;
   @Output() formSubmit = new EventEmitter<void>();
   @Output() previousStep = new EventEmitter<void>();
 
@@ -53,6 +54,10 @@ export class InfStepTwoComponent {
 
   ngOnInit() {
     this.scrollToTop();
+    const thereAreDependents = this.getValue('dependentsInfo')?.length > 0;
+    if(thereAreDependents) {
+      this.goToDependantsForm();
+    }
   }
 
   private scrollToTop() {
@@ -83,17 +88,26 @@ export class InfStepTwoComponent {
   }
 
   onSubmit() {
-    const haveDependents = this.getValue('dependents') === '0' ? false : true;
-    if(!haveDependents) {
+    const haveDependents = this.getValue('dependents') !== '0';
+    
+    if (!haveDependents) {
       this.formSubmit.emit();
       return;
-    } else {
-      this.goToDependantsForm();
     }
-
-    if(haveDependents && this.renderDependentsForm) {
+    
+    if (!this.renderDependentsForm) {
+      const { isValid, firstInvalidControl } = this.validateStep();
+      if (isValid) {
+        this.goToDependantsForm();
+      } else {
+        this.scrollToError(firstInvalidControl);
+      }
+      return;
+    }
+    
+    if (this.renderDependentsForm) {
       const { isValid, firstInvalidControl } = this.validateDependentForm();
-      if(isValid) {
+      if (isValid) {
         this.formSubmit.emit();
       } else {
         this.scrollToError(firstInvalidControl);

@@ -17,10 +17,6 @@ import { catchError, filter, from, map, Observable, of, switchMap, tap, throwErr
 import { HttpEventType } from '@angular/common/http';
 import { ValidateOcInfoComponent } from '../../../pages/validate-oc-info/validate-oc-info.component';
 
-const oc_file_types: string[] = [
-  'medicalPrepaidFile'
-]
-
 @Component({
   selector: 'app-invoice-natural-form',
   standalone: true,
@@ -47,6 +43,7 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
   @Output() handleStepChange = new EventEmitter<'next' | 'previous'>();
   formattedOcOptions: SelectOption[] = [];
   @Input() poProjections: any[] = [];
+  @Output() saveForm = new EventEmitter<any>();
 
   loading = false;
 
@@ -77,8 +74,8 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
       signatureAuth: this.formBuilder.control('', Validators.requiredTrue),
       signature: this.formBuilder.control('', Validators.required),
       contractNumber: this.formBuilder.control({ value: '', disabled: true }),
-      phone: this.formBuilder.control('', [Validators.required]),
-      institutionalEmail: this.formBuilder.control('', [Validators.required, Validators.email]),
+      phone: this.formBuilder.control(''),
+      institutionalEmail: this.formBuilder.control(''),
       incomeTaxReturn: this.formBuilder.control('', [Validators.required]),
       exceedsIncome: this.formBuilder.control('', [Validators.required]),
       taxCondition: this.formBuilder.control('', [Validators.required]),
@@ -154,7 +151,6 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
   }
 
   sendForm(): void {
-    console.log('Form sent', this.invoiceNaturalForm.value);
     this.nextStep();
   }
 
@@ -299,6 +295,7 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
 
 
   async nextStep(): Promise<void> {
+    console.log('Form sent', this.globalService.setInvoiceNaturalForm(this.invoiceNaturalForm.value, this.vendorInfo.id));
     if (this.currentStep === 1) {
       const { isValid, firstInvalidControl } = this.validateStepOne();
       if (isValid) {
@@ -334,14 +331,11 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
         try {
           await this.uploadFilesFromArrayOfControls(anexesArray);
           await this.uploadFiles(filesToUploadStepthree);
+          this.saveForm.emit(this.globalService.setInvoiceNaturalForm(this.invoiceNaturalForm.value, this.vendorInfo.id));
           this.loading = false;
-          this.handleStepChange.emit('next');
         } catch (error) {
           console.error('Error uploading files:', error);
-        } finally {
-          this.sendForm();
         }
-       
       } else if (firstInvalidControl) {
         this.scrollToError(firstInvalidControl);
       }

@@ -3,7 +3,7 @@
       <div class="custom-loader"></div>
   </div>
 } @else if (personType === PERSON_TYPES.Natural){
-<app-panel-buttons (saveForm)="saveForm()" [isOc]="true"></app-panel-buttons>
+<app-panel-buttons [isOc]="true"></app-panel-buttons>
 <div class="form-container">
   <app-logo></app-logo>
   <h1 class="form-title">CONFIRMACIÓN DE RADICACIÓN</h1>
@@ -12,7 +12,8 @@
   <app-invoice-natural-form 
     [vendorInfo]="vendorInfo" 
     [currentStep]="currentStep" 
-    (handleStepChange)="handleStepChange($event)" 
+    (handleStepChange)="handleStepChange($event)"
+    (saveForm)="saveForm($event)" 
     [purchaseOrders]="purchaseOrders" 
     [selectedPurchaseOrders]="selectedPurchaseOrders"
     [poProjections]="purchaseOrdersProjections"

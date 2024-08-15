@@ -26,7 +26,9 @@ export class InfStepThreeComponent {
   }
 
   ngOnInit() {
-    this.addNewAnexFormGroup();
+    if(this.invoiceNaturalForm?.get('otherAnexes')?.value.length === 0) {
+      this.addNewAnexFormGroup();
+    }
   }
 
   getControl(controlName: string) {

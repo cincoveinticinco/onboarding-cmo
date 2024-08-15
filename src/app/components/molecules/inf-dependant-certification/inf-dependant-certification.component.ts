@@ -23,6 +23,7 @@ import { InvoiceLodgingService } from '../../../services/invoiceLodging.service'
 })
 export class InfDependantCertificationComponent {
   @Input() dependantForm: any;
+  @Input() loading: boolean = false;
   @Input() dependentIndex: number = 0;
   documentTypesOptions: any = [];
 

@@ -43,3 +43,11 @@ label {
 .padding-bottom {
   padding-bottom: 100px;
 }
+
+.add-dependent-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 20px;
+  color: red;
+}
