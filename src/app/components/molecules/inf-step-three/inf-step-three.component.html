@@ -19,6 +19,7 @@
   }
   <a (click)="addNewAnexFormGroup()">+ Agregar anexo</a>
   <div class="row margin-top padding-bottom padding-bottom">
-    <button class="col-12 btn-purpple margin-top" type="submit">Finalizar</button>
+    <button mat-raised-button type="button" class="col-6 btn-gray" (click)="handlePreviousStep()">REGRESAR</button>
+    <button class="col-6 btn-purpple margin-top" type="submit">Finalizar</button>
   </div>
 </form>

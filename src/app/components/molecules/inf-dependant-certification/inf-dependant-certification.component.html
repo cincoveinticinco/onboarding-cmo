@@ -5,7 +5,9 @@
     <app-select-input
       [label]="'Tipo de documento'"
       [control]="getControl('dependantDocumentTypeId')"
-      [options]="[]"
+      [options]="documentTypesOptions"
+      [optionName]="'documentTypeEsp'"
+      [optionValue]="'id'"
       class="col-6"
       [id]="'dependantDocumentTypeId-' + dependentIndex"
     ></app-select-input>

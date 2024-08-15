@@ -5,6 +5,7 @@ import { TextInputComponent } from '../../atoms/text-input/text-input.component'
 import { SelectInputComponent } from '../../atoms/select-input/select-input.component';
 import { CheckboxInputComponent } from '../../atoms/checkbox-input/checkbox-input.component';
 import { FileboxComponent } from '../../atoms/filebox/filebox.component';
+import { InvoiceLodgingService } from '../../../services/invoiceLodging.service';
 
 @Component({
   selector: 'app-inf-dependant-certification',
@@ -23,9 +24,17 @@ import { FileboxComponent } from '../../atoms/filebox/filebox.component';
 export class InfDependantCertificationComponent {
   @Input() dependantForm: any;
   @Input() dependentIndex: number = 0;
+  documentTypesOptions: any = [];
+
+  constructor( private ils: InvoiceLodgingService ) {
+  }
 
   ngOnInit() {
     this.scrollToTop();
+    this.ils.getDocumentTypes().subscribe((response: any) => {
+      this.documentTypesOptions = response;
+      console.log(this.documentTypesOptions);
+    })
   }
 
   private scrollToTop() {

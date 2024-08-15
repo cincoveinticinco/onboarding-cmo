@@ -83,7 +83,22 @@ export class InfStepTwoComponent {
   }
 
   onSubmit() {
-    this.formSubmit.emit();  
+    const haveDependents = this.getValue('dependents') === '0' ? false : true;
+    if(!haveDependents) {
+      this.formSubmit.emit();
+      return;
+    } else {
+      this.goToDependantsForm();
+    }
+
+    if(haveDependents && this.renderDependentsForm) {
+      const { isValid, firstInvalidControl } = this.validateDependentForm();
+      if(isValid) {
+        this.formSubmit.emit();
+      } else {
+        this.scrollToError(firstInvalidControl);
+      }
+    }
   }
 
   addNewDependentFormGroup() {

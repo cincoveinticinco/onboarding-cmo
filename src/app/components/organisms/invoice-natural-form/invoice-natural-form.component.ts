@@ -312,6 +312,11 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
         const filesToUploadStepTwo = ['medicalPrepaidFile', 'housingCreditFile', 'afcContributionsFile', 'voluntaryPensionContributionsFile'];
         try {
           await this.uploadFiles(filesToUploadStepTwo);
+          const dependentsInfo = this.invoiceNaturalForm.get('dependentsInfo') as FormArray;
+          dependentsInfo.controls.forEach((control: any) => {
+            const filesToUpload = ['minorChildrenFile', 'childrenStudyCertificateFile', 'childrenMedicineCertificateFile', 'partnerMedicineCertificateFile', 'familyMedicineCertificateFile'];
+            this.uploadFilesFromFormGroup(control, filesToUpload);
+          })
           this.loading = false;
           this.handleStepChange.emit('next');
         } catch (error) {
@@ -324,7 +329,19 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
     } else if (this.currentStep === 3) {
       const { isValid, firstInvalidControl } = this.validateStepThree();
       if (isValid) {
-        this.sendForm();
+        const filesToUploadStepthree = ['socialSecurity'];
+        const anexesArray = this.invoiceNaturalForm.get('otherAnexes') as FormArray;
+        try {
+          await this.uploadFilesFromArrayOfControls(anexesArray);
+          await this.uploadFiles(filesToUploadStepthree);
+          this.loading = false;
+          this.handleStepChange.emit('next');
+        } catch (error) {
+          console.error('Error uploading files:', error);
+        } finally {
+          this.sendForm();
+        }
+       
       } else if (firstInvalidControl) {
         this.scrollToError(firstInvalidControl);
       }
@@ -343,12 +360,12 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
 
   submitFile(event: {
     value: File;
-    formControlName: string;
+    formControl: FormControl
   }): Observable<any> {
-    const {value, formControlName} = event;
+    const {value, formControl} = event;
     console.log('event', event);
   
-    const control = this.getControl(formControlName);
+    const control = formControl;
   
     // get vendor id
     const vendorId = this.ilService.getVendorId();
@@ -362,7 +379,7 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
       if (vendorId) {
         return this.ilService.getPresignedPutURLOc(nameFile, vendorId).pipe(
           catchError((error) => {
-            return of({ id: formControlName, file: value, key: '', url: '' });
+            return of({ id: value, file: value, key: '', url: '' });
           }),
           switchMap((putUrl: any) => {
             if (!putUrl.url) {
@@ -396,7 +413,8 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
           tap((result: any) => {
             console.log('File processed successfully:', result);
             const url = result?.url || `${vendorId}/${nameFile}`;
-            control.setValue(url);
+            const value = control.value;
+            control.setValue({ ...value, url });
             console.log(this.invoiceNaturalForm, 'TEST CONTROL');
           })
         );
@@ -407,6 +425,48 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
     }
   }
 
+  async uploadFilesFromArrayOfControls(controlArray: FormArray): Promise<void> {
+    this.loading = true;
+    const uploadPromises = controlArray.controls.map((control: any) => {
+      return new Promise<void>((resolve) => {
+        const file = control.value.file;
+        if (file) {
+          this.submitFile({ value: file, formControl: control }).subscribe(
+            () => resolve(),
+            () => resolve()
+          );
+        } else {
+          
+        }
+      });
+    });
+  
+    await Promise.all(uploadPromises);
+  }
+
+  async uploadFilesFromFormGroup(form: FormGroup, filesControls: string[]): Promise<void> {
+    this.loading = true;
+    const uploadPromises = filesControls.map((controlName: string) => {
+      return new Promise<void>((resolve) => {
+        const control = form.get(controlName);
+        if (control && control.value && control.value.file) {
+          this.submitFile({ value: control.value.file, formControl: control as FormControl }).subscribe(
+            () => resolve(),
+            (error) => {
+              console.error(`Error uploading file for ${controlName}:`, error);
+              resolve();
+            }
+          );
+        } else {
+          resolve();
+        }
+      });
+    });
+  
+    await Promise.all(uploadPromises);
+    this.loading = false;
+  }
+
   async uploadFiles(controlNames: string[]): Promise<void> {
     this.loading = true;
     const uploadPromises = controlNames.map((controlName: string) => {
@@ -414,7 +474,7 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
         const control = this.getControl(controlName);
         const file = control.value.file;
         if (file) {
-          this.submitFile({ value: file, formControlName: controlName }).subscribe(
+          this.submitFile({ value: file, formControl: control }).subscribe(
             () => resolve(),
             () => resolve() 
           );
@@ -430,4 +490,5 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
   previousStep(): void {
     this.handleStepChange.emit('previous');
   }
+  
 }
