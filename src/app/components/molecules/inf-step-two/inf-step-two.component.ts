@@ -116,23 +116,24 @@ export class InfStepTwoComponent {
   }
 
   addNewDependentFormGroup() {
-    this.getDependents().push(this.formBuilder.group({
+    const newDependentForm = this.formBuilder.group({
       dependantDocumentTypeId: ['', [Validators.required]],
       dependantDocumentNumber: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
       dependantFullName: ['', [Validators.required]],
       dependantKinship: ['', [Validators.required]],
-      decreaseInTaxBase: ['', [Validators.required]],
-      minorChildren: ['', [Validators.required]],
+      decreaseInTaxBase: [false, [Validators.required]],
+      minorChildren: [false, [Validators.required]],
       minorChildrenFile: [''],
       childrenStudyCertificateFile: [''],
-      childrenStudyCertificate: ['', [Validators.required]],
-      childrenMedicineCertificate: ['', [Validators.required]],
+      childrenStudyCertificate: [false, [Validators.required]],
+      childrenMedicineCertificate: [false, [Validators.required]],
       childrenMedicineCertificateFile: [''],
-      partnerMedicineCertificate: ['', [Validators.required]],
+      partnerMedicineCertificate: [false, [Validators.required]],
       partnerMedicineCertificateFile: [''],
-      familyMedicineCertificate: ['', [Validators.required]],
+      familyMedicineCertificate: [false, [Validators.required]],
       familyMedicineCertificateFile: ['']
-    }));
+    });
+    this.getDependents().push(newDependentForm);
   }
 
   validateDependentForm() {
@@ -184,5 +185,9 @@ export class InfStepTwoComponent {
     }
 
     this.previousStep.emit();
+  }
+
+  trackByIndex(index: number, item: any): number {
+    return index;
   }
 }

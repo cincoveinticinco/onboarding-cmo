@@ -1,4 +1,4 @@
-<form [formGroup]="dependantForm">
+<form [formGroup]="dependantForm" [id]="'dependentForm-' + dependentIndex">
   <app-subtitle [subtitle]="'ANEXO 1. CERTIFICACIÓN DE DEPENDIENTE #' + dependentIndex"></app-subtitle>
   <p>Bajo la gravedad del juramento, y en cumplimiento de lo previsto en el Artículo 387 del Estatuto Tributario, informo que la(s) persona(s) relacionadas a continuación tiene(n) la calidad de dependiente a mi cargo:</p>
   <div class="row">
@@ -23,20 +23,28 @@
       [control]="getControl('dependantFullName')"
       [type]="'text'"
       [id]="'dependantFullName-' + dependentIndex"
-      class="col-6"></app-text-input>
+      class="col-6"
+    ></app-text-input>
     <app-text-input
       [label]="'Parentesco'"
       [control]="getControl('dependantKinship')"
       [type]="'text'"
       [id]="'dependantKinship-' + dependentIndex"
-      class="col-6"></app-text-input>
+      class="col-6"
+    ></app-text-input>
   </div>
   <div class="row">
     <div class="checkbox-container">
-      <input type="checkbox" class="col-1" [formControl]="getControl('decreaseInTaxBase')" [id]="'decreaseInTaxBase-' + dependentIndex">
+      <input 
+        type="checkbox" 
+        class="col-1" 
+        [formControl]="getControl('decreaseInTaxBase')" 
+        [id]="'decreaseInTaxBase-' + dependentIndex"
+      >
     </div>
     <p class="col-11">
-      Las Partes aceptan que el presente documento será firmado electrónicamente haciendo uso de cualquier herramienta de firma electrónica. Bajo ese entendido, Las Partes declaran y aceptan que la firma electrónica que figure en este documento es una manifestación de su consentimiento y voluntad para obligarse en los términos y condiciones dispuestos en el presente documento. </p>
+      Las Partes aceptan que el presente documento será firmado electrónicamente haciendo uso de cualquier herramienta de firma electrónica. Bajo ese entendido, Las Partes declaran y aceptan que la firma electrónica que figure en este documento es una manifestación de su consentimiento y voluntad para obligarse en los términos y condiciones dispuestos en el presente documento.
+    </p>
   </div>
   <app-subtitle [subtitle]="'TIPO DE DEPENDIENTE'"></app-subtitle>
   <app-checkbox-input
@@ -53,7 +61,7 @@
     ></app-filebox>
   }
   <app-checkbox-input
-    [label]="'2.  Los hijos del contribuyente con edad entre 18 y 23 años, cuando el padre o madre contribuyente persona natural se encuentre financiando su educación en instituciones formales de educación superior certificadas por el ICFES, o la autoridad oficial correspondiente; o en los programas técnicos de educación no formal debidamente acreditados por la autoridad competente. (Certificado de estudio expedido por la institución de educación)'"
+    [label]="'2. Los hijos del contribuyente con edad entre 18 y 23 años, cuando el padre o madre contribuyente persona natural se encuentre financiando su educación en instituciones formales de educación superior certificadas por el ICFES, o la autoridad oficial correspondiente; o en los programas técnicos de educación no formal debidamente acreditados por la autoridad competente. (Certificado de estudio expedido por la institución de educación)'"
     [boldLabel]="false"
     [control]="getControl('childrenStudyCertificate')"
     [controlName]="'childrenStudyCertificate'"
@@ -66,7 +74,7 @@
     ></app-filebox>
   }
   <app-checkbox-input
-    [label]="'3.  Los hijos del contribuyente mayores de 23 años que se encuentren en situación de dependencia originada en factores físicos o psicológicos que sean certificados por Medicina Legal.'"
+    [label]="'3. Los hijos del contribuyente mayores de 23 años que se encuentren en situación de dependencia originada en factores físicos o psicológicos que sean certificados por Medicina Legal.'"
     [boldLabel]="false"
     [control]="getControl('childrenMedicineCertificate')"
     [controlName]="'childrenMedicineCertificate'"
@@ -75,7 +83,7 @@
   @if(getValue('childrenMedicineCertificate') === '1') {
     <app-filebox
       [control]="getControl('childrenMedicineCertificateFile')"
-      [id]="'childrenMedicineCertificate-' + dependentIndex"
+   
     ></app-filebox>
   }
   <app-checkbox-input

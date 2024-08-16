@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { SubtitleComponent } from '../../atoms/subtitle/subtitle.component';
 import { TextInputComponent } from '../../atoms/text-input/text-input.component';
 import { SelectInputComponent } from '../../atoms/select-input/select-input.component';
@@ -22,20 +22,18 @@ import { InvoiceLodgingService } from '../../../services/invoiceLodging.service'
   styleUrl: './inf-dependant-certification.component.css'
 })
 export class InfDependantCertificationComponent {
-  @Input() dependantForm: any;
+  @Input() dependantForm!: FormGroup;
   @Input() loading: boolean = false;
   @Input() dependentIndex: number = 0;
   documentTypesOptions: any = [];
 
-  constructor( private ils: InvoiceLodgingService ) {
-  }
+  constructor(private ils: InvoiceLodgingService) {}
 
   ngOnInit() {
     this.scrollToTop();
     this.ils.getDocumentTypes().subscribe((response: any) => {
       this.documentTypesOptions = response;
-      console.log(this.documentTypesOptions);
-    })
+    });
   }
 
   private scrollToTop() {
@@ -43,10 +41,10 @@ export class InfDependantCertificationComponent {
   }
 
   getControl(controlName: string) {
-    return this.dependantForm?.get(controlName);
+    return this.dependantForm.get(controlName) as FormControl
   }
 
   getValue(controlName: string) {
-    return this.dependantForm?.get(controlName)?.value;
+    return this.dependantForm.get(controlName)?.value;
   }
 }

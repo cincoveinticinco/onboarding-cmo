@@ -234,14 +234,14 @@
         </div>
     </form>
   } @else {
-    @for (dependent of getDependentsForms(); track dependent) {
+    @for (dependent of getDependentsForms(); track $index) {
       <app-inf-dependant-certification
         [dependantForm]="dependent"
         [dependentIndex]="$index + 1"
       ></app-inf-dependant-certification>
-    }
+    }    
     <div class="add-dependent-wrapper">
-      <img src="/assets/images/AddUser.svg" alt="Agregar usuario" class="plus-icon">
+      <img src="./assets/images/AddUser.svg" alt="Agregar usuario" class="plus-icon">
       <a (click)="addNewDependentFormGroup()">Agregar dependiente</a>
     </div>
     <div class="row margin-top buttons-wrapper padding-bottom">
