@@ -5,6 +5,7 @@ import { TextInputComponent } from '../../components/atoms/text-input/text-input
 import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
 import { InvoiceLodgingService } from '../../services/invoiceLodging.service';
+import { ValidateOcInfoComponent } from '../validate-oc-info/validate-oc-info.component';
 
 @Component({
   selector: 'app-send-oc',
@@ -13,7 +14,8 @@ import { InvoiceLodgingService } from '../../services/invoiceLodging.service';
     LogoComponent, 
     TextInputComponent,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    ValidateOcInfoComponent
   ],
   templateUrl: './send-oc.component.html',
   styleUrl: './send-oc.component.css'
@@ -21,6 +23,7 @@ import { InvoiceLodgingService } from '../../services/invoiceLodging.service';
 export class SendOcComponent {
   sendOcForm: FormGroup;
   emailSent: boolean = false;
+  loading: boolean = false;
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -53,8 +56,10 @@ export class SendOcComponent {
   }
 
   sendForm() {
+    this.loading = true;
     this.iS.sendPurchaseOrdersToEmail(this.sendOcForm.value).subscribe(
       (response) => {
+        this.loading = false;
         this.emailSent = true;
       });
   }
