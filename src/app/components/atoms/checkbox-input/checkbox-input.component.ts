@@ -26,7 +26,7 @@ export class CheckboxInputComponent {
   };
   @Input() boldLabel: boolean = true;
   @Input() controlersWhenTrue: string[] = [];
-  @Input() customName: string | undefined // There will be some controllers that will be required only when the checkbox is true, this input is used when there are more than one controller that depends on the checkbox
+  @Input() customName: string | undefined;
 
   getErrors(): string | null {
     const touched = this.control.touched;
@@ -36,44 +36,48 @@ export class CheckboxInputComponent {
     return null;
   }
 
-  setDescriptionControl(control: any, nameControl: string) {
-    if(this.form) {
-      if (control) {
-        this.form.get(`${nameControl}_description`)?.setValidators(Validators.required);
-        this.form.get(`${nameControl}_description`)?.updateValueAndValidity();
-      }
-      else {
-        this.form.get(`${nameControl}_description`)?.removeValidators(Validators.required);
-        this.form.get(`${nameControl}_description`)?.updateValueAndValidity();
-      }
-    }
+  handleChange(value: string) {
+    this.setDescriptionControl(value, this.controlName);
+    this.setFileControl(value, this.controlName);
+  }
 
-    if(this.controlersWhenTrue.length > 0) {
-      this.controlersWhenTrue.forEach(controlName => {
-        if (this.form?.get(this.controlName)?.value === '1') {
-          this.form?.get(controlName)?.setValidators(Validators.required);
-          this.form?.get(controlName)?.updateValueAndValidity();
-        }
-        else {
-          this.form?.get(controlName)?.removeValidators(Validators.required);
-          this.form?.get(controlName)?.updateValueAndValidity();
-        }
-      });
+  setDescriptionControl(value: string, nameControl: string) {
+    if (this.form) {
+      const descriptionControl = this.form.get(`${nameControl}_description`);
+      const isChecked = value === '1';
+
+      if (isChecked) {
+        descriptionControl?.setValidators(Validators.required);
+      } else {
+        descriptionControl?.clearValidators();
+      }
+      descriptionControl?.updateValueAndValidity();
+
+      if (this.controlersWhenTrue.length > 0) {
+        this.controlersWhenTrue.forEach(controlName => {
+          const dependentControl = this.form?.get(controlName);
+          if (isChecked) {
+            dependentControl?.setValidators(Validators.required);
+          } else {
+            dependentControl?.clearValidators();
+          }
+          dependentControl?.updateValueAndValidity();
+        });
+      }
     }
   }
 
-  setFileControl(control: any, nameControl: string) {
-    if(this.form) {
-      if (this.form.get(this.controlName)?.value === '1') {
-        console.log('control', `${nameControl}File`);
-        this.form.get(`${nameControl}File`)?.setValidators(Validators.required);
-        this.form.get(`${nameControl}File`)?.updateValueAndValidity();
+  setFileControl(value: string, nameControl: string) {
+    if (this.form) {
+      const fileControl = this.form.get(`${nameControl}File`);
+      const isChecked = value === '1';
+
+      if (isChecked) {
+        fileControl?.setValidators(Validators.required);
+      } else {
+        fileControl?.clearValidators();
       }
-      else {
-        console.log('control', `${nameControl}File`);
-        this.form.get(`${nameControl}File`)?.removeValidators(Validators.required);
-        this.form.get(`${nameControl}File`)?.updateValueAndValidity();
-      }
+      fileControl?.updateValueAndValidity();
     }
   }
 }
