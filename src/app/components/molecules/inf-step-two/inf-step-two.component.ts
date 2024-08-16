@@ -134,6 +134,7 @@ export class InfStepTwoComponent {
       familyMedicineCertificateFile: ['']
     });
     this.getDependents().push(newDependentForm);
+    console.log(this.invoiceNaturalForm)
   }
 
   validateDependentForm() {

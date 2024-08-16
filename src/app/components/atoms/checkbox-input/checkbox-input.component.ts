@@ -25,7 +25,8 @@ export class CheckboxInputComponent {
     false: 'No'
   };
   @Input() boldLabel: boolean = true;
-  @Input() controlersWhenTrue: string[] = []; // There will be some controllers that will be required only when the checkbox is true, this input is used when there are more than one controller that depends on the checkbox
+  @Input() controlersWhenTrue: string[] = [];
+  @Input() customName: string | undefined // There will be some controllers that will be required only when the checkbox is true, this input is used when there are more than one controller that depends on the checkbox
 
   getErrors(): string | null {
     const touched = this.control.touched;
