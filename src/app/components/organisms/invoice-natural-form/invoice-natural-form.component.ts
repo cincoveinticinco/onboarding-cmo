@@ -332,7 +332,7 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
         try {
           await this.uploadFilesFromArrayOfControls(anexesArray);
           await this.uploadFiles(filesToUploadStepthree);
-          this.saveForm.emit(this.globalService.setInvoiceNaturalForm(this.invoiceNaturalForm.value, this.vendorInfo.id));
+          this.saveForm.emit(this.invoiceNaturalForm.value);
           this.loading = false;
         } catch (error) {
           console.error('Error uploading files:', error);
@@ -421,8 +421,8 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
           tap((result: any) => {
             console.log('File processed successfully:', result);
             const url = result?.url || `${vendorId}/${nameFile}`;
-            const value = control.value;
-            control.setValue({ ...value, url });
+            const previousValue = control.value;
+            control.setValue({ ...previousValue, url });
             console.log(this.invoiceNaturalForm, 'TEST CONTROL');
           })
         );

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { LogoComponent } from '../atoms/logo/logo.component';
 import { Router } from '@angular/router';
 import { GlobalService } from '../../services/global.service';
@@ -12,12 +12,22 @@ import { AuthOcService } from '../../services/auth-oc.service';
   styleUrl: './oc-form-success.component.css'
 })
 export class OcFormSuccessComponent {
-  radicado: string = '123456789';
+  radicado: string = '';
+
+  ngOnInit() {
+    this.getRadicado();
+  }
 
   constructor(
     private auth: AuthOcService
   ) {}
 
+  getRadicado() {
+    const radicadoState = window.history.state.radicado;
+    if (radicadoState) {
+      this.radicado = radicadoState;
+    }
+  }
   goToHome() {
     this.auth.logOut();
   }

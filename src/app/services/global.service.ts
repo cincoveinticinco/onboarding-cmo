@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { VendorService } from './vendor.service';
 import { Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { info } from 'console';
-import { file_types } from '../shared/interfaces/files_types';
+import { InfoAdditionalTypes, OcFileTypes } from '../shared/interfaces/files_types';
+import { OcNaturalParams } from '../shared/interfaces/natural_params_form.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -347,8 +347,8 @@ export class GlobalService {
     form.get('email')?.setValue(data?.email || '');
   }
 
-  setInvoiceNaturalForm(formValue: any, vendorId: number, registerNumber: number | null = null): any {
-    console.log(formValue, '//////////////////////')
+  setInvoiceNaturalForm(formValue: any, vendorId: number, registerNumber: number | null = null): OcNaturalParams {
+    console.log(formValue);
     const params: any = {
       consecutive_number: registerNumber,
       sign_text: formValue?.signature,
@@ -356,79 +356,80 @@ export class GlobalService {
       f_vendor_id: vendorId,
       telephone: formValue?.phone,
       institutional_email: formValue?.institutionalEmail,
+      vendor_documents: [],
       info_additional: [
         {
-          info_additional_type_id: 'incomeTaxReturn',
+          info_additional_type_id: InfoAdditionalTypes.INCOME_TAX_RETURN,
           value: formValue?.incomeTaxReturn,
           description: 'Income Tax Return'
         },
         {
-          info_additional_type_id: 'exceedsIncome',
+          info_additional_type_id: InfoAdditionalTypes.EXCEEDS_INCOME,
           value: formValue?.exceedsIncome,
           description: 'Exceeds Income'
         },
         {
-          info_additional_type_id: 'taxCondition',
+          info_additional_type_id: InfoAdditionalTypes.TAX_CONDITION,
           value: formValue?.taxCondition,
           description: 'Tax Condition'
         },
         {
-          info_additional_type_id: 'medicalPrepaid',
+          info_additional_type_id: InfoAdditionalTypes.MEDICAL_PREPAID,
           value: formValue?.medicalPrepaid,
           description: 'Medical Prepaid',
           document: formValue?.medicalPrepaidFile?.url
         },
         {
-          info_additional_type_id: 'housingCredit',
+          info_additional_type_id: InfoAdditionalTypes.HOUSING_CREDIT,
           value: formValue?.housingCredit,
           description: 'Housing Credit',
           document: formValue?.housingCreditFile?.url
         },
         {
-          info_additional_type_id: 'afcContributions',
+          info_additional_type_id: InfoAdditionalTypes.AFC_CONTRIBUTIONS,
           value: formValue?.afcContributions,
           description: 'AFC Contributions',
           document: formValue?.afcContributionsFile?.url
         },
         {
-          info_additional_type_id: 'voluntaryPensionContributions',
+          info_additional_type_id: InfoAdditionalTypes.VOLUNTARY_PENSION_CONTRIBUTIONS,
           value: formValue?.voluntaryPensionContributions,
           description: 'Voluntary Pension Contributions',
           document: formValue?.voluntaryPensionContributionsFile?.url
         }
       ],
       dependents_info: formValue.dependentsInfo && formValue?.dependentsInfo.map((dependent: any) => ({
-        documentType: dependent?.documentType,
-        document: dependent?.document,
-        name: dependent?.name,
-        kinship: dependent?.kinship,
+        documentType: dependent?.dependantDocumentTypeId,
+        document: dependent?.dependantDocumentNumber,
+        name: dependent?.dependantFullName,
+        kinship: dependent?.dependantKinship,
         infoAdditional: [
           {
-            info_additional_type_id: 'minorChildren',
+            info_additional_type_id: InfoAdditionalTypes.MINOR_CHILDREN,
             value: dependent?.minorChildren,
             description: 'Minor Children',
             document: dependent?.minorChildrenFile?.url
           },
           {
-            info_additional_type_id: 'childrenStudyCertificate',
+            info_additional_type_id: InfoAdditionalTypes.CHILDREN_STUDY_CERTIFICATE,
             value: dependent?.childrenStudyCertificate,
             description: 'Children Study Certificate',
             document: dependent?.childrenStudyCertificateFile?.url
           },
           {
-            info_additional_type_id: 'childrenMedicineCertificate',
+            info_additional_type_id: InfoAdditionalTypes.CHILDREN_MEDICINE_CERTIFICATE,
             value: dependent?.childrenMedicineCertificate,
             description: 'Children Medicine Certificate',
             document: dependent?.childrenMedicineCertificateFile?.url
           },
           {
-            info_additional_type_id: 'partnerMedicineCertificate',
+            info_additional_type_id: InfoAdditionalTypes.PARTNER_MEDICINE_CERTIFICATE,
             value: dependent?.partnerMedicineCertificate,
             description: 'Partner Medicine Certificate',
             document: dependent?.partnerMedicineCertificateFile?.url
           },
           {
-            info_additional_type_id: 'familyMedicineCertificate',
+            info_additional_type_id: InfoAdditionalTypes.FAMILY_MEDICINE_CERTIFICATE,
             value: dependent?.familyMedicineCertificate,
             description: 'Family Medicine Certificate',
             document: dependent?.familyMedicineCertificateFile?.url
@@ -436,32 +437,29 @@ export class GlobalService {
         ]
       }))
     };
-  
-    // Añadir otros anexos si existen
-    if (formValue.otherAnexes && formValue.otherAnexes.length > 0) {
-      formValue.otherAnexes.forEach((anexo: any, index: number) => {
-        params.info_additional.push({
-          info_additional_type_id: `otherAnex${index + 1}`,
-          value: 1,
-          description: anexo.description,
-          document: anexo.file?.url
-        });
+
+    // Añadir social security document
+
+    if (formValue.socialSecurity?.url) {
+      params.vendor_documents.push({
+        document_type_id: OcFileTypes.SOCIAL_SECURITY,
+        document: formValue.socialSecurity?.url
       });
     }
   
-    // Añadir seguridad social
-    if (formValue.socialSecurity) {
-      params.info_additional.push({
-        info_additional_type_id: 'socialSecurity',
-        value: 1,
-        description: 'Social Security',
-        document: formValue.socialSecurity?.url
+    // Añadir otros anexos si existen
+    if (formValue.otherAnexes && formValue.otherAnexes.length > 0) {
+      formValue.otherAnexes.forEach((anexo: any) => {
+        console.log(anexo)
+        params.vendor_documents.push({
+          document_type_id: OcFileTypes.ANEXO,
+          document: anexo.url
+        });
       });
     }
   
     return params;
   }
-
 
   constructor(private _vS: VendorService, private _snackBar: MatSnackBar) { }
 }

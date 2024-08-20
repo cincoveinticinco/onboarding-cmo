@@ -31,10 +31,12 @@ export class OcFormsCmoComponent implements OnInit {
   personType: number | undefined;
   purchaseOrdersProjections: any[] = [];
   PERSON_TYPES = TIPOPERSONA;
+  registerCode: string | null = null;
 
   constructor(
     private authService: AuthOcService, 
     private invoiceLodgingService: InvoiceLodgingService,
+    private globalService: GlobalService,
     private router: Router
   ) {}
 
@@ -57,6 +59,7 @@ export class OcFormsCmoComponent implements OnInit {
         this.purchaseOrders = response.purchaseOrders;
         this.selectedPurchaseOrders = response.selectedOrders;
         this.purchaseOrdersProjections = response.poProjections;
+        this.registerCode = response.registerCode;
         this.loading = false;
       },
       () => {
@@ -66,9 +69,20 @@ export class OcFormsCmoComponent implements OnInit {
   }
 
   saveForm(form: any): void {
-    console.log(form, '***************************');
-    this.router.navigate(['/oc-forms-cmo/success']);
-  }
+      const register = this.registerCode ? parseInt(this.registerCode) : null;
+
+      const formattedForm = this.globalService.setInvoiceNaturalForm(form, this.vendorInfo.id, register)
+      this.invoiceLodgingService.updateRegisterVendor(formattedForm).subscribe(
+        (response: any) => {
+          this.router.navigate(['/oc-forms-cmo/success/' + response.registerId], {
+            state: { radicado: response.radicado }
+          });
+        },
+        () => {
+          console.log('Error');
+        }
+      );
+    }
 
   handleStepChange(event: 'next' | 'previous', form: any = null): void {
     if (event === 'next' && this.currentStep <= 3) {

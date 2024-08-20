@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map, tap } from 'rxjs';
 import { AuthOcService } from './auth-oc.service';
+import { OcNaturalParams } from '../shared/interfaces/natural_params_form.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -100,4 +101,13 @@ export class InvoiceLodgingService {
     });
   }
 
+  updateRegisterVendor(formParams: OcNaturalParams) {
+    this.setHeaders();
+    const params = formParams;
+    
+    return this.http.post(`${environment.apiUrl}cmo/update_register`, params, {
+      headers: this.headers
+    });
+    
+  }
 }
