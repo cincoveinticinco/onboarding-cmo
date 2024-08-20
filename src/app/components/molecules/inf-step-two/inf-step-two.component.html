@@ -1,5 +1,7 @@
 @if(loading) {
-
+  <div class="loader">
+    <div class="custom-loader"></div>
+</div>
 } @else {@if (!renderDependentsForm) {
   <form [formGroup]="invoiceNaturalForm" (ngSubmit)="onSubmit()">
       <app-subtitle [subtitle]="'DECLARACIÓN FUNDAMENTADA'"></app-subtitle>
@@ -235,10 +237,10 @@
     </form>
   } @else {
     @for (dependent of getDependentsForms(); track $index) {
-      <app-inf-dependant-certification
-        [dependantForm]="dependent"
+      <app-inf-dependent-certification
+        [dependentForm]="dependent"
         [dependentIndex]="$index + 1"
-      ></app-inf-dependant-certification>
+      ></app-inf-dependent-certification>
     }    
     <div class="add-dependent-wrapper">
       <img src="./assets/images/AddUser.svg" alt="Agregar usuario" class="plus-icon">

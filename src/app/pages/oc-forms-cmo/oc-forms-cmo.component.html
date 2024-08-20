@@ -30,6 +30,7 @@
       [purchaseOrders]="purchaseOrders" 
       [selectedPurchaseOrders]="selectedPurchaseOrders"
       [selectOptionsPo]="getFormattedOcOptions(purchaseOrders)"
+      (saveForm)="saveForm($event)" 
     ></app-invoice-juridica-form>
   </div>
 }

@@ -347,7 +347,7 @@ export class GlobalService {
     form.get('email')?.setValue(data?.email || '');
   }
 
-  setInvoiceNaturalForm(formValue: any, vendorId: number, registerNumber: number | null = null): OcNaturalParams {
+  setOcForm(formValue: any, vendorId: number, registerNumber: number | null = null): OcNaturalParams {
     console.log(formValue);
     const params: any = {
       consecutive_number: registerNumber,
@@ -399,10 +399,10 @@ export class GlobalService {
         }
       ],
       dependents_info: formValue.dependentsInfo && formValue?.dependentsInfo.map((dependent: any) => ({
-        documentType: dependent?.dependantDocumentTypeId,
-        document: dependent?.dependantDocumentNumber,
-        name: dependent?.dependantFullName,
-        kinship: dependent?.dependantKinship,
+        documentType: dependent?.dependentDocumentTypeId,
+        document: dependent?.dependentDocumentNumber,
+        name: dependent?.dependentFullName,
+        kinship: dependent?.dependentKinship,
         infoAdditional: [
           {
             info_additional_type_id: InfoAdditionalTypes.MINOR_CHILDREN,
@@ -444,6 +444,31 @@ export class GlobalService {
       params.vendor_documents.push({
         document_type_id: OcFileTypes.SOCIAL_SECURITY,
         document: formValue.socialSecurity?.url
+      });
+    }
+
+    // Añadir electronic Invoice document
+    if (formValue.electronicInvoice?.url) {
+      params.vendor_documents.push({
+        document_type_id: OcFileTypes.ELECTRONIC_INVOICE,
+        document: formValue.electronicInvoice?.url
+      });
+    }
+
+    // Añadir tax auditor certificate document
+    if (formValue.taxAuditorCertificate?.url) {
+      params.vendor_documents.push({
+        document_type_id: OcFileTypes.TAX_AUDITOR_CERTIFICATE,
+        document: formValue.taxAuditorCertificate?.url
+      });
+    }
+
+    // Añadir ARL
+
+    if (formValue.arlCertificate?.url) {
+      params.vendor_documents.push({
+        document_type_id: OcFileTypes.ARL_CERTIFICATE,
+        document: formValue.arlCertificate?.url
       });
     }
   

@@ -20,6 +20,9 @@ export enum FileType {
 
 export enum OcFileTypes {
   SOCIAL_SECURITY = 347,
+  ELECTRONIC_INVOICE = 348,
+  TAX_AUDITOR_CERTIFICATE = 349,
+  ARL_CERTIFICATE = 350,
   ANEXO = 351
 }
 

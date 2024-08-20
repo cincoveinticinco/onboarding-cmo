@@ -68,15 +68,19 @@ export class OcFormsCmoComponent implements OnInit {
     );
   }
 
-  saveForm(form: any): void {
+  saveForm(event: {
+    form: any, cancelLoading: any
+  }): void {
+      const { form, cancelLoading } = event
       const register = this.registerCode ? parseInt(this.registerCode) : null;
-
-      const formattedForm = this.globalService.setInvoiceNaturalForm(form, this.vendorInfo.id, register)
+      const formattedForm = this.globalService.setOcForm(form, this.vendorInfo.id, register)
+      console.log(formattedForm, 'FORMATED FORM')
       this.invoiceLodgingService.updateRegisterVendor(formattedForm).subscribe(
         (response: any) => {
           this.router.navigate(['/oc-forms-cmo/success/' + response.registerId], {
             state: { radicado: response.radicado }
           });
+          cancelLoading()
         },
         () => {
           console.log('Error');

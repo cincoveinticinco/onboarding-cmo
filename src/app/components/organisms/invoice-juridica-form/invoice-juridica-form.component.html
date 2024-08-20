@@ -1,86 +1,92 @@
-<form [formGroup]="invoiceJuridicaForm" (ngSubmit)="onSubmit()" id="invoice-natural-form">
-  @for(poControl of getPurchaseOrdersControls(); track poControl) {
+@if (loading) {
+  <div class="loader">
+    <div class="custom-loader"></div>
+</div>
+} @else {
+  <form [formGroup]="invoiceJuridicaForm" (ngSubmit)="onSubmit()" id="invoice-natural-form">
+    @for(poControl of getPurchaseOrdersControls(); track poControl) {
+      <div class="row">
+        <app-select-input
+          [label]="'Orden de compra'"
+          [control]="poControl"
+          [options]="availableOptions[$index] || []"
+          [optionName]="'optionName'"
+          [optionValue]="'optionValue'"
+          class="col-6"
+        ></app-select-input>
+        @if($index > 0) {
+          <a class="col-1 flex-column justify-end align-center margin-bottom" (click)="deletePurchaseOrderControl($index)">
+             <mat-icon class="red">delete_outline</mat-icon>
+          </a>
+        }
+        @if($index === getPurchaseOrdersControls().length - 1 && selectOptionsPo && $index < selectOptionsPo.length - 1) {
+          <a class="col-5 flex-column justify-end align-center margin-bottom" (click)="addPurchaseOrderControl()">
+            + Agregar nuevo número de orden
+          </a>
+        }
+      </div>
+    }
     <div class="row">
-      <app-select-input
-        [label]="'Orden de compra'"
-        [control]="poControl"
-        [options]="availableOptions[$index] || []"
-        [optionName]="'optionName'"
-        [optionValue]="'optionValue'"
+      <app-text-input
+        [label]="'Tipo de persona'"
+        [control]="getControl('personType')"
+        [type]="'text'"
         class="col-6"
-      ></app-select-input>
-      @if($index > 0) {
-        <a class="col-1 flex-column justify-end align-center margin-bottom" (click)="deletePurchaseOrderControl($index)">
-           <mat-icon class="red">delete_outline</mat-icon>
-        </a>
-      }
-      @if($index === getPurchaseOrdersControls().length - 1 && selectOptionsPo && $index < selectOptionsPo.length - 1) {
-        <a class="col-5 flex-column justify-end align-center margin-bottom" (click)="addPurchaseOrderControl()">
-          + Agregar nuevo número de orden
-        </a>
-      }
+      ></app-text-input>
+      <app-text-input
+        [label]="'Tipo de documento'"
+        [control]="getControl('documentType')"
+        [type]="'text'"
+        class="col-6"
+      ></app-text-input>
+      <app-text-input
+        [label]="'Número de documento'"
+        [control]="getControl('documentNumber')"
+        [type]="'number'"
+        class="col-6"
+      ></app-text-input>
+      <app-text-input
+        [label]="'Nombres y Apellidos'"
+        [control]="getControl('companyName')"
+        [type]="'text'"
+        class="col-6"
+      ></app-text-input>
+      <app-text-input
+        [label]="'Dirección'"
+        [control]="getControl('address')"
+        [type]="'text'"
+        class="col-6"
+      ></app-text-input>
+      <app-text-input
+        [label]="'Email'"
+        [control]="getControl('email')"
+        [type]="'email'"
+        class="col-6"
+      ></app-text-input>
     </div>
-  }
-  <div class="row">
-    <app-text-input
-      [label]="'Tipo de persona'"
-      [control]="getControl('personType')"
-      [type]="'text'"
-      class="col-6"
-    ></app-text-input>
-    <app-text-input
-      [label]="'Tipo de documento'"
-      [control]="getControl('documentType')"
-      [type]="'text'"
-      class="col-6"
-    ></app-text-input>
-    <app-text-input
-      [label]="'Número de documento'"
-      [control]="getControl('documentNumber')"
-      [type]="'number'"
-      class="col-6"
-    ></app-text-input>
-    <app-text-input
-      [label]="'Nombres y Apellidos'"
-      [control]="getControl('companyName')"
-      [type]="'text'"
-      class="col-6"
-    ></app-text-input>
-    <app-text-input
-      [label]="'Dirección'"
-      [control]="getControl('address')"
-      [type]="'text'"
-      class="col-6"
-    ></app-text-input>
-    <app-text-input
-      [label]="'Email'"
-      [control]="getControl('email')"
-      [type]="'email'"
-      class="col-6"
-    ></app-text-input>
-  </div>
-  <app-subtitle [subtitle]="'DOCUMENTOS PRECARGADOS'"></app-subtitle>
-  <p><b>RUT</b> <a>  Ver aquí</a></p>
-  <br><p>¿Desea actualizar el documento? <a class="green-anchor">click aquí</a></p>
-  @for(oc of vendorInfo.selectedOrders; track vendorInfo.selectedOrders.id) {
-    <br><p><b>{{oc.consecutive_codes}}</b>  <a>Ver aquí</a></p>
-  }
-  <app-subtitle [subtitle]="'Documentos solicitados'"></app-subtitle>
-  <label>Factura Electrónica*</label>
-  <app-filebox [control]="getControl('electronicInvoice')"></app-filebox>
-  <label>Seguridad Social*</label>
-  <app-filebox [control]="getControl('socialSecurity')"></app-filebox>
-  <label>Planilla seguridad Social con Riesgo Laboral del Empleado</label>
-  <app-filebox [control]="getControl('taxAuditorCertificate')"></app-filebox>
-  <label>Certificado ARL / Contratista con Vinculación*</label>
-  <app-filebox [control]="getControl('arlCertificate')"></app-filebox>
-  @for(anexo of getOtherAnexesControls(); track $index) {
-    <label>Anexo {{$index + 1}}*</label>
-    <app-filebox [control]="anexo"></app-filebox>
-  }
-  <a (click)="addNewAnexFormGroup()">+ Agregar anexo</a>
-
-  <div class="row margin-top padding-bottom">
-    <button class="col-12 btn-purpple margin-top" type="submit">Finalizar</button>
-  </div>
-</form>
+    <app-subtitle [subtitle]="'DOCUMENTOS PRECARGADOS'"></app-subtitle>
+    <p><b>RUT</b> <a>  Ver aquí</a></p>
+    <br><p>¿Desea actualizar el documento? <a class="green-anchor">click aquí</a></p>
+    @for(oc of vendorInfo.selectedOrders; track vendorInfo.selectedOrders.id) {
+      <br><p><b>{{oc.consecutive_codes}}</b>  <a>Ver aquí</a></p>
+    }
+    <app-subtitle [subtitle]="'Documentos solicitados'"></app-subtitle>
+    <label>Factura Electrónica*</label>
+    <app-filebox [control]="getControl('electronicInvoice')"></app-filebox>
+    <label>Seguridad Social*</label>
+    <app-filebox [control]="getControl('socialSecurity')"></app-filebox>
+    <label>Planilla seguridad Social con Riesgo Laboral del Empleado</label>
+    <app-filebox [control]="getControl('taxAuditorCertificate')"></app-filebox>
+    <label>Certificado ARL / Contratista con Vinculación*</label>
+    <app-filebox [control]="getControl('arlCertificate')"></app-filebox>
+    @for(anexo of getOtherAnexesControls(); track $index) {
+      <label>Anexo {{$index + 1}}*</label>
+      <app-filebox [control]="anexo"></app-filebox>
+    }
+    <a (click)="addNewAnexFormGroup()">+ Agregar anexo</a>
+  
+    <div class="row margin-top padding-bottom">
+      <button class="col-12 btn-purpple margin-top" type="submit">Finalizar</button>
+    </div>
+  </form>
+}

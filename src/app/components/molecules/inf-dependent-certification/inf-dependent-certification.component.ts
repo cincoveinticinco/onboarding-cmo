@@ -8,7 +8,7 @@ import { FileboxComponent } from '../../atoms/filebox/filebox.component';
 import { InvoiceLodgingService } from '../../../services/invoiceLodging.service';
 
 @Component({
-  selector: 'app-inf-dependant-certification',
+  selector: 'app-inf-dependent-certification',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -18,11 +18,11 @@ import { InvoiceLodgingService } from '../../../services/invoiceLodging.service'
     CheckboxInputComponent,
     FileboxComponent
   ],
-  templateUrl: './inf-dependant-certification.component.html',
-  styleUrl: './inf-dependant-certification.component.css'
+  templateUrl: './inf-dependent-certification.component.html',
+  styleUrl: './inf-dependent-certification.component.css'
 })
-export class InfDependantCertificationComponent {
-  @Input() dependantForm!: FormGroup;
+export class InfdependentCertificationComponent {
+  @Input() dependentForm!: FormGroup;
   @Input() loading: boolean = false;
   @Input() dependentIndex: number = 0;
   documentTypesOptions: any = [];
@@ -41,10 +41,10 @@ export class InfDependantCertificationComponent {
   }
 
   getControl(controlName: string) {
-    return this.dependantForm.get(controlName) as FormControl
+    return this.dependentForm.get(controlName) as FormControl
   }
 
   getValue(controlName: string) {
-    return this.dependantForm.get(controlName)?.value;
+    return this.dependentForm.get(controlName)?.value;
   }
 }

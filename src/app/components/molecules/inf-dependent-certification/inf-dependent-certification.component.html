@@ -1,35 +1,35 @@
-<form [formGroup]="dependantForm" [id]="dependentIndex">
+<form [formGroup]="dependentForm" [id]="dependentIndex">
   <app-subtitle [subtitle]="'ANEXO 1. CERTIFICACIÓN DE DEPENDIENTE #' + dependentIndex"></app-subtitle>
   <p>Bajo la gravedad del juramento, y en cumplimiento de lo previsto en el Artículo 387 del Estatuto Tributario, informo que la(s) persona(s) relacionadas a continuación tiene(n) la calidad de dependiente a mi cargo:</p>
   <div class="row">
     <app-select-input
       [label]="'Tipo de documento'"
-      [control]="getControl('dependantDocumentTypeId')"
+      [control]="getControl('dependentDocumentTypeId')"
       [options]="documentTypesOptions"
       [optionName]="'documentTypeEsp'"
       [optionValue]="'id'"
       class="col-6"
-      [id]="'dependantDocumentTypeId-' + dependentIndex"
+      [id]="'dependentDocumentTypeId-' + dependentIndex"
     ></app-select-input>
     <app-text-input
       [label]="'Número de documento'"
-      [control]="getControl('dependantDocumentNumber')"
+      [control]="getControl('dependentDocumentNumber')"
       [type]="'number'"
       class="col-6"
-      [id]="'dependantDocumentNumber-' + dependentIndex"
+      [id]="'dependentDocumentNumber-' + dependentIndex"
     ></app-text-input>
     <app-text-input
       [label]="'Nombres y Apellidos'"
-      [control]="getControl('dependantFullName')"
+      [control]="getControl('dependentFullName')"
       [type]="'text'"
-      [id]="'dependantFullName-' + dependentIndex"
+      [id]="'dependentFullName-' + dependentIndex"
       class="col-6"
     ></app-text-input>
     <app-text-input
       [label]="'Parentesco'"
-      [control]="getControl('dependantKinship')"
+      [control]="getControl('dependentKinship')"
       [type]="'text'"
-      [id]="'dependantKinship-' + dependentIndex"
+      [id]="'dependentKinship-' + dependentIndex"
       class="col-6"
     ></app-text-input>
   </div>

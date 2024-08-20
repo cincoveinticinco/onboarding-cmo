@@ -5,13 +5,13 @@ import { TextInputComponent } from '../../atoms/text-input/text-input.component'
 import { CheckboxInputComponent } from '../../atoms/checkbox-input/checkbox-input.component';
 import { FileboxComponent } from '../../atoms/filebox/filebox.component';
 import { ElectronicSignatureAuthComponent } from '../electronic-signature-auth/electronic-signature-auth.component';
-import { InfDependantCertificationComponent } from '../inf-dependant-certification/inf-dependant-certification.component';
+import { InfdependentCertificationComponent } from '../inf-dependent-certification/inf-dependent-certification.component';
 
-export interface DependantForm {
-  dependantDocumentTypeId: number;
-  dependantDocumentNumber: number;
-  dependantFullName: string;
-  dependantKinship: string;
+export interface DependentForm {
+  dependentDocumentTypeId: number;
+  dependentDocumentNumber: number;
+  dependentFullName: string;
+  dependentKinship: string;
   decreaseInTaxBase: boolean;
   minorChildredn: boolean;
   minorChildrenFile: string;
@@ -36,7 +36,7 @@ export interface DependantForm {
     SubtitleComponent,
     FileboxComponent,
     ElectronicSignatureAuthComponent,
-    InfDependantCertificationComponent
+    InfdependentCertificationComponent
   ],
   templateUrl: './inf-step-two.component.html',
   styleUrl: './inf-step-two.component.css'
@@ -56,7 +56,7 @@ export class InfStepTwoComponent {
     this.scrollToTop();
     const thereAreDependents = this.getValue('dependentsInfo')?.length > 0;
     if(thereAreDependents) {
-      this.goToDependantsForm();
+      this.goToDependentsForm();
     }
   }
 
@@ -80,7 +80,7 @@ export class InfStepTwoComponent {
     return this.invoiceNaturalForm?.get(controlName)?.value;
   }
 
-  goToDependantsForm() {
+  goToDependentsForm() {
     this.renderDependentsForm = true;
     if(this.getDependents().length === 0) {
       this.addNewDependentFormGroup();
@@ -98,7 +98,7 @@ export class InfStepTwoComponent {
     if (!this.renderDependentsForm) {
       const { isValid, firstInvalidControl } = this.validateStep();
       if (isValid) {
-        this.goToDependantsForm();
+        this.goToDependentsForm();
       } else {
         this.scrollToError(firstInvalidControl);
       }
@@ -117,10 +117,10 @@ export class InfStepTwoComponent {
 
   addNewDependentFormGroup() {
     const newDependentForm = this.formBuilder.group({
-      dependantDocumentTypeId: ['', [Validators.required]],
-      dependantDocumentNumber: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
-      dependantFullName: ['', [Validators.required]],
-      dependantKinship: ['', [Validators.required]],
+      dependentDocumentTypeId: ['', [Validators.required]],
+      dependentDocumentNumber: ['', [Validators.required, Validators.pattern('^[0-9]*$')]],
+      dependentFullName: ['', [Validators.required]],
+      dependentKinship: ['', [Validators.required]],
       decreaseInTaxBase: [false, [Validators.required]],
       minorChildren: [false, [Validators.required]],
       minorChildrenFile: [''],

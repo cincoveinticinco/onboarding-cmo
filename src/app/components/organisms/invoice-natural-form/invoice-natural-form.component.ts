@@ -294,53 +294,76 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
     return { isValid, firstInvalidControl };
   }
 
+  cancelLoading() {
+    this.loading = false
+  }
+
 
   async nextStep(): Promise<void> {
-    console.log('Form sent', this.globalService.setInvoiceNaturalForm(this.invoiceNaturalForm.value, this.vendorInfo.id));
+    console.log('Form sent', this.globalService.setOcForm(this.invoiceNaturalForm.value, this.vendorInfo.id));
+  
     if (this.currentStep === 1) {
+      this.loading = true;
       const { isValid, firstInvalidControl } = this.validateStepOne();
       if (isValid) {
         this.handleStepChange.emit('next');
       } else if (firstInvalidControl) {
         this.scrollToError(firstInvalidControl);
       }
+      this.loading = false;
     } else if (this.currentStep === 2) {
+      this.loading = true;
       const { isValid, firstInvalidControl } = this.validateStepTwo();
       if (isValid) {
-        const filesToUploadStepTwo = ['medicalPrepaidFile', 'housingCreditFile', 'afcContributionsFile', 'voluntaryPensionContributionsFile'];
         try {
-          await this.uploadFiles(filesToUploadStepTwo);
-          const dependentsInfo = this.invoiceNaturalForm.get('dependentsInfo') as FormArray;
-          dependentsInfo.controls.forEach((control: any) => {
-            const filesToUpload = ['minorChildrenFile', 'childrenStudyCertificateFile', 'childrenMedicineCertificateFile', 'partnerMedicineCertificateFile', 'familyMedicineCertificateFile'];
-            this.uploadFilesFromFormGroup(control, filesToUpload);
-          })
+          await this.uploadFilesForStepTwo();
           this.loading = false;
           this.handleStepChange.emit('next');
         } catch (error) {
           console.error('Error uploading files:', error);
-          // Manejar el error según sea necesario
+          this.loading = false;
         }
       } else if (firstInvalidControl) {
         this.scrollToError(firstInvalidControl);
+        this.loading = false;
       }
     } else if (this.currentStep === 3) {
+      this.loading = true;
       const { isValid, firstInvalidControl } = this.validateStepThree();
       if (isValid) {
-        const filesToUploadStepthree = ['socialSecurity'];
-        const anexesArray = this.invoiceNaturalForm.get('otherAnexes') as FormArray;
         try {
-          await this.uploadFilesFromArrayOfControls(anexesArray);
-          await this.uploadFiles(filesToUploadStepthree);
-          this.saveForm.emit(this.invoiceNaturalForm.value);
-          this.loading = false;
+          await this.uploadFilesForStepThree();
+          this.saveForm.emit({
+            form: this.invoiceNaturalForm.value,
+            cancelLoading: this.cancelLoading
+          });
         } catch (error) {
           console.error('Error uploading files:', error);
         }
+        this.loading = false;
       } else if (firstInvalidControl) {
         this.scrollToError(firstInvalidControl);
+        this.loading = false;
       }
     }
+  }
+  
+  async uploadFilesForStepTwo(): Promise<void> {
+    const filesToUploadStepTwo = ['medicalPrepaidFile', 'housingCreditFile', 'afcContributionsFile', 'voluntaryPensionContributionsFile'];
+    await this.uploadFiles(filesToUploadStepTwo);
+  
+    const dependentsInfo = this.invoiceNaturalForm.get('dependentsInfo') as FormArray;
+    await Promise.all(dependentsInfo.controls.map(async (control: any) => {
+      const filesToUpload = ['minorChildrenFile', 'childrenStudyCertificateFile', 'childrenMedicineCertificateFile', 'partnerMedicineCertificateFile', 'familyMedicineCertificateFile'];
+      await this.uploadFilesFromFormGroup(control, filesToUpload);
+    }));
+  }
+  
+  async uploadFilesForStepThree(): Promise<void> {
+    const filesToUploadStepthree = ['socialSecurity'];
+    const anexesArray = this.invoiceNaturalForm.get('otherAnexes') as FormArray;
+    await this.uploadFilesFromArrayOfControls(anexesArray);
+    await this.uploadFiles(filesToUploadStepthree);
   }
 
   scrollToError(controlName: string): void {
@@ -376,7 +399,7 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
           catchError(() => {
             if (environment?.stage != 'local') {
               control.setValue(null, { emitEvent: false });
-              this.loading = false;
+        
               this.globalService.openSnackBar('Fallo al guardar el documento, intente de nuevo', '', 5000);
               return throwError(() => new Error('Error al obtener la URL de subida.'));
             } else {
@@ -407,7 +430,6 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
               catchError(() => {
                 if (environment?.stage != 'local') {
                   control.setValue(null, { emitEvent: false });
-                  this.loading = false;
                   this.globalService.openSnackBar('Fallo al guardar el documento, intente de nuevo', '', 5000);
                   return throwError(() => new Error('Error al subir el archivo.'));
                 } else {
@@ -434,7 +456,6 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
   }
 
   async uploadFilesFromArrayOfControls(controlArray: FormArray): Promise<void> {
-    this.loading = true;
     const uploadPromises = controlArray.controls.map((control: any) => {
       return new Promise<void>((resolve) => {
         const file = control.value.file;
@@ -453,7 +474,6 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
   }
 
   async uploadFilesFromFormGroup(form: FormGroup, filesControls: string[]): Promise<void> {
-    this.loading = true;
     const uploadPromises = filesControls.map((controlName: string) => {
       return new Promise<void>((resolve) => {
         const control = form.get(controlName);
@@ -472,11 +492,9 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
     });
   
     await Promise.all(uploadPromises);
-    this.loading = false;
   }
 
   async uploadFiles(controlNames: string[]): Promise<void> {
-    this.loading = true;
     const uploadPromises = controlNames.map((controlName: string) => {
       return new Promise<void>((resolve) => {
         const control = this.getControl(controlName);
