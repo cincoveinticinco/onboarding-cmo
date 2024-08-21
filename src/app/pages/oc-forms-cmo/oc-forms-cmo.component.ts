@@ -62,8 +62,10 @@ export class OcFormsCmoComponent implements OnInit {
         this.registerCode = response.registerCode;
         this.loading = false;
       },
-      () => {
-        this.authService.logOut();
+      (error) => {
+        if(error && error.status === 401) {
+          this.authService.logOut();
+        }
       }
     );
   }

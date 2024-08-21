@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { VendorService } from './vendor.service';
-import { Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { InfoAdditionalTypes, OcFileTypes } from '../shared/interfaces/files_types';
 import { OcNaturalParams } from '../shared/interfaces/natural_params_form.interface';
@@ -335,6 +335,72 @@ export class GlobalService {
     form.get('bankBranch')?.setValue(data?.bankBranch || '');
     form.get('bankKey')?.setValue(data?.bankKey || '');
     form.get('bankAccountType')?.setValue(data?.bankAccountType || '');
+    form.get('signature')?.setValue(data?.signature || '');
+    form.get('signatureTwo')?.setValue(data?.signature || '');
+    form.get('phone')?.setValue(data?.telephone || '');
+    form.get('institutionalEmail')?.setValue(data?.institutionalEmail || '');
+
+    console.log(data?.vendorDocuments, '/////////////////////////777');
+    data?.vendorDocuments?.forEach((doc: any) => {
+      switch(doc.f_vendor_document_type_id) {
+        case OcFileTypes.SOCIAL_SECURITY:
+          console.log(doc.link, '/////////////////////////888****');
+          form.get('socialSecurity')?.setValue(this.getDocumentLinkOc(doc.link));
+          console.log(form.get('socialSecurity')?.value, '/////////////////////////999');
+          break;
+        case OcFileTypes.ELECTRONIC_INVOICE:
+          form.get('electronicInvoice')?.setValue(this.getDocumentLinkOc(doc.link));
+          break;
+        case OcFileTypes.TAX_AUDITOR_CERTIFICATE:
+          form.get('taxAuditorCertificate')?.setValue(this.getDocumentLinkOc(doc.link));
+          break;
+        case OcFileTypes.ARL_CERTIFICATE:
+          form.get('arlCertificate')?.setValue(this.getDocumentLinkOc(doc.link));
+          break;
+        case OcFileTypes.ANEXO:
+          form.get('otherAnexes')?.push(new FormControl(this.getDocumentLinkOc(doc.link)));
+          break;
+      }
+    })
+
+    data?.infoAdditional?.forEach((info: any) => {
+      switch(info.f_vendor_inf_add_type_id) {
+        case InfoAdditionalTypes.INCOME_TAX_RETURN:
+          form.get('incomeTaxReturn')?.setValue(info.value ? '1' : '0');
+          break;
+        case InfoAdditionalTypes.EXCEEDS_INCOME:
+          form.get('exceedsIncome')?.setValue(info.value ? '1' : '0');
+          break;
+        case InfoAdditionalTypes.TAX_CONDITION:
+          form.get('taxCondition')?.setValue(info.value ? '1' : '0');
+          break;
+        case InfoAdditionalTypes.MEDICAL_PREPAID:
+          form.get('medicalPrepaid')?.setValue(info.value ? '1' : '0');
+          form.get('medicalPrepaidFile')?.setValue(this.getDocumentLinkOc(info.document));
+          break;
+        case InfoAdditionalTypes.HOUSING_CREDIT:
+          form.get('housingCredit')?.setValue(info.value ? '1' : '0');
+          form.get('housingCreditFile')?.setValue(this.getDocumentLinkOc(info.document));
+          break;
+        case InfoAdditionalTypes.AFC_CONTRIBUTIONS:
+          form.get('afcContributions')?.setValue(info.value ? '1' : '0');
+          form.get('afcContributionsFile')?.setValue(this.getDocumentLinkOc(info.document));
+          break;
+        case InfoAdditionalTypes.VOLUNTARY_PENSION_CONTRIBUTIONS:
+          form.get('voluntaryPensionContributions')?.setValue(info.value ? '1' : '0');
+          form.get('voluntaryPensionContributionsFile')?.setValue(this.getDocumentLinkOc(info.document));
+          break;
+        case InfoAdditionalTypes.DEPENDENTS:
+          form.get('dependents')?.setValue(info.value ? '1' : '0');
+          break;
+      }
+    });
+    console.log(form, '/////////////////////////777');
+  }
+
+  getDocumentLinkOc(url: string) {
+    console.log(url, '/////////////////////////888');
+    return url ? { name: url, url: url } : null;
   }
 
   fillInitialInvoiceJuridicaForm(form: any, data: any) {
@@ -352,11 +418,17 @@ export class GlobalService {
     const params: any = {
       consecutive_number: registerNumber,
       sign_text: formValue?.signature,
-      po_vendor: formValue?.orderIds,
+      selected_orders: formValue?.orderIds,
       f_vendor_id: vendorId,
       telephone: formValue?.phone,
       institutional_email: formValue?.institutionalEmail,
       vendor_documents: [],
+      afc_entity: formValue?.afcContributionsEntity,
+      afc_account_number: formValue?.afcContributionsAccountNumber,
+      afc_value: formValue?.afcContributionsValue,
+      voluntary_pension_entity: formValue?.voluntaryPensionContributionsEntity,
+      voluntary_pension_account_number: formValue?.voluntaryPensionContributionsAccountNumber,
+      voluntary_pension_value: formValue?.voluntaryPensionContributionsValue,
       info_additional: [
         {
           info_additional_type_id: InfoAdditionalTypes.INCOME_TAX_RETURN,
@@ -372,6 +444,11 @@ export class GlobalService {
           info_additional_type_id: InfoAdditionalTypes.TAX_CONDITION,
           value: formValue?.taxCondition,
           description: 'Tax Condition'
+        },
+        {
+          info_additional_type_id: InfoAdditionalTypes.DEPENDENTS,
+          value: formValue?.dependents,
+          description: 'Dependents'
         },
         {
           info_additional_type_id: InfoAdditionalTypes.MEDICAL_PREPAID,
@@ -434,7 +511,7 @@ export class GlobalService {
             description: 'Family Medicine Certificate',
             document: dependent?.familyMedicineCertificateFile?.url
           }
-        ]
+        ],
       }))
     };
 

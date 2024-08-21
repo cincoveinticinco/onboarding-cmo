@@ -40,8 +40,11 @@ export class InfStepOneComponent {
   constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit() {
-    this.availableOptions[`${this.getOrderIds().length - 1}`] = this.selectOptionsPo;
+    this.getOrderIds().controls.forEach((control, index) => {
+      this.availableOptions[index] = this.selectOptionsPo;
+    })
     this.getProjectionsForSelectedOrders();
+    console.log(this.invoiceNaturalForm.value)
   }
 
   getControl(controlName: string) {

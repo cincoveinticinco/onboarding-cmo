@@ -107,10 +107,20 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
     this.disabledControls.forEach(control => {
       this.invoiceNaturalForm.get(control)?.disable();
     });
-    this.selectedPurchaseOrders?.forEach((po: PurchaseOrders, index: number) => {
-      this.addPurchaseOrderControl();
-      this.fillPurchaseOrderControl(index, po.id);
-    });
+    if(this.purchaseOrders && this.purchaseOrders.length > 0){
+      this.initializeForm();
+    }
+  }
+
+  initializeForm() {
+    console.log('Selected POs', this.selectedPurchaseOrders);
+    if (this.selectedPurchaseOrders && this.selectedPurchaseOrders.length > 0) {
+      this.selectedPurchaseOrders.forEach((po: PurchaseOrders, index: number) => {
+        this.addOrderId();
+        this.updateFormattedOcOptions();
+        this.fillPurchaseOrderControl(index, po.id);
+      });
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -126,12 +136,15 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
   }
 
   updateFormattedOcOptions(): void {
-    const selectedOrderIds = this.getOrderIds().value;
-    const availablePurchaseOrders = this.purchaseOrders?.filter(
-      (po: PurchaseOrders) => !selectedOrderIds.includes(po.id)
-    ) || [];
-    this.formattedOcOptions = this.getFormattedOcOptions(availablePurchaseOrders);
-    console.log('Formatted options', this.formattedOcOptions);
+    if(this.getValue('orderIds').length === 0) {
+      this.formattedOcOptions = this.getFormattedOcOptions(this.purchaseOrders);
+    } else {
+      const selectedOrderIds = this.getOrderIds().value;
+      const availablePurchaseOrders = this.purchaseOrders?.filter(
+        (po: PurchaseOrders) => !selectedOrderIds.includes(po.id)
+      );
+      this.formattedOcOptions = this.getFormattedOcOptions(availablePurchaseOrders);
+    }
   }
 
   addOrderId(): void {
@@ -143,11 +156,13 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
   }
 
   getFormattedOcOptions(purchaseOrders: any): SelectOption[] {
+    console.log('Purchase orderssssss', purchaseOrders);
     const formattedPo = purchaseOrders.map((order: any) => ({
       optionValue: parseInt(order.id),
       optionName: order.consecutiveCodes
-    })) || [];
-
+    }));
+    console.log('Purchase orders', purchaseOrders);
+    console.log('Formatted PO', formattedPo);
     return formattedPo;
   }
 
@@ -169,6 +184,7 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
   }
 
   fillPurchaseOrderControl(index: number, value: number): void {
+    console.log('Filling purchase order control', index, value);
     this.getOrderIds().at(index).setValue(value.toString());
   }
 
@@ -319,8 +335,7 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
           await this.uploadFilesForStepTwo();
           this.loading = false;
           this.handleStepChange.emit('next');
-        } catch (error) {
-          console.error('Error uploading files:', error);
+        } finally {
           this.loading = false;
         }
       } else if (firstInvalidControl) {
@@ -443,8 +458,10 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
           tap((result: any) => {
             console.log('File processed successfully:', result);
             const url = result?.url || `${vendorId}/${nameFile}`;
-            const previousValue = control.value;
-            control.setValue({ ...previousValue, url });
+            control.setValue({
+              name: value.name,
+              url,
+            });
             console.log(this.invoiceNaturalForm, 'TEST CONTROL');
           })
         );
@@ -458,7 +475,7 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
   async uploadFilesFromArrayOfControls(controlArray: FormArray): Promise<void> {
     const uploadPromises = controlArray.controls.map((control: any) => {
       return new Promise<void>((resolve) => {
-        const file = control.value.file;
+        const file = control.value;
         if (file) {
           this.submitFile({ value: file, formControl: control }).subscribe(
             () => resolve(),
@@ -477,8 +494,8 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
     const uploadPromises = filesControls.map((controlName: string) => {
       return new Promise<void>((resolve) => {
         const control = form.get(controlName);
-        if (control && control.value && control.value.file) {
-          this.submitFile({ value: control.value.file, formControl: control as FormControl }).subscribe(
+        if (control && control.value && control.value) {
+          this.submitFile({ value: control.value, formControl: control as FormControl }).subscribe(
             () => resolve(),
             (error) => {
               console.error(`Error uploading file for ${controlName}:`, error);
@@ -498,7 +515,7 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
     const uploadPromises = controlNames.map((controlName: string) => {
       return new Promise<void>((resolve) => {
         const control = this.getControl(controlName);
-        const file = control.value.file;
+        const file = control.value;
         if (file) {
           this.submitFile({ value: file, formControl: control }).subscribe(
             () => resolve(),
