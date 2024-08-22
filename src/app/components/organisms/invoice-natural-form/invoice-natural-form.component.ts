@@ -410,6 +410,12 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
     } else {
       const nameFile = this.globalService.normalizeString(value.name);
       if (vendorId) {
+        // Verificar si ya existe una URL precargada
+        const existingUrl = control.value?.url;
+        if (existingUrl) {
+          console.log('URL already preloaded:', existingUrl);
+          return of({ url: existingUrl });
+        }
         return this.ilService.getPresignedPutURLOc(nameFile, vendorId).pipe(
           catchError(() => {
             if (environment?.stage != 'local') {
