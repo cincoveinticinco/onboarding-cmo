@@ -101,6 +101,17 @@ export class InvoiceLodgingService {
     });
   }
 
+  radicateVendorRegister(register_id: string) {
+    this.setHeaders();
+    const params = {
+      register_id
+    }
+    return this.http.post(`${environment.apiUrl}cmo/radicate_vendor_register`, params, {
+      headers: this.headers
+    });
+
+  }
+
   updateRegisterVendor(formParams: OcNaturalParams) {
     this.setHeaders();
     const params = formParams;

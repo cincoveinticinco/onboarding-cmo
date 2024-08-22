@@ -4,6 +4,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { InfoAdditionalTypes, OcFileTypes } from '../shared/interfaces/files_types';
 import { OcNaturalParams } from '../shared/interfaces/natural_params_form.interface';
+import { info } from 'node:console';
 
 @Injectable({
   providedIn: 'root'
@@ -340,13 +341,10 @@ export class GlobalService {
     form.get('phone')?.setValue(data?.telephone || '');
     form.get('institutionalEmail')?.setValue(data?.institutionalEmail || '');
 
-    console.log(data?.vendorDocuments, '/////////////////////////777');
     data?.vendorDocuments?.forEach((doc: any) => {
       switch(doc.f_vendor_document_type_id) {
         case OcFileTypes.SOCIAL_SECURITY:
-          console.log(doc.link, '/////////////////////////888****');
           form.get('socialSecurity')?.setValue(this.getDocumentLinkOc(doc.link));
-          console.log(form.get('socialSecurity')?.value, '/////////////////////////999');
           break;
         case OcFileTypes.ELECTRONIC_INVOICE:
           form.get('electronicInvoice')?.setValue(this.getDocumentLinkOc(doc.link));
@@ -432,44 +430,52 @@ export class GlobalService {
       info_additional: [
         {
           info_additional_type_id: InfoAdditionalTypes.INCOME_TAX_RETURN,
+          info_additional_document_id: OcFileTypes.INCOME_TAX_RETURN,
           value: formValue?.incomeTaxReturn,
           description: 'Income Tax Return'
         },
         {
           info_additional_type_id: InfoAdditionalTypes.EXCEEDS_INCOME,
+          info_additional_document_id: OcFileTypes.EXCEEDS_INCOME,
           value: formValue?.exceedsIncome,
           description: 'Exceeds Income'
         },
         {
           info_additional_type_id: InfoAdditionalTypes.TAX_CONDITION,
+          info_additional_document_id: OcFileTypes.TAX_CONDITION,
           value: formValue?.taxCondition,
           description: 'Tax Condition'
         },
         {
           info_additional_type_id: InfoAdditionalTypes.DEPENDENTS,
+          info_additional_document_id: OcFileTypes.DEPENDENTS,
           value: formValue?.dependents,
           description: 'Dependents'
         },
         {
           info_additional_type_id: InfoAdditionalTypes.MEDICAL_PREPAID,
+          info_additional_document_id: OcFileTypes.MEDICAL_PREPAID,
           value: formValue?.medicalPrepaid,
           description: 'Medical Prepaid',
           document: formValue?.medicalPrepaidFile?.url
         },
         {
           info_additional_type_id: InfoAdditionalTypes.HOUSING_CREDIT,
+          info_additional_document_id: OcFileTypes.HOUSING_CREDIT,
           value: formValue?.housingCredit,
           description: 'Housing Credit',
           document: formValue?.housingCreditFile?.url
         },
         {
           info_additional_type_id: InfoAdditionalTypes.AFC_CONTRIBUTIONS,
+          info_additional_document_id: OcFileTypes.AFC_CONTRIBUTIONS,
           value: formValue?.afcContributions,
           description: 'AFC Contributions',
           document: formValue?.afcContributionsFile?.url
         },
         {
           info_additional_type_id: InfoAdditionalTypes.VOLUNTARY_PENSION_CONTRIBUTIONS,
+          info_additional_document_id: OcFileTypes.VOLUNTARY_PENSION_CONTRIBUTIONS,
           value: formValue?.voluntaryPensionContributions,
           description: 'Voluntary Pension Contributions',
           document: formValue?.voluntaryPensionContributionsFile?.url
@@ -483,30 +489,35 @@ export class GlobalService {
         infoAdditional: [
           {
             info_additional_type_id: InfoAdditionalTypes.MINOR_CHILDREN,
+            info_additional_document_id: OcFileTypes.MINOR_CHILDREN,
             value: dependent?.minorChildren,
             description: 'Minor Children',
             document: dependent?.minorChildrenFile?.url
           },
           {
             info_additional_type_id: InfoAdditionalTypes.CHILDREN_STUDY_CERTIFICATE,
+            info_additional_document_id: OcFileTypes.CHILDREN_STUDY_CERTIFICATE,
             value: dependent?.childrenStudyCertificate,
             description: 'Children Study Certificate',
             document: dependent?.childrenStudyCertificateFile?.url
           },
           {
             info_additional_type_id: InfoAdditionalTypes.CHILDREN_MEDICINE_CERTIFICATE,
+            info_additional_document_id: OcFileTypes.CHILDREN_MEDICINE_CERTIFICATE,
             value: dependent?.childrenMedicineCertificate,
             description: 'Children Medicine Certificate',
             document: dependent?.childrenMedicineCertificateFile?.url
           },
           {
             info_additional_type_id: InfoAdditionalTypes.PARTNER_MEDICINE_CERTIFICATE,
+            info_additional_document_id: OcFileTypes.PARTNER_MEDICINE_CERTIFICATE,
             value: dependent?.partnerMedicineCertificate,
             description: 'Partner Medicine Certificate',
             document: dependent?.partnerMedicineCertificateFile?.url
           },
           {
             info_additional_type_id: InfoAdditionalTypes.FAMILY_MEDICINE_CERTIFICATE,
+            info_additional_document_id: OcFileTypes.FAMILY_MEDICINE_CERTIFICATE,
             value: dependent?.familyMedicineCertificate,
             description: 'Family Medicine Certificate',
             document: dependent?.familyMedicineCertificateFile?.url

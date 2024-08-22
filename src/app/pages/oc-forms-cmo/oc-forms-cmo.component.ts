@@ -8,6 +8,7 @@ import { InvoiceLodgingService } from '../../services/invoiceLodging.service';
 import { TIPOPERSONA } from '../../shared/interfaces/typo_persona';
 import { InvoiceJuridicaFormComponent } from '../../components/organisms/invoice-juridica-form/invoice-juridica-form.component';
 import { GlobalService } from '../../services/global.service';
+import { REGISTER_STATUSES } from '../../shared/interfaces/register_types';
 
 export interface PurchaseOrders {
   id: number,
@@ -32,6 +33,8 @@ export class OcFormsCmoComponent implements OnInit {
   purchaseOrdersProjections: any[] = [];
   PERSON_TYPES = TIPOPERSONA;
   registerCode: string | null = null;
+  registerStatus: number | undefined;
+  REGISTER_STATUSES = REGISTER_STATUSES;
 
   constructor(
     private authService: AuthOcService, 
@@ -50,6 +53,16 @@ export class OcFormsCmoComponent implements OnInit {
     });
   }
 
+  redirectWhenRadicated(): void {
+    if(this.registerStatus === REGISTER_STATUSES.RADICADO) {
+      this.router.navigate(['/oc-forms-cmo/success/' + this.registerCode], {
+        state: { radicado: this.registerCode }
+      });
+    } else{
+      return;
+    }
+  }
+
   private loadFormInitialData(): void {
     this.loading = true;
     this.invoiceLodgingService.getFormInitialData().subscribe(
@@ -60,6 +73,8 @@ export class OcFormsCmoComponent implements OnInit {
         this.selectedPurchaseOrders = response.selectedOrders;
         this.purchaseOrdersProjections = response.poProjections;
         this.registerCode = response.registerCode;
+        this.registerStatus = response.fRegisterStatusId;
+        this.redirectWhenRadicated();
         this.loading = false;
       },
       (error) => {

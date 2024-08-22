@@ -1,0 +1,5 @@
+export enum REGISTER_STATUSES{
+  RADICADO = 1,
+  APROBADO = 2,
+  RECHAZADO = 3,
+}
