@@ -119,6 +119,5 @@ export class InvoiceLodgingService {
     return this.http.post(`${environment.apiUrl}cmo/update_register`, params, {
       headers: this.headers
     });
-    
   }
 }
