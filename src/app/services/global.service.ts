@@ -71,6 +71,10 @@ export class GlobalService {
       form_responsible_document: data[('form_responsible_document')] || data[('document')],
       form_responsible_position: data[('form_responsible_position')],
       cv_link: data['cv_link'],
+      responsible_responsibles_name: data['responsible_responsibles_name'],
+      responsible_responsibles_document: data['responsible_responsibles_document'],
+      responsible_responsibles_email: data['responsible_responsibles_email'],
+      responsible_f_document_type_id: data['responsible_f_document_type_id'],
       info_additional: [
         {
           info_additional_type_id: 110,
@@ -212,6 +216,10 @@ export class GlobalService {
     form.get('form_responsible_position')?.setValue(data?.form_responsible_position || '');
     form.get('signature')?.setValue(this.getDocumentLink(324), { emitEvent: false });
     form.get('cv_link')?.setValue(data?.cv_link || '');
+    form.get('responsible_responsibles_name')?.setValue(data?.responsible_name || '');
+    form.get('responsible_responsibles_document')?.setValue(data?.responsible_document || null);
+    form.get('responsible_responsibles_email')?.setValue(data?.responsible_email || '');
+    form.get('responsible_f_document_type_id')?.setValue(data?.responsible_f_document_type_id || null);
 
     // Setting additional info
     const info_additional = data?.info_additional;

@@ -24,6 +24,7 @@ import { file_types } from '../../../shared/interfaces/files_types';
 import { Subscription } from 'rxjs';
 import { AdditionalInfoComponent } from '../../molecules/additional-info/additional-info.component';
 import { AUTOCOMPLETE_CONTROLS } from '../../../shared/interfaces/autocomplete_controls';
+import { ServiceProviderDataComponent } from "../../molecules/service-provider-data/service-provider-data.component";
 
 @Component({
   selector: 'app-vinculacion-juridica',
@@ -50,7 +51,8 @@ import { AUTOCOMPLETE_CONTROLS } from '../../../shared/interfaces/autocomplete_c
     PersonaDiligenciaFormularioComponent,
     PanelButtonsComponent,
     AdditionalInfoComponent,
-  ],
+    ServiceProviderDataComponent
+],
   templateUrl: './vinculacion-juridica.component.html',
   styleUrls: ['./vinculacion-juridica.component.css']
 })
@@ -120,6 +122,10 @@ export class VinculacionJuridicaComponent {
       form_responsible_position: new FormControl('', [Validators.required]),
       signature: new FormControl('', [Validators.required]),
       cv_link: new FormControl(''),
+      responsible_responsibles_name: new FormControl('', [Validators.required]),
+      responsible_responsibles_document: new FormControl('', [Validators.required]),
+      responsible_responsibles_email: new FormControl('', [Validators.required, Validators.email]),
+      responsible_f_document_type_id: new FormControl('', [Validators.required]),
     });
   }
 
