@@ -15,6 +15,7 @@
       [label]="'Número de documento'"
       [control]="getControl('dependentDocumentNumber')"
       [type]="'number'"
+      [pattern]="'^[0-9]+$'"
       class="col-6"
       [id]="'dependentDocumentNumber-' + dependentIndex"
     ></app-text-input>
@@ -62,7 +63,7 @@
     ></app-filebox>
   }
   <app-checkbox-input
-    [label]="'2. Los hijos del contribuyente con edad entre 18 y 23 años, cuando el padre o madre contribuyente persona natural se encuentre financiando su educación en instituciones formales de educación superior certificadas por el ICFES, o la autoridad oficial correspondiente; o en los programas técnicos de educación no formal debidamente acreditados por la autoridad competente. (Certificado de estudio expedido por la institución de educación)'"
+    [label]="'2. Los hijos del contribuyente con edad entre 18 y 25 años, cuando el padre o madre contribuyente persona natural se encuentre financiando su educación en instituciones formales de educación superior certificadas por el ICFES, o la autoridad oficial correspondiente; o en los programas técnicos de educación no formal debidamente acreditados por la autoridad competente. (Certificado de estudio expedido por la institución de educación con vigencia de este año)'"
     [boldLabel]="false"
     [control]="getControl('childrenStudyCertificate')"
     [controlName]="'childrenStudyCertificate'"
@@ -76,7 +77,7 @@
     ></app-filebox>
   }
   <app-checkbox-input
-    [label]="'3. Los hijos del contribuyente mayores de 23 años que se encuentren en situación de dependencia originada en factores físicos o psicológicos que sean certificados por Medicina Legal.'"
+    [label]="'3. Los hijos del contribuyente mayores de dieciocho (18) años que se encuentren en situación de dependencia originada en factores físicos o psicológicos que sean certificados por el Ministerio de Salud y Protecciór Social o la entidad determinada por las normas vigente.'"
     [boldLabel]="false"
     [control]="getControl('childrenMedicineCertificate')"
     [controlName]="'childrenMedicineCertificate'"

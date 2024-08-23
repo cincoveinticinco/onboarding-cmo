@@ -1,6 +1,6 @@
 <form [formGroup]="invoiceNaturalForm" (ngSubmit)="onSubmit()">
   <app-subtitle [subtitle]="'DOCUMENTOS PRECARGADOS'"></app-subtitle>
-  <p><b>Documento Soporte</b> <a>  Ver aquí</a></p>
+  <p><b>Si lo desea, descarga el soporte de radicación </b> <a>  Ver aquí</a></p>
   <br>¿Desea adjuntar otro documento?
   @for(oc of vendorInfo.selectedOrders; track vendorInfo.selectedOrders.id) {
   <br><p><b>{{oc.consecutive_codes}}</b>  <a>Ver aquí</a></p>
@@ -11,13 +11,16 @@
   <br><p>Desea actualizar el documento? <a class="green-anchor">click aquí</a></p>
   <app-subtitle [subtitle]="'Documentos solicitados'"></app-subtitle>
 
-  <label>Seguridad Social*</label>
+  <label>Pago seguridad social mes vigente*</label>
   <app-filebox [control]="getControl('socialSecurity')"></app-filebox>
   @for(anexo of getOtherAnexesControls(); track $index) {
-    <label>Anexo {{$index}}*</label>
+    <label>Otros Anexos*</label>
     <app-filebox [control]="anexo" [id]="'otherAnexes-' + $index"></app-filebox>
   }
   <a (click)="addNewAnexFormGroup()">+ Agregar anexo</a>
+  <p class="col-12 margin-top margin-bottom">
+    <b>*Si no recibe ninguna notificacion del proceso de radicación se entiende que fue exitoso.</b>
+  </p>
   <div class="row margin-top padding-bottom padding-bottom">
     <button mat-raised-button type="button" class="col-6 btn-gray" (click)="handlePreviousStep()">REGRESAR</button>
     <button class="col-6 btn-purpple" type="submit">Finalizar</button>

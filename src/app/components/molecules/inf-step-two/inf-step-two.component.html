@@ -23,14 +23,16 @@
         <app-text-input
           label="Número de Documento"
           [control]="getControl('documentNumber')"
-          type="text"
+          [pattern]="'^[0-9]+$'"
+          type="number"
           class="col-6"
         ></app-text-input>
         
         <app-text-input
           label="Número de Contrato"
           [control]="getControl('contractNumber')"
-          type="text"
+          [pattern]="'^[0-9]+$'"
+          type="number"
           class="col-6"
         ></app-text-input>
         
@@ -139,40 +141,19 @@
         id="dependents"
       ></app-checkbox-input>
     
-      <app-subtitle [subtitle]="'RENTAS EXTRAS'"></app-subtitle>
+      <app-subtitle [subtitle]="'RENTAS EXENTAS'"></app-subtitle>
     
       <app-checkbox-input
-        [label]="'1. Aportes AFC'"
+        [label]="'1. Aportes AFC (Si aplica se debe incluir el pdf de soporte de pago mes anterior)'"
         [control]="getControl('afcContributions')"
         [controlName]="'afcContributions'"
-        [controlersWhenTrue]="['afcContributionsEntity', 'afcContributionsAccountNumber', 'afcContributionsValue', 'afcContributionsFile']"
+        [controlersWhenTrue]="['afcContributionsFile']"
         [form]="invoiceNaturalForm"
         [boldLabel]="false"
       ></app-checkbox-input>
       
       @if(getValue('afcContributions') === '1') {
         <div class="row">
-          <app-text-input
-            label="Nombre de la Entidad"
-            [control]="getControl('afcContributionsEntity')"
-            type="text"
-            class="col-6"
-            id="afcContributionsEntity"
-          ></app-text-input>
-          <app-text-input
-            label="Número de Cuenta"
-            [control]="getControl('afcContributionsAccountNumber')"
-            type="number"
-            class="col-6"
-            id="afcContributionsAccountNumber"
-          ></app-text-input>
-          <app-text-input
-            label="Valor"
-            [control]="getControl('afcContributionsValue')"
-            type="currency"
-            class="col-6"
-            id="afcContributionsValue"
-          ></app-text-input>
           <label class="col-12">*Adjuntar soporte</label>
           <app-filebox
             class="col-12"
@@ -183,37 +164,16 @@
       }
       <!-- similar to afc for Aportes Pensiones Voluntarias. -->
       <app-checkbox-input
-        [label]="'2. Aportes Pensiones Voluntarias'"
+        [label]="'2. Aportes Pensiones Voluntarias (Si aplica se debe incluir el pdf de soporte de pago mes anterior)'"
         [control]="getControl('voluntaryPensionContributions')"
         [controlName]="'voluntaryPensionContributions'"
         [form]="invoiceNaturalForm"
         [boldLabel]="false"
-        [controlersWhenTrue]="['voluntaryPensionContributionsEntity', 'voluntaryPensionContributionsAccountNumber', 'voluntaryPensionContributionsValue', 'voluntaryPensionContributionsFile']"
+        [controlersWhenTrue]="['voluntaryPensionContributionsFile']"
         id="voluntaryPensionContributions"
       ></app-checkbox-input>
       @if(getValue('voluntaryPensionContributions') === '1') {
         <div class="row">
-          <app-text-input
-            label="Nombre de la Entidad"
-            [control]="getControl('voluntaryPensionContributionsEntity')"
-            type="text"
-            class="col-6"
-            id="voluntaryPensionContributionsEntity"
-          ></app-text-input>
-          <app-text-input
-            label="Número de Cuenta"
-            [control]="getControl('voluntaryPensionContributionsAccountNumber')"
-            type="text"
-            class="col-6"
-            id="voluntaryPensionContributionsAccountNumber"
-          ></app-text-input>
-          <app-text-input
-            label="Valor"
-            [control]="getControl('voluntaryPensionContributionsValue')"
-            type="currency"
-            class="col-6"
-            id="voluntaryPensionContributionsValue"
-          ></app-text-input>
           <label class="col-12">*Adjuntar soporte</label>
           <app-filebox
             class="col-12"
