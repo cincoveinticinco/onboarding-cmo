@@ -141,26 +141,45 @@ export class InfStepTwoComponent {
     const dependentsForms = this.getDependentsForms();
     let isValid = true;
     let firstInvalidControl: any = null;
-
-    dependentsForms.forEach((dependentForm: FormGroup) => {
-      Object.keys(dependentForm.controls).forEach((controlName, index) => {
+  
+    dependentsForms.forEach((dependentForm: FormGroup, formIndex: number) => {
+      Object.keys(dependentForm.controls).forEach((controlName) => {
         const control = dependentForm.get(controlName);
-        if(control?.invalid) {
-          isValid = false;
-          control.markAsTouched()
-          control.markAsPristine();
-          control.markAsDirty();
-          const setInvalidControl = (controlName: any)  => {
-            if(!firstInvalidControl) {
-              firstInvalidControl = `${controlName}-${index + 1}`;
+        if (control) {
+          // Special handling for checkbox controls
+          if (this.isCheckboxControl(controlName)) {
+            if (!control.value) {
+              isValid = false;
+              control.setErrors({ 'required': true });
+            } else {
+              control.setErrors(null);
             }
           }
-          setInvalidControl(controlName);
+  
+          if (control.invalid) {
+            isValid = false;
+            control.markAsTouched();
+            control.markAsDirty();
+            if (!firstInvalidControl) {
+              firstInvalidControl = `${controlName}-${formIndex + 1}`;
+            }
+          }
         }
       });
     });
+  
+    return { isValid, firstInvalidControl };
+  }
 
-    return { isValid, firstInvalidControl }
+  isCheckboxControl(controlName: string): boolean {
+    return [
+      'decreaseInTaxBase',
+      'minorChildren',
+      'childrenStudyCertificate',
+      'childrenMedicineCertificate',
+      'partnerMedicineCertificate',
+      'familyMedicineCertificate'
+    ].includes(controlName);
   }
 
   scrollToError(controlName: string | null): void {
