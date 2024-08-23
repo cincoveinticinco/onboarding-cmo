@@ -159,84 +159,69 @@ export class InvoiceJuridicaFormComponent {
   submitFile(event: {
     value: File;
     formControl: FormControl
-  }): Observable<any> {
-    const {value, formControl} = event;
-    console.log('event', event);
+  }) {
+    this.loading = true;
+    const { value, formControl } = event;
   
-    const control = formControl;
-  
-    // get vendor id
-    const vendorId = this.ilsService.getVendorId();
+    const vendorId: any = this.ilsService.getVendorId();
   
     if (!value) {
-      // Function to delete file in the backend
-      // Implement file deletion logic here
-      return of(null);
-    } else {
+      
+    }
+    else {
       const nameFile = this.globalService.normalizeString(value.name);
-      if (vendorId) {
-        // Verificar si ya existe una URL precargada
-        const existingUrl = control.value?.url;
-        if (existingUrl) {
-          console.log('URL already preloaded:', existingUrl);
-          return of({ url: existingUrl });
-        }
-
-        return this.ilsService.getPresignedPutURLOc(nameFile, vendorId).pipe(
-          catchError(() => {
-            if (environment?.stage != 'local') {
-              control.setValue(null, { emitEvent: false });
-              this.globalService.openSnackBar('Fallo al guardar el documento, intente de nuevo', '', 5000);
-              return throwError(() => new Error('Error al obtener la URL de subida.'));
-            } else {
-              return of({ id: value, file: value, key: '', url: '' });
-            }
-          }),
-          switchMap((putUrl: any) => {
-            if (!putUrl.url) {
-              // Handle local case: create a local URL
-              const localUrl = `${vendorId}/${nameFile}`;
-              return of({ localUrl, putUrl });
-            }
-            return from(value.arrayBuffer()).pipe(
-              map(arrayBuffer => ({ arrayBuffer, putUrl }))
-            );
-          }),
-          switchMap((result: any) => {
-            if (result.localUrl) {
-              // Local case: return the local URL
-              return of({ url: result.localUrl });
-            }
-            if (!result.arrayBuffer) return of(null);
-            return this.vendorService.uploadFileUrlPresigned(
-              new Blob([result.arrayBuffer]), 
-              result.putUrl.url, 
-              value.type
-            ).pipe(
-              catchError(() => {
+      this.ilsService.getPresignedPutURLOc(nameFile, vendorId).pipe(
+        catchError((error) =>
+          of({ id: value, file: value, key: '', url: '' })
+        ),
+        map((putUrl: any) => ({
+          ...putUrl,
+          id: value,
+          file: value,
+        })),
+        switchMap((uploadFile: any) => {
+          if (!uploadFile.url) {
+            return of({ blobFile: null, uploadFile });
+          }
+          return new Promise(resolve => {
+            uploadFile.file.arrayBuffer().then((blobFile: File) => resolve({ blobFile, uploadFile }));
+          });
+        }),
+        switchMap((blobUpdateFile: any) => {
+          const { blobFile, uploadFile } = blobUpdateFile;
+          if (!blobFile) {
+            return of(uploadFile);
+          }
+          return this.vendorService.uploadFileUrlPresigned(<File>blobFile, uploadFile.url, uploadFile.file.type)
+            .pipe(
+              catchError((_) => {
                 if (environment?.stage != 'local') {
-                  control.setValue(null, { emitEvent: false });
+                  formControl.setValue(null, { emitEvent: false });
                   this.globalService.openSnackBar('Fallo al guardar el documento, intente de nuevo', '', 5000);
                   return throwError(() => new Error('Error al subir el archivo.'));
                 } else {
-                  return of(null);
+                  return of({ ...value, url: '' });
                 }
               }),
-              map(response => response.type === HttpEventType.Response ? result.putUrl : null)
+              map((value) => value.type == HttpEventType.Response ? uploadFile : null)
             );
-          }),
-          filter(result => result !== null),
-          tap((result: any) => {
-            console.log('File processed successfully:', result);
-            const url = result?.url || `${vendorId}/${nameFile}`;
-            const previousValue = control.value;
-            control.setValue({ ...previousValue, url });
-          })
-        );
-      } else {
-        console.error('No vendor ID available');
-        return throwError('No vendor ID available');
-      }
+        }),
+        switchMap((uploadFile: any) => {
+          if (!uploadFile) return of(false);
+          const url = uploadFile.url || `${vendorId}/${nameFile}`
+          formControl.setValue({
+            name: value.name,
+            url,
+          });
+          console.log(this.invoiceJuridicaForm, 'TEST CONTROL');
+          return of(true);
+        })
+      )
+      .subscribe((value) => {
+        setTimeout(() => { 
+          this.loading = false;
+        }, 3500);
+      });
     }
   }
 
@@ -246,10 +231,8 @@ export class InvoiceJuridicaFormComponent {
         const control = this.getControl(controlName);
         const file = control.value.file;
         if (file) {
-          this.submitFile({ value: file, formControl: control }).subscribe(
-            () => resolve(),
-            () => resolve() 
-          );
+          this.submitFile({ value: file, formControl: control })
+          setTimeout(() => resolve(), 3500);
         } else {
           resolve();
         }
@@ -264,10 +247,8 @@ export class InvoiceJuridicaFormComponent {
       return new Promise<void>((resolve) => {
         const file = control.value.file;
         if (file) {
-          this.submitFile({ value: file, formControl: control }).subscribe(
-            () => resolve(),
-            () => resolve()
-          );
+          this.submitFile({ value: file, formControl: control })
+          setTimeout(() => resolve(), 3500);
         } else {
           
         }

@@ -55,9 +55,9 @@ export class OcFormsCmoComponent implements OnInit {
 
   redirectWhenRadicated(): void {
     if(this.registerStatus === REGISTER_STATUSES.RADICADO) {
-      this.router.navigate(['/oc-forms-cmo/success/' + this.registerCode], {
-        state: { radicado: this.registerCode }
-      });
+      // this.router.navigate(['/oc-forms-cmo/success/' + this.registerCode], {
+      //   state: { radicado: this.registerCode }
+      // });
     } else{
       return;
     }
@@ -89,6 +89,7 @@ export class OcFormsCmoComponent implements OnInit {
     form: any, cancelLoading: any
   }): void {
       const { form, cancelLoading } = event
+      this.loading = true;
       const register = this.registerCode ? parseInt(this.registerCode) : null;
       const formattedForm = this.globalService.setOcForm(form, this.vendorInfo.id, register)
       console.log(formattedForm, 'FORMATED FORM')
@@ -97,7 +98,7 @@ export class OcFormsCmoComponent implements OnInit {
           this.router.navigate(['/oc-forms-cmo/success/' + response.registerId], {
             state: { radicado: response.radicado }
           });
-          cancelLoading()
+          this.loading = false;
         },
         () => {
           console.log('Error');
