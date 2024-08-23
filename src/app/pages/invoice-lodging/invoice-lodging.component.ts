@@ -78,6 +78,10 @@ export class InvoiceLodgingComponent implements OnInit {
     });
   }
 
+  getDocumentPattern() {
+    return this.getControl('personType').value === TIPOPERSONA.Natural ? '^[0-9]*$' : '^[0-9]{1,9}$';
+  }
+
   filterDocumentTypes(typePersonId: TIPOPERSONA) {
     if (typePersonId === TIPOPERSONA.Natural) {
       this.formattedDocumentTypes = this.documentTypes

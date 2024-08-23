@@ -31,13 +31,23 @@
       [dropSpecialCharacters]="false"
       (blur)="blur()"
     />
+  } @else if(type === 'number') {
+    <input
+      [placeholder]="placeholder"
+      [formControl]="control"
+      type="number"
+      [pattern]="pattern || '[0-9]*'"
+      inputmode="numeric"
+      (blur)="blur()"
+      (keypress)="onlyNumbers($event)"
+    />
   } @else {
-      <input
-        [placeholder]="placeholder"
-        [formControl]="control"
-        [type]="type"
-        [pattern]="pattern || ''"
-        (blur)="blur()"
-      />
+    <input
+      [placeholder]="placeholder"
+      [formControl]="control"
+      [type]="type"
+      [pattern]="pattern || ''"
+      (blur)="blur()"
+    />
   }
 </div>

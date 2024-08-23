@@ -39,7 +39,7 @@
           [label]="'Número de documento'"
           [control]="getControl('documentNumber')"
           [type]="'number'"
-          [pattern]="'^[0-9]+$'"
+          [pattern]="getDocumentPattern()"
           class="col-12"
         ></app-text-input>
         <p class="col-1 justify-end">
