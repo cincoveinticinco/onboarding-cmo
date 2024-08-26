@@ -54,6 +54,7 @@
     [control]="getControl('minorChildren')"
     [controlName]="'minorChildren'"
     [customName]="'minorChildren-' + dependentIndex"
+    [form]="dependentForm"
     [id]="'minorChildren'"
   ></app-checkbox-input>
   @if(getValue('minorChildren') === '1') {
@@ -67,6 +68,8 @@
     [boldLabel]="false"
     [control]="getControl('childrenStudyCertificate')"
     [controlName]="'childrenStudyCertificate'"
+    [controlersWhenTrue]="['childrenStudyCertificateFile']"
+    [form]="dependentForm"
     [customName]="'childrenStudyCertificate-' + dependentIndex"
     [id]="'childrenStudyCertificate-' + dependentIndex"
   ></app-checkbox-input>
@@ -82,6 +85,7 @@
     [control]="getControl('childrenMedicineCertificate')"
     [controlName]="'childrenMedicineCertificate'"
     [customName]="'childrenMedicineCertificate-' + dependentIndex"
+    [form]="dependentForm"
     [id]="'childrenMedicineCertificate-' + dependentIndex"
   ></app-checkbox-input>
   @if(getValue('childrenMedicineCertificate') === '1') {
@@ -96,6 +100,7 @@
     [control]="getControl('partnerMedicineCertificate')"
     [controlName]="'partnerMedicineCertificate'"
     [customName]="'partnerMedicineCertificate-' + dependentIndex"
+    [form]="dependentForm"
     [id]="'partnerMedicineCertificate-' + dependentIndex"
   ></app-checkbox-input>
   @if(getValue('partnerMedicineCertificate') === '1') {
@@ -110,6 +115,7 @@
     [control]="getControl('familyMedicineCertificate')"
     [controlName]="'familyMedicineCertificate'"
     [customName]="'familyMedicineCertificate-' + dependentIndex"
+    [form]="dependentForm"
     [id]="'familyMedicineCertificate-' + dependentIndex"
   ></app-checkbox-input>
   @if(getValue('familyMedicineCertificate') === '1') {
