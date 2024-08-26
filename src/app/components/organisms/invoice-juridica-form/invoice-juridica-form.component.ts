@@ -166,7 +166,10 @@ export class InvoiceJuridicaFormComponent {
     const vendorId: any = this.ilsService.getVendorId();
   
     if (!value) {
-      
+      const documentId = formControl.value.document_id;
+      if(documentId) {
+        this.vendorService.deleteVendorDocument({ document_id: documentId })
+      }
     }
     else {
       const nameFile = this.globalService.normalizeString(value.name);

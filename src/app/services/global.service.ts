@@ -339,6 +339,11 @@ export class GlobalService {
     form.get('signatureTwo')?.setValue(data?.signature || '');
     form.get('phone')?.setValue(data?.telephone || '');
     form.get('institutionalEmail')?.setValue(data?.institutionalEmail || '');
+
+
+    data?.selectedOrders?.forEach((order: any) => {
+      form.get('orderIds')?.push(new FormControl(order.toString()));
+    })
   
     data?.vendorDocuments?.forEach((doc: any) => {
       if (doc.link) {
@@ -485,6 +490,11 @@ export class GlobalService {
     form.get('companyName')?.setValue(data?.companyName || '');
     form.get('address')?.setValue(data?.address || '');
     form.get('email')?.setValue(data?.email || '');
+    
+
+    data?.selectedOrders?.forEach((order: any) => {
+      form.get('orderIds')?.push(new FormControl(order));
+    })
 
     // documents when juridica are socialSecurity, electronicInvoice, taxAuditorCertificate, arlCertificate, otherAnexes
 
