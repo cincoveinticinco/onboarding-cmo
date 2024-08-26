@@ -54,10 +54,6 @@ export class InfStepTwoComponent {
 
   ngOnInit() {
     this.scrollToTop();
-    const thereAreDependents = this.getValue('dependentsInfo')?.length > 0;
-    if(thereAreDependents) {
-      this.goToDependentsForm();
-    }
   }
 
   private scrollToTop() {
