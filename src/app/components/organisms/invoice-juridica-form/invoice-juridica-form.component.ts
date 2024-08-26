@@ -208,7 +208,7 @@ export class InvoiceJuridicaFormComponent {
         }),
         switchMap((uploadFile: any) => {
           if (!uploadFile) return of(false);
-          const url = uploadFile.url || `${vendorId}/${nameFile}`
+          const url = uploadFile?.url ? `${vendorId}/${nameFile}` : '';
           formControl.setValue({
             name: value.name,
             url,

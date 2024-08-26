@@ -445,13 +445,16 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
         }),
         switchMap((uploadFile: any) => {
           if (!uploadFile) return of(false);
-          const url = uploadFile.url || `${vendorId}/${nameFile}`;
-          console.log(uploadFile, 'UPLOAD FILE'); 
+         
+          const url = uploadFile?.url ? `${vendorId}/${nameFile}` : '';
+          console.log('UPLOAD FILE', uploadFile);
+          const formControlCurrentValue = formControl.value;
           formControl.setValue({
+            document_id: formControlCurrentValue?.document_id,
             name: value.name,
             url,
           });
-          console.log(this.invoiceNaturalForm, 'TEST CONTROL');
+          console.log(this.globalService.setOcForm(this.invoiceNaturalForm, vendorId ), 'TEST CONTROL');
           return of(true);
         })
       )

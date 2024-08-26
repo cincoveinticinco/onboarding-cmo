@@ -54,12 +54,14 @@ export class OcFormsCmoComponent implements OnInit {
   }
 
   redirectWhenRadicated(): void {
-    if(this.registerStatus === REGISTER_STATUSES.RADICADO) {
-      // this.router.navigate(['/oc-forms-cmo/success/' + this.registerCode], {
-      //   state: { radicado: this.registerCode }
-      // });
-    } else{
-      return;
+    if(
+      this.registerStatus === REGISTER_STATUSES.RADICADO
+      || this.registerStatus === REGISTER_STATUSES.APROBADO_PRODUCCIÓN
+      || this.registerStatus === REGISTER_STATUSES.APROBADO_CONTABILIDAD
+    ) {
+      this.router.navigate(['/oc-forms-cmo/success/' + this.registerCode], {
+        state: { radicado: this.registerCode }
+      });
     }
   }
 

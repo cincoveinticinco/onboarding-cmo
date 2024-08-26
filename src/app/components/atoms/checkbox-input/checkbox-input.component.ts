@@ -28,6 +28,10 @@ export class CheckboxInputComponent {
   @Input() controlersWhenTrue: string[] = [];
   @Input() customName: string | undefined;
 
+  ngOnInit() {
+    this.handleChange(this.control.value);
+  }
+
   getErrors(): string | null {
     const touched = this.control.touched;
     if (this.control.hasError('required') && touched) {

@@ -50,6 +50,10 @@ export const routes: Routes = [
       component: OcFormsCmoComponent
     },
     {
+      path: 'facturascmo/:registerId',
+      component: ValidateOcInfoComponent
+    },
+    {
       path: 'oc-forms-cmo/success/:registerId',
       component: OcFormSuccessComponent,
     },
