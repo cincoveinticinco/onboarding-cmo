@@ -339,29 +339,31 @@ export class GlobalService {
     form.get('signatureTwo')?.setValue(data?.signature || '');
     form.get('phone')?.setValue(data?.telephone || '');
     form.get('institutionalEmail')?.setValue(data?.institutionalEmail || '');
-
+  
     data?.vendorDocuments?.forEach((doc: any) => {
-      switch(doc.f_vendor_document_type_id) {
-        case OcFileTypes.SOCIAL_SECURITY:
-          form.get('socialSecurity')?.setValue(this.getDocumentLinkOc(doc.link));
-          break;
-        case OcFileTypes.ELECTRONIC_INVOICE:
-          form.get('electronicInvoice')?.setValue(this.getDocumentLinkOc(doc.link));
-          break;
-        case OcFileTypes.TAX_AUDITOR_CERTIFICATE:
-          form.get('taxAuditorCertificate')?.setValue(this.getDocumentLinkOc(doc.link));
-          break;
-        case OcFileTypes.ARL_CERTIFICATE:
-          form.get('arlCertificate')?.setValue(this.getDocumentLinkOc(doc.link));
-          break;
-        case OcFileTypes.ANEXO:
-          form.get('otherAnexes')?.push(new FormControl(this.getDocumentLinkOc(doc.link)));
-          break;
+      if (doc.link) { // Verificar si existe el enlace del documento
+        switch (doc.f_vendor_document_type_id) {
+          case OcFileTypes.SOCIAL_SECURITY:
+            form.get('socialSecurity')?.setValue(this.getDocumentLinkOc(doc.link));
+            break;
+          case OcFileTypes.ELECTRONIC_INVOICE:
+            form.get('electronicInvoice')?.setValue(this.getDocumentLinkOc(doc.link));
+            break;
+          case OcFileTypes.TAX_AUDITOR_CERTIFICATE:
+            form.get('taxAuditorCertificate')?.setValue(this.getDocumentLinkOc(doc.link));
+            break;
+          case OcFileTypes.ARL_CERTIFICATE:
+            form.get('arlCertificate')?.setValue(this.getDocumentLinkOc(doc.link));
+            break;
+          case OcFileTypes.ANEXO:
+            form.get('otherAnexes')?.push(new FormControl(this.getDocumentLinkOc(doc.link)));
+            break;
+        }
       }
-    })
-
+    });
+  
     data?.infoAdditional?.forEach((info: any) => {
-      switch(info.f_vendor_inf_add_type_id) {
+      switch (info.f_vendor_inf_add_type_id) {
         case InfoAdditionalTypes.INCOME_TAX_RETURN:
           form.get('incomeTaxReturn')?.setValue(info.value ? '1' : '0');
           break;
@@ -373,26 +375,34 @@ export class GlobalService {
           break;
         case InfoAdditionalTypes.MEDICAL_PREPAID:
           form.get('medicalPrepaid')?.setValue(info.value ? '1' : '0');
-          form.get('medicalPrepaidFile')?.setValue(this.getDocumentLinkOc(info.link));
+          if (info.link) {
+            form.get('medicalPrepaidFile')?.setValue(this.getDocumentLinkOc(info.link));
+          }
           break;
         case InfoAdditionalTypes.HOUSING_CREDIT:
           form.get('housingCredit')?.setValue(info.value ? '1' : '0');
-          form.get('housingCreditFile')?.setValue(this.getDocumentLinkOc(info.link));
+          if (info.link) {
+            form.get('housingCreditFile')?.setValue(this.getDocumentLinkOc(info.link));
+          }
           break;
         case InfoAdditionalTypes.AFC_CONTRIBUTIONS:
           form.get('afcContributions')?.setValue(info.value ? '1' : '0');
-          form.get('afcContributionsFile')?.setValue(this.getDocumentLinkOc(info.link));
+          if (info.link) {
+            form.get('afcContributionsFile')?.setValue(this.getDocumentLinkOc(info.link));
+          }
           break;
         case InfoAdditionalTypes.VOLUNTARY_PENSION_CONTRIBUTIONS:
           form.get('voluntaryPensionContributions')?.setValue(info.value ? '1' : '0');
-          form.get('voluntaryPensionContributionsFile')?.setValue(this.getDocumentLinkOc(info.link));
+          if (info.link) {
+            form.get('voluntaryPensionContributionsFile')?.setValue(this.getDocumentLinkOc(info.link));
+          }
           break;
         case InfoAdditionalTypes.DEPENDENTS:
           form.get('dependents')?.setValue(info.value ? '1' : '0');
           break;
       }
     });
-
+  
     data?.dependentsInfo?.forEach((dependent: any) => {
       const dependents = form.get('dependentsInfo') as FormArray;
       dependents.push(new FormGroup({
@@ -400,26 +410,60 @@ export class GlobalService {
         dependentDocumentNumber: new FormControl(dependent.document),
         dependentFullName: new FormControl(dependent.name),
         dependentKinship: new FormControl(dependent.kinship),
-        minorChildren: new FormControl(dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.MINOR_CHILDREN)?.value ? '1' : '0'),
-        minorChildrenFile: new FormControl(this.getDocumentLinkOc(dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.MINOR_CHILDREN)?.link)),
-        childrenStudyCertificate: new FormControl(dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.CHILDREN_STUDY_CERTIFICATE)?.value ? '1' : '0'),
-        childrenStudyCertificateFile: new FormControl(this.getDocumentLinkOc(dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.CHILDREN_STUDY_CERTIFICATE)?.link)),
-        childrenMedicineCertificate: new FormControl(dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.CHILDREN_MEDICINE_CERTIFICATE)?.value ? '1' : '0'),
-        childrenMedicineCertificateFile: new FormControl(this.getDocumentLinkOc(dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.CHILDREN_MEDICINE_CERTIFICATE)?.link)),
-        partnerMedicineCertificate: new FormControl(dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.PARTNER_MEDICINE_CERTIFICATE)?.value ? '1' : '0'),
-        partnerMedicineCertificateFile: new FormControl(this.getDocumentLinkOc(dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.PARTNER_MEDICINE_CERTIFICATE)?.link)),
-        familyMedicineCertificate: new FormControl(dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.FAMILY_MEDICINE_CERTIFICATE)?.value ? '1' : '0'),
-        familyMedicineCertificateFile: new FormControl(this.getDocumentLinkOc(dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.FAMILY_MEDICINE_CERTIFICATE)?.link))
+        minorChildren: new FormControl(
+          dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.MINOR_CHILDREN)?.value ? '1' : '0'
+        ),
+        minorChildrenFile: new FormControl(
+          dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.MINOR_CHILDREN)?.link
+            ? this.getDocumentLinkOc(dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.MINOR_CHILDREN)?.link)
+            : null
+        ),
+        childrenStudyCertificate: new FormControl(
+          dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.CHILDREN_STUDY_CERTIFICATE)?.value ? '1' : '0'
+        ),
+        childrenStudyCertificateFile: new FormControl(
+          dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.CHILDREN_STUDY_CERTIFICATE)?.link
+            ? this.getDocumentLinkOc(dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.CHILDREN_STUDY_CERTIFICATE)?.link)
+            : null
+        ),
+        childrenMedicineCertificate: new FormControl(
+          dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.CHILDREN_MEDICINE_CERTIFICATE)?.value ? '1' : '0'
+        ),
+        childrenMedicineCertificateFile: new FormControl(
+          dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.CHILDREN_MEDICINE_CERTIFICATE)?.link
+            ? this.getDocumentLinkOc(dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.CHILDREN_MEDICINE_CERTIFICATE)?.link)
+            : null
+        ),
+        partnerMedicineCertificate: new FormControl(
+          dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.PARTNER_MEDICINE_CERTIFICATE)?.value ? '1' : '0'
+        ),
+        partnerMedicineCertificateFile: new FormControl(
+          dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.PARTNER_MEDICINE_CERTIFICATE)?.link
+            ? this.getDocumentLinkOc(dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.PARTNER_MEDICINE_CERTIFICATE)?.link)
+            : null
+        ),
+        familyMedicineCertificate: new FormControl(
+          dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.FAMILY_MEDICINE_CERTIFICATE)?.value ? '1' : '0'
+        ),
+        familyMedicineCertificateFile: new FormControl(
+          dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.FAMILY_MEDICINE_CERTIFICATE)?.link
+            ? this.getDocumentLinkOc(dependent.infoAdditional.find((info: any) => info.f_vendor_inf_add_type_id === InfoAdditionalTypes.FAMILY_MEDICINE_CERTIFICATE)?.link)
+            : null
+        )
       }));
-    })
+    });
   }
+  
 
   getDocumentLinkOc(url: string) {
-    return url ? { name: url, url: url } : null;
+   if(url) {
+      return { name: url, url: url };
+   } else {
+    return
+   }
   }
 
   fillInitialInvoiceJuridicaForm(form: any, data: any) {
-    console.log(data, form);
     form.get('personType')?.setValue(data?.personType || '');
     form.get('documentType')?.setValue(data?.documentTypeEsp || '');
     form.get('documentNumber')?.setValue(data?.documentNumber || '');
