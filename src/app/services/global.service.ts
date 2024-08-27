@@ -349,11 +349,7 @@ export class GlobalService {
     form.get('institutionalEmail')?.setValue(data?.institutionalEmail || '');
     console.log('contract number', data?.contract_code);
     form.get('contractNumber')?.setValue(data?.contract_code);
-
-
-    data?.selectedOrders?.forEach((order: any) => {
-      form.get('orderIds')?.push(new FormControl(order.toString()));
-    })
+    form.get('orderIds')?.setValue(data?.selected_orders || []);
   
     data?.vendorDocuments?.forEach((doc: any) => {
       if (doc.link) {
@@ -502,11 +498,7 @@ export class GlobalService {
     form.get('email')?.setValue(data?.email || '');
     console.log('contract number', data?.contract_code);
     form.get('contractNumber')?.setValue(data?.contract_code);
-    
-
-    data?.selectedOrders?.forEach((order: any) => {
-      form.get('orderIds')?.push(new FormControl(order));
-    })
+    form.get('orderIds')?.setValue(data?.selected_orders || []);
 
     // documents when juridica are socialSecurity, electronicInvoice, taxAuditorCertificate, arlCertificate, otherAnexes
 
