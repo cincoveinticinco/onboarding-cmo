@@ -79,16 +79,16 @@
           Descripción
         </th>
         <th>
-          Vr. Día
-        </th>
-        <th>
-          Vr. Total
-        </th>
-        <th>
           IVA
         </th>
         <th>
           Retención
+        </th>
+        <th>
+          Vr. Día
+        </th>
+        <th>
+          Vr. Total
         </th>
       </tr>
       <!-- should iterate in selectedOrders -->
@@ -101,16 +101,16 @@
             {{ order.description }}
           </td>
           <td>
-            {{ fromNumberToCop(order.value) }}
-          </td>
-          <td>
-            {{ fromNumberToCop(order.total) }}
-          </td>
-          <td>
             {{ fromNumberToCop(order.taxes_addition_value) }}
           </td>
           <td>
             {{ fromNumberToCop(order.taxes_not_addition_value) }}
+          </td>
+          <td>
+            {{ fromNumberToCop(order.value) }}
+          </td>
+          <td>
+            {{ fromNumberToCop(order.total) }}
           </td>
         </tr>
       }
@@ -150,7 +150,6 @@
       signatureAuth: 'signatureAuth'
     }"></app-electronic-signature-auth>
       <div class="row margin-top buttons-wrapper">
-    <button mat-raised-button color="primary" type="button" class="col-6 btn-purpple">DESCARGAR DOCUMENTO</button>
     <button mat-raised-button color="primary" type="submit" class="col-6 btn-black">CONTINUAR</button>
   </div>
 </form>
