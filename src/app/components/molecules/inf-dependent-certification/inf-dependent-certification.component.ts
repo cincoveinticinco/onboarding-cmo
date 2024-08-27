@@ -6,6 +6,7 @@ import { SelectInputComponent } from '../../atoms/select-input/select-input.comp
 import { CheckboxInputComponent } from '../../atoms/checkbox-input/checkbox-input.component';
 import { FileboxComponent } from '../../atoms/filebox/filebox.component';
 import { InvoiceLodgingService } from '../../../services/invoiceLodging.service';
+import { TIPODOCUMENTO } from '../../../shared/interfaces/typo_documentos';
 
 @Component({
   selector: 'app-inf-dependent-certification',
@@ -46,5 +47,9 @@ export class InfdependentCertificationComponent {
 
   getValue(controlName: string) {
     return this.dependentForm.get(controlName)?.value;
+  }
+
+  getDocumentPattern() {
+    return this.getControl('dependentDocumentTypeId').value.toString() !== TIPODOCUMENTO.NIT.toString() ? '^[0-9]*$' : '^[0-9]{1,9}$';
   }
 }
