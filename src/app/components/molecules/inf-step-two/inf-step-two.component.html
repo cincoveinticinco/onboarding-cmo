@@ -190,9 +190,8 @@
           signatureAuth: 'signatureAuthTwo'
         }"></app-electronic-signature-auth>
         <div class="row margin-top buttons-wrapper">
-          <button mat-raised-button type="button" class="col-4 btn-gray" (click)="handlePreviousStep()">REGRESAR</button>
-          <button mat-raised-button type="button" class="col-4 btn-purpple">DESCARGAR DOCUMENTO</button>
-          <button mat-raised-button type="submit" class="col-4 btn-black">CONTINUAR</button>
+          <button mat-raised-button type="button" class="col-6 btn-gray" (click)="handlePreviousStep()">REGRESAR</button>
+          <button mat-raised-button type="submit" class="col-6 btn-black">CONTINUAR</button>
         </div>
     </form>
   } @else {
@@ -207,8 +206,8 @@
       <a (click)="addNewDependentFormGroup()">Agregar dependiente</a>
     </div>
     <div class="row margin-top buttons-wrapper padding-bottom">
-      <button mat-raised-button type="button" class="col-4 btn-gray" (click)="handlePreviousStep()">REGRESAR</button>
-      <button mat-raised-button type="submit" class="col-4 btn-black" (click)="onSubmit()">CONTINUAR</button>
+      <button mat-raised-button type="button" class="col-6 btn-gray" (click)="handlePreviousStep()">REGRESAR</button>
+      <button mat-raised-button type="submit" class="col-6 btn-black" (click)="onSubmit()">CONTINUAR</button>
     </div>
   }
 }

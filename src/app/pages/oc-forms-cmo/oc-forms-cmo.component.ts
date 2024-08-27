@@ -98,7 +98,7 @@ export class OcFormsCmoComponent implements OnInit {
       this.invoiceLodgingService.updateRegisterVendor(formattedForm).subscribe(
         (response: any) => {
           this.router.navigate(['/oc-forms-cmo/success/' + response.registerId], {
-            state: { radicado: response.radicado }
+            state: { radicado: response.radicado, url: response.url }
           });
           this.loading = false;
         },

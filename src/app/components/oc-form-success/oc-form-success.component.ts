@@ -13,6 +13,7 @@ import { AuthOcService } from '../../services/auth-oc.service';
 })
 export class OcFormSuccessComponent {
   radicado: string = '';
+  url: string = '';
 
   ngOnInit() {
     this.getRadicado();
@@ -24,8 +25,12 @@ export class OcFormSuccessComponent {
 
   getRadicado() {
     const radicadoState = window.history.state.radicado;
+    const urlState = window.history.state.url;
     if (radicadoState) {
       this.radicado = radicadoState;
+    }
+    if (urlState) {
+      this.url = urlState;
     }
   }
   goToHome() {

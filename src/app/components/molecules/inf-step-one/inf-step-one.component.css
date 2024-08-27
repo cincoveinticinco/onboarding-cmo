@@ -20,6 +20,13 @@ table {
 
 .buttons-wrapper {
   padding-bottom: 100px;
+  display: flex;
+  justify-content: center;
+  padding-top: 50px;
+  
+  button {
+    width: 250px;
+  }
 }
 
 .justify-end {
