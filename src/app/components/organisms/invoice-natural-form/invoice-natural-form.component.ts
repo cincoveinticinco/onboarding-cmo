@@ -395,6 +395,8 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
   }) {
     this.loading = true;
     const { value, formControl } = event;
+
+    console.log(value, 'VALUE***********************');
   
     const vendorId: any = this.ilService.getVendorId();
   
@@ -474,7 +476,7 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
   async uploadFilesFromArrayOfControls(controlArray: FormArray): Promise<void> {
     const uploadPromises = controlArray.controls.map((control: any) => {
       return new Promise<void>((resolve) => {
-        const file = control.value;
+        const file = control.value.file;
         if (file) {
           this.submitFile({ value: file, formControl: control });
           // Asumimos que submitFile manejará internamente el loading state
@@ -493,7 +495,7 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
       return new Promise<void>((resolve) => {
         const control = form.get(controlName);
         if (control && control.value) {
-          this.submitFile({ value: control.value, formControl: control as FormControl });
+          this.submitFile({ value: control.value.file, formControl: control as FormControl });
           setTimeout(() => resolve(), 3500);
         } else {
           resolve();
@@ -508,7 +510,8 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
     const uploadPromises = controlNames.map((controlName: string) => {
       return new Promise<void>((resolve) => {
         const control = this.getControl(controlName);
-        const file = control.value;
+        const file = control.value.file;
+        console.log(control.value, 'CONTROL VALUE');
         if (file) {
           this.submitFile({ value: file, formControl: control });
           setTimeout(() => resolve(), 3500);
