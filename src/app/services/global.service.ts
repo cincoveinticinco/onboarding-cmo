@@ -648,8 +648,9 @@ export class GlobalService {
     };
 
     // Añadir social security document
+    console.log(formValue, '?????????????????????')
+    if (formValue.socialSecurity) {
 
-    if (formValue.socialSecurity?.url) {
       params.vendor_documents.push({
         document_type_id: OcFileTypes.SOCIAL_SECURITY,
         document: formValue.socialSecurity?.url,
@@ -658,7 +659,7 @@ export class GlobalService {
     }
 
     // Añadir electronic Invoice document
-    if (formValue.electronicInvoice?.url) {
+    if (formValue.electronicInvoice) {
       params.vendor_documents.push({
         document_type_id: OcFileTypes.ELECTRONIC_INVOICE,
         document: formValue.electronicInvoice?.url,
@@ -667,7 +668,7 @@ export class GlobalService {
     }
 
     // Añadir tax auditor certificate document
-    if (formValue.taxAuditorCertificate?.url) {
+    if (formValue.taxAuditorCertificate) {
       params.vendor_documents.push({
         document_type_id: OcFileTypes.TAX_AUDITOR_CERTIFICATE,
         document: formValue.taxAuditorCertificate?.url,
@@ -677,7 +678,7 @@ export class GlobalService {
 
     // Añadir ARL
 
-    if (formValue.arlCertificate?.url) {
+    if (formValue.arlCertificate) {
       params.vendor_documents.push({
         document_type_id: OcFileTypes.ARL_CERTIFICATE,
         document: formValue.arlCertificate?.url,
