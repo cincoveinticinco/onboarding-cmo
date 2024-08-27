@@ -407,9 +407,12 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
     else {
       const nameFile = this.globalService.normalizeString(value.name);
       const existingUrl = formControl.value.url;
-      if(existingUrl) return;
+      if(existingUrl) {
+        console.log('File already uploaded', existingUrl);
+        return
+      };
       this.ilService.getPresignedPutURLOc(nameFile, vendorId).pipe(
-        catchError((error) =>
+        catchError((error: any) =>
           of({ id: value.name, file: value, key: '', url: '' })
         ),
         map((putUrl: any) => ({
@@ -418,6 +421,7 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
           file: value,
         })),
         switchMap((uploadFile: any) => {
+          console.log('Upload file', uploadFile);
           if (!uploadFile.url) {
             return of({ blobFile: null, uploadFile });
           }
@@ -426,6 +430,7 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
           });
         }),
         switchMap((blobUpdateFile: any) => {
+          console.log('Blob update file', blobUpdateFile);
           const { blobFile, uploadFile } = blobUpdateFile;
           if (!blobFile) {
             return of(uploadFile);
