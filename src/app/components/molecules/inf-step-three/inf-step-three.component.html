@@ -1,10 +1,5 @@
 <form [formGroup]="invoiceNaturalForm" (ngSubmit)="onSubmit()">
   <app-subtitle [subtitle]="'DOCUMENTOS PRECARGADOS'"></app-subtitle>
-  <p><b>Si lo desea, descarga el soporte de radicación </b> <a>  Ver aquí</a></p>
-  <br>¿Desea adjuntar otro documento?
-  @for(oc of vendorInfo.selectedOrders; track vendorInfo.selectedOrders.id) {
-  <br><p><b>{{oc.consecutive_codes}}</b>  <a>Ver aquí</a></p>
-  }
   <br><b>RUT</b><a>Ver aquí</a>
   <br><p>Desea actualizar el documento?  <a class="green-anchor">click aquí</a></p>
   <br><b>Anexo 1. Certificación de dependiente #1</b>
