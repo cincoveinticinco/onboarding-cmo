@@ -114,9 +114,11 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
 
   initializeForm() {
     console.log('Selected POs', this.selectedPurchaseOrders);
-    if (this.selectedPurchaseOrders && this.selectedPurchaseOrders.length > 0 ) {
-      this.selectedPurchaseOrders.forEach(() => {
-      this.updateFormattedOcOptions();
+    if (this.selectedPurchaseOrders && this.selectedPurchaseOrders.length > 0 && this.getOrderIds().length === 0) {
+      this.selectedPurchaseOrders.forEach((po: PurchaseOrders, index: number) => {
+        this.addOrderId();
+        this.updateFormattedOcOptions();
+        this.fillPurchaseOrderControl(index, po.id);
       });
     }
   }
