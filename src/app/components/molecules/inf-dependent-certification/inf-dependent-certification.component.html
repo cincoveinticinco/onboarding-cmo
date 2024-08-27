@@ -15,7 +15,7 @@
       [label]="'Número de documento'"
       [control]="getControl('dependentDocumentNumber')"
       [type]="'number'"
-      [pattern]="'^[0-9]+$'"
+      [pattern]="getDocumentPattern()"
       class="col-6"
       [id]="'dependentDocumentNumber-' + dependentIndex"
     ></app-text-input>
