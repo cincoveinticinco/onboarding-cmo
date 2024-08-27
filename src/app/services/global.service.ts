@@ -347,6 +347,8 @@ export class GlobalService {
     form.get('signatureTwo')?.setValue(data?.signature || '');
     form.get('phone')?.setValue(data?.telephone || '');
     form.get('institutionalEmail')?.setValue(data?.institutionalEmail || '');
+    console.log('contract number', data?.contract_code);
+    form.get('contractNumber')?.setValue(data?.contract_code);
 
 
     data?.selectedOrders?.forEach((order: any) => {
@@ -498,6 +500,8 @@ export class GlobalService {
     form.get('companyName')?.setValue(data?.companyName || '');
     form.get('address')?.setValue(data?.address || '');
     form.get('email')?.setValue(data?.email || '');
+    console.log('contract number', data?.contract_code);
+    form.get('contractNumber')?.setValue(data?.contract_code);
     
 
     data?.selectedOrders?.forEach((order: any) => {
