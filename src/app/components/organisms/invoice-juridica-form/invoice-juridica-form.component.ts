@@ -173,7 +173,7 @@ export class InvoiceJuridicaFormComponent {
     }
     else {
       const nameFile = this.globalService.normalizeString(value.name);
-      this.ilsService.getPresignedPutURLOc(nameFile, vendorId).pipe(
+      this.ilsService.getPresignedPutURLOc(nameFile, vendorId, "register").pipe(
         catchError((error) =>
           of({ id: value, file: value, key: '', url: '' })
         ),
@@ -216,7 +216,6 @@ export class InvoiceJuridicaFormComponent {
             name: value.name,
             url,
           });
-          console.log(this.invoiceJuridicaForm, 'TEST CONTROL');
           return of(true);
         })
       )

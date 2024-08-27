@@ -397,8 +397,6 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
   }) {
     this.loading = true;
     const { value, formControl } = event;
-
-    console.log(value, 'VALUE***********************');
   
     const vendorId: any = this.ilService.getVendorId();
   
@@ -415,7 +413,7 @@ export class InvoiceNaturalFormComponent implements OnInit, OnChanges {
         console.log('File already uploaded', existingUrl);
         return
       };
-      this.ilService.getPresignedPutURLOc(nameFile, vendorId).pipe(
+      this.ilService.getPresignedPutURLOc(nameFile, vendorId, 'register').pipe(
         catchError((error: any) =>
           of({ id: value.name, file: value, key: '', url: '' })
         ),

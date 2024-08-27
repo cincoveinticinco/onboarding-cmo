@@ -98,7 +98,7 @@ export class InvoiceLodgingComponent implements OnInit {
     if(this.invoiceLodgingForm.valid) {
       this.validationPending = true;
       this.iS.authenticateUser(this.invoiceLodgingForm.value).pipe(
-        delay(2000), // Espera 2 segundos
+        delay(2000),
         tap((response) => {
           if (response.status === 200) {
             console.log('SENDING')

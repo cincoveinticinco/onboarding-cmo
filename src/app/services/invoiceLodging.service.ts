@@ -59,11 +59,12 @@ export class InvoiceLodgingService {
     return localStorage.getItem('id_vendor_oc_id');
   }
 
-  getPresignedPutURLOc(filename: string, folder: string) {
+  getPresignedPutURLOc(filename: string, vendor_id: string, folder?: string ) {
     this.setHeaders();
     let params = {
 			'filename': filename,
-			'vendor_id': folder
+			'vendor_id': vendor_id,
+      'folder': folder
 		};
 		return this.http
 			.post(`${environment.apiUrl}finance/getPresignedUrlService`, params, { headers: this.headers })
