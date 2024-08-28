@@ -10,6 +10,12 @@
   }
 }
 
+.link-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 a {
   margin-left: 6px;
   text-decoration: none;

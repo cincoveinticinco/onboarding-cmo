@@ -2,28 +2,38 @@
   <app-subtitle [subtitle]="'DOCUMENTOS PRECARGADOS'"></app-subtitle>
 
   @if(getControl('socialSecurity')?.value?.url) {
-    <b><p>Seguridad social</p></b>
-    <a href="{{ getControl('socialSecurity')?.value.url }}" target="_blank">Ver documento</a>
+    <div class="link-wrapper">
+      <b><p>Seguridad social</p></b>
+      <a href="{{ getControl('socialSecurity')?.value.url }}" target="_blank">Ver documento</a>
+    </div>
   }
 
   @if(getControl('afcContributionsFile')?.value?.url) {
-    <b><p>Aportes AFC</p></b>
-    <a href="{{ getControl('afcContributionsFile')?.value.url }}" target="_blank">Ver documento</a>
+    <div class="link-wrapper">
+      <b><p>Aportes AFC</p></b>
+      <a href="{{ getControl('afcContributionsFile')?.value.url }}" target="_blank">Ver documento</a>
+    </div>
   }
 
   @if(getControl('pensionContributionsFile')?.value?.url) {
-    <b><p>Aportes pensión</p></b>
-    <a href="{{ getControl('pensionContributionsFile')?.value.url }}" target="_blank">Ver documento</a>
+    <div class="link-wrapper">
+      <b><p>Aportes pensión</p></b>
+      <a href="{{ getControl('pensionContributionsFile')?.value.url }}" target="_blank">Ver documento</a>
+    </div>
   }
 
   @if(getControl('medicalPrepaidFile')?.value?.url) {
-    <b><p>Prepagada</p></b>
-    <a href="{{ getControl('medicalPrepaidFile')?.value.url }}" target="_blank">Ver documento</a>
+    <div class="link-wrapper">
+      <b><p>Medicina Prepagada</p></b>
+      <a href="{{ getControl('medicalPrepaidFile')?.value.url }}" target="_blank">Ver documento</a>
+    </div>
   }
 
   @if(getControl('housingCreditFile')?.value?.url) {
-    <b><p>Credito vivienda</p></b>
-    <a href="{{ getControl('housingCreditFile')?.value.url }}" target="_blank">Ver documento</a>
+    <div>
+      <b><p>Credito vivienda</p></b>
+      <a href="{{ getControl('housingCreditFile')?.value.url }}" target="_blank">Ver documento</a>
+    </div>
   }
 
   <!-- ['minorChildrenFile', 'childrenStudyCertificateFile', 'childrenMedicineCertificateFile', 'partnerMedicineCertificateFile', 'familyMedicineCertificateFile'] -->
@@ -33,24 +43,34 @@
     @for(dependent of dependentsInfo.controls; track $index) {
       <b><p>Persona a cargo {{ $index + 1 }}</p></b>
       @if(dependent.get('minorChildrenFile')?.value.url) {
-        <b><p>Menores de edad</p></b>
-        <a href="{{ dependent.get('minorChildrenFile')?.value.url }}" target="_blank">Ver documento</a>
+        <div class="link-wrapper">
+          <b><p>Menores de edad</p></b>
+          <a href="{{ dependent.get('minorChildrenFile')?.value.url }}" target="_blank">Ver documento</a>
+        </div>
       }
       @if(dependent.get('childrenStudyCertificateFile')?.value.url) {
-        <b><p>Estudio</p></b>
-        <a href="{{ dependent.get('childrenStudyCertificateFile')?.value.url }}" target="_blank">Ver documento</a>
+        <div class="link-wrapper">
+          <b><p>Certificado de estudio</p></b>
+          <a href="{{ dependent.get('childrenStudyCertificateFile')?.value.url }}" target="_blank">Ver documento</a>
+        </div>
       }
       @if(dependent.get('childrenMedicineCertificateFile')?.value.url) {
-        <b><p>Medicina</p></b>
-        <a href="{{ dependent.get('childrenMedicineCertificateFile')?.value.url }}" target="_blank">Ver documento</a>
+        <div class="link-wrapper">
+          <b><p>Certificado Médico dependiente</p></b>
+          <a href="{{ dependent.get('childrenMedicineCertificateFile')?.value.url }}" target="_blank">Ver documento</a>
+        </div>
       }
       @if(dependent.get('partnerMedicineCertificateFile')?.value.url) {
-        <b><p>Medicina conyuge</p></b>
-        <a href="{{ dependent.get('partnerMedicineCertificateFile')?.value.url }}" target="_blank">Ver documento</a>
+        <div class="link-wrapper">
+          <b><p>Certificado Médico Conyugue</p></b>
+          <a href="{{ dependent.get('partnerMedicineCertificateFile')?.value.url }}" target="_blank">Ver documento</a>
+        </div>
       }
       @if(dependent.get('familyMedicineCertificateFile')?.value.url) {
-        <b><p>Medicina familiar</p></b>
-        <a href="{{ dependent.get('familyMedicineCertificateFile')?.value.url }}" target="_blank">Ver documento</a>
+        <div class="link-wrapper">
+          <b><p>Certificado Medico familiar</p></b>
+          <a href="{{ dependent.get('familyMedicineCertificateFile')?.value.url }}" target="_blank">Ver documento</a>
+        </div>
       }
     }
   }
