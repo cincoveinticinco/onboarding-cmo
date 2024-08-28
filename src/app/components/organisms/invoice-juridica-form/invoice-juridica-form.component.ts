@@ -14,6 +14,7 @@ import { InvoiceLodgingService } from '../../../services/invoiceLodging.service'
 import { environment } from '../../../../environments/environment';
 import { VendorService } from '../../../services/vendor.service';
 import { HttpEventType } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-invoice-juridica-form',
@@ -24,7 +25,8 @@ import { HttpEventType } from '@angular/common/http';
     TextInputComponent,
     FileboxComponent,
     SelectInputComponent,
-    MatIconModule
+    MatIconModule,
+    CommonModule
   ],
   templateUrl: './invoice-juridica-form.component.html',
   styleUrls: ['./invoice-juridica-form.component.css']
@@ -95,7 +97,7 @@ export class InvoiceJuridicaFormComponent {
     await this.uploadFilesFromArrayOfControls(this.getOtherAnexesArray());
     this.ilsService.updateRegisterVendor(this.invoiceJuridicaForm.value);
     this.saveForm.emit({
-      form: this.invoiceJuridicaForm,
+      form: this.invoiceJuridicaForm.value,
       cancelLoading: this.cancelLoading
     });
     this.globalService.openSnackBar('Formulario enviado correctamente', '', 5000);
@@ -242,7 +244,7 @@ export class InvoiceJuridicaFormComponent {
     const uploadPromises = controlNames.map((controlName: string) => {
       return new Promise<void>((resolve) => {
         const control = this.getControl(controlName);
-        const file = control.value.file;
+        const file = control.value?.file;
         if (file) {
           this.submitFile({ value: file, formControl: control });
           setTimeout(() => resolve(), 3500);
@@ -258,7 +260,7 @@ export class InvoiceJuridicaFormComponent {
   async uploadFilesFromArrayOfControls(controlArray: FormArray): Promise<void> {
     const uploadPromises = controlArray.controls.map((control: any) => {
       return new Promise<void>((resolve) => {
-        const file = control.value.file;
+        const file = control.value?.file;
         if (file) {
           this.submitFile({ value: file, formControl: control });
           setTimeout(() => resolve(), 3500);
@@ -273,5 +275,30 @@ export class InvoiceJuridicaFormComponent {
 
   deleteAnnex(index: number) {
     this.getOtherAnexesArray().removeAt(index);
+  }
+
+  thereArePrechargedDocs(): boolean {
+    const controlsToCheck = [
+      'electronicInvoice',
+      'socialSecurity',
+      'taxAuditorCertificate',
+      'arlCertificate'
+    ];
+  
+    for (const control of controlsToCheck) {
+      if (this.getControl(control)?.value?.url) {
+        return true;
+      }
+    }
+  
+    if (this.getOtherAnexesControls().length > 0) {
+      for (const anexo of this.getOtherAnexesControls()) {
+        if (anexo.value?.url) {
+          return true;
+        }
+      }
+    }
+  
+    return false;
   }
 }
