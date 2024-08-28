@@ -1,36 +1,36 @@
 <form [formGroup]="invoiceNaturalForm" (ngSubmit)="onSubmit()">
   <app-subtitle [subtitle]="'DOCUMENTOS PRECARGADOS'"></app-subtitle>
 
-  @if(getControl('socialSecurity').value.url) {
+  @if(getControl('socialSecurity')?.value?.url) {
     <b><p>Seguridad social</p></b>
-    <a href="{{ getControl('socialSecurity').value.url }}" target="_blank">Ver documento</a>
+    <a href="{{ getControl('socialSecurity')?.value.url }}" target="_blank">Ver documento</a>
   }
 
-  @if(getControl('afcContributionsFile').value.url) {
+  @if(getControl('afcContributionsFile')?.value?.url) {
     <b><p>Aportes AFC</p></b>
-    <a href="{{ getControl('afcContributionsFile').value.url }}" target="_blank">Ver documento</a>
+    <a href="{{ getControl('afcContributionsFile')?.value.url }}" target="_blank">Ver documento</a>
   }
 
-  @if(getControl('pensionContributionsFile').value.url) {
+  @if(getControl('pensionContributionsFile')?.value?.url) {
     <b><p>Aportes pensión</p></b>
-    <a href="{{ getControl('pensionContributionsFile').value.url }}" target="_blank">Ver documento</a>
+    <a href="{{ getControl('pensionContributionsFile')?.value.url }}" target="_blank">Ver documento</a>
   }
 
-  @if(getControl('medicalPrepaidFile').value.url) {
+  @if(getControl('medicalPrepaidFile')?.value?.url) {
     <b><p>Prepagada</p></b>
-    <a href="{{ getControl('medicalPrepaidFile').value.url }}" target="_blank">Ver documento</a>
+    <a href="{{ getControl('medicalPrepaidFile')?.value.url }}" target="_blank">Ver documento</a>
   }
 
-  @if(getControl('housingCreditFile').value.url) {
+  @if(getControl('housingCreditFile')?.value?.url) {
     <b><p>Credito vivienda</p></b>
-    <a href="{{ getControl('housingCreditFile').value.url }}" target="_blank">Ver documento</a>
+    <a href="{{ getControl('housingCreditFile')?.value.url }}" target="_blank">Ver documento</a>
   }
 
   <!-- ['minorChildrenFile', 'childrenStudyCertificateFile', 'childrenMedicineCertificateFile', 'partnerMedicineCertificateFile', 'familyMedicineCertificateFile'] -->
 
-  @if(dependentsInfo?.controls) {
+  @if(dependentsInfo && dependentsInfo.controls && dependentsInfo.length > 0) {
     <b><p>Personas a cargo</p></b>
-    @for(dependent of dependentsInfo?.controls; track $index) {
+    @for(dependent of dependentsInfo.controls; track $index) {
       <b><p>Persona a cargo {{ $index + 1 }}</p></b>
       @if(dependent.get('minorChildrenFile')?.value.url) {
         <b><p>Menores de edad</p></b>
