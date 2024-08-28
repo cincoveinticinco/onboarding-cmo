@@ -20,6 +20,8 @@ export class InfStepThreeComponent {
   @Output() formSubmit = new EventEmitter<void>();
   @Output() previousStep = new EventEmitter<void>();
 
+  dependentsInfo: FormArray | undefined;
+
 
   onSubmit() {
     this.formSubmit.emit();
@@ -29,6 +31,7 @@ export class InfStepThreeComponent {
     if(this.invoiceNaturalForm?.get('otherAnexes')?.value.length === 0) {
       this.addNewAnexFormGroup();
     }
+    this.dependentsInfo= this.invoiceNaturalForm?.get('dependentsInfo') as FormArray;
   }
 
   getControl(controlName: string) {

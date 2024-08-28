@@ -565,7 +565,7 @@ export class GlobalService {
           info_additional_document_id: OcFileTypes.MEDICAL_PREPAID,
           value: formValue?.medicalPrepaid,
           description: 'Medical Prepaid',
-          document: formValue?.medicalPrepaidFile?.url,
+          document: formValue?.medicalPrepaidFile?.document_url,
           document_id: formValue?.medicalPrepaidFile?.document_id
         },
         {
@@ -573,7 +573,7 @@ export class GlobalService {
           info_additional_document_id: OcFileTypes.HOUSING_CREDIT,
           value: formValue?.housingCredit,
           description: 'Housing Credit',
-          document: formValue?.housingCreditFile?.url,
+          document: formValue?.housingCreditFile?.document_url,
           document_id: formValue?.housingCreditFile?.document_id
         },
         {
@@ -581,7 +581,7 @@ export class GlobalService {
           info_additional_document_id: OcFileTypes.AFC_CONTRIBUTIONS,
           value: formValue?.afcContributions,
           description: 'AFC Contributions',
-          document: formValue?.afcContributionsFile?.url,
+          document: formValue?.afcContributionsFile?.document_url,
           document_id: formValue?.afcContributionsFile?.document_id
         },
         {
@@ -589,7 +589,7 @@ export class GlobalService {
           info_additional_document_id: OcFileTypes.VOLUNTARY_PENSION_CONTRIBUTIONS,
           value: formValue?.voluntaryPensionContributions,
           description: 'Voluntary Pension Contributions',
-          document: formValue?.voluntaryPensionContributionsFile?.url,
+          document: formValue?.voluntaryPensionContributionsFile?.document_url,
           document_id: formValue?.voluntaryPensionContributionsFile?.document_id
         }
       ],
@@ -604,7 +604,7 @@ export class GlobalService {
             info_additional_document_id: OcFileTypes.MINOR_CHILDREN,
             value: dependent?.minorChildren,
             description: 'Minor Children',
-            document: dependent?.minorChildrenFile?.url,
+            document: dependent?.minorChildrenFile?.document_url,
             document_id: dependent?.minorChildrenFile?.document_id
           },
           {
@@ -612,7 +612,7 @@ export class GlobalService {
             info_additional_document_id: OcFileTypes.CHILDREN_STUDY_CERTIFICATE,
             value: dependent?.childrenStudyCertificate,
             description: 'Children Study Certificate',
-            document: dependent?.childrenStudyCertificateFile?.url,
+            document: dependent?.childrenStudyCertificateFile?.document_url,
             document_id: dependent?.childrenStudyCertificateFile?.document_id
           },
           {
@@ -620,7 +620,7 @@ export class GlobalService {
             info_additional_document_id: OcFileTypes.CHILDREN_MEDICINE_CERTIFICATE,
             value: dependent?.childrenMedicineCertificate,
             description: 'Children Medicine Certificate',
-            document: dependent?.childrenMedicineCertificateFile?.url,
+            document: dependent?.childrenMedicineCertificateFile?.document_url,
             document_id: dependent?.childrenStudyCertificateFile?.document_id
           },
           {
@@ -628,7 +628,7 @@ export class GlobalService {
             info_additional_document_id: OcFileTypes.PARTNER_MEDICINE_CERTIFICATE,
             value: dependent?.partnerMedicineCertificate,
             description: 'Partner Medicine Certificate',
-            document: dependent?.partnerMedicineCertificateFile?.url,
+            document: dependent?.partnerMedicineCertificateFile?.document_url,
             document_id: dependent?.childrenStudyCertificateFile?.document_id
           },
           {
@@ -636,20 +636,18 @@ export class GlobalService {
             info_additional_document_id: OcFileTypes.FAMILY_MEDICINE_CERTIFICATE,
             value: dependent?.familyMedicineCertificate,
             description: 'Family Medicine Certificate',
-            document: dependent?.familyMedicineCertificateFile?.url,
+            document: dependent?.familyMedicineCertificateFile?.document_url,
             document_id: dependent?.childrenStudyCertificateFile?.document_id,
           }
         ],
       }))
     };
 
-    // Añadir social security document
-    console.log(formValue, '?????????????????????')
     if (formValue.socialSecurity) {
 
       params.vendor_documents.push({
         document_type_id: OcFileTypes.SOCIAL_SECURITY,
-        document: formValue.socialSecurity?.url,
+        document: formValue.socialSecurity?.document_url,
         document_id: formValue.socialSecurity?.document_id
       });
     }
@@ -658,7 +656,7 @@ export class GlobalService {
     if (formValue.electronicInvoice) {
       params.vendor_documents.push({
         document_type_id: OcFileTypes.ELECTRONIC_INVOICE,
-        document: formValue.electronicInvoice?.url,
+        document: formValue.electronicInvoice?.document_url,
         document_id: formValue.electronicInvoice?.document_id
       });
     }
@@ -667,7 +665,7 @@ export class GlobalService {
     if (formValue.taxAuditorCertificate) {
       params.vendor_documents.push({
         document_type_id: OcFileTypes.TAX_AUDITOR_CERTIFICATE,
-        document: formValue.taxAuditorCertificate?.url,
+        document: formValue.taxAuditorCertificate?.document_url,
         document_id: formValue.taxAuditorCertificate?.document_id
       });
     }
@@ -677,7 +675,7 @@ export class GlobalService {
     if (formValue.arlCertificate) {
       params.vendor_documents.push({
         document_type_id: OcFileTypes.ARL_CERTIFICATE,
-        document: formValue.arlCertificate?.url,
+        document: formValue.arlCertificate?.document_url,
         document_id: formValue.arlCertificate?.document_id
       });
     }
@@ -688,7 +686,7 @@ export class GlobalService {
         console.log(anexo)
         params.vendor_documents.push({
           document_type_id: OcFileTypes.ANEXO,
-          document: anexo.url,
+          document: anexo.document_url,
           document_id: anexo.document_id
         });
       });

@@ -1,9 +1,67 @@
 <form [formGroup]="invoiceNaturalForm" (ngSubmit)="onSubmit()">
   <app-subtitle [subtitle]="'DOCUMENTOS PRECARGADOS'"></app-subtitle>
-  <br><b>RUT</b><a>Ver aquí</a>
-  <br><p>Desea actualizar el documento?  <a class="green-anchor">click aquí</a></p>
-  <br><b>Anexo 1. Certificación de dependiente #1</b>
-  <br><p>Desea actualizar el documento? <a class="green-anchor">click aquí</a></p>
+
+  @if(getControl('socialSecurity').value.url) {
+    <b><p>Seguridad social</p></b>
+    <a href="{{ getControl('socialSecurity').value.url }}" target="_blank">Ver documento</a>
+  }
+
+  @if(getControl('afcContributionsFile').value.url) {
+    <b><p>Aportes AFC</p></b>
+    <a href="{{ getControl('afcContributionsFile').value.url }}" target="_blank">Ver documento</a>
+  }
+
+  @if(getControl('pensionContributionsFile').value.url) {
+    <b><p>Aportes pensión</p></b>
+    <a href="{{ getControl('pensionContributionsFile').value.url }}" target="_blank">Ver documento</a>
+  }
+
+  @if(getControl('medicalPrepaidFile').value.url) {
+    <b><p>Prepagada</p></b>
+    <a href="{{ getControl('medicalPrepaidFile').value.url }}" target="_blank">Ver documento</a>
+  }
+
+  @if(getControl('housingCreditFile').value.url) {
+    <b><p>Credito vivienda</p></b>
+    <a href="{{ getControl('housingCreditFile').value.url }}" target="_blank">Ver documento</a>
+  }
+
+  <!-- ['minorChildrenFile', 'childrenStudyCertificateFile', 'childrenMedicineCertificateFile', 'partnerMedicineCertificateFile', 'familyMedicineCertificateFile'] -->
+
+  @if(dependentsInfo?.controls) {
+    <b><p>Personas a cargo</p></b>
+    @for(dependent of dependentsInfo?.controls; track $index) {
+      <b><p>Persona a cargo {{ $index + 1 }}</p></b>
+      @if(dependent.get('minorChildrenFile')?.value.url) {
+        <b><p>Menores de edad</p></b>
+        <a href="{{ dependent.get('minorChildrenFile')?.value.url }}" target="_blank">Ver documento</a>
+      }
+      @if(dependent.get('childrenStudyCertificateFile')?.value.url) {
+        <b><p>Estudio</p></b>
+        <a href="{{ dependent.get('childrenStudyCertificateFile')?.value.url }}" target="_blank">Ver documento</a>
+      }
+      @if(dependent.get('childrenMedicineCertificateFile')?.value.url) {
+        <b><p>Medicina</p></b>
+        <a href="{{ dependent.get('childrenMedicineCertificateFile')?.value.url }}" target="_blank">Ver documento</a>
+      }
+      @if(dependent.get('partnerMedicineCertificateFile')?.value.url) {
+        <b><p>Medicina conyuge</p></b>
+        <a href="{{ dependent.get('partnerMedicineCertificateFile')?.value.url }}" target="_blank">Ver documento</a>
+      }
+      @if(dependent.get('familyMedicineCertificateFile')?.value.url) {
+        <b><p>Medicina familiar</p></b>
+        <a href="{{ dependent.get('familyMedicineCertificateFile')?.value.url }}" target="_blank">Ver documento</a>
+      }
+    }
+  }
+
+  @for(anexo of getOtherAnexesControls(); track $index) {
+    @if(anexo.value.url) {
+      <b><p>Otros Anexos</p></b>
+      <a href="{{ anexo.value.url }}" target="_blank">Ver documento</a>
+    }
+  }
+  
   <app-subtitle [subtitle]="'Documentos solicitados'"></app-subtitle>
 
   <label>Pago seguridad social mes vigente*</label>
