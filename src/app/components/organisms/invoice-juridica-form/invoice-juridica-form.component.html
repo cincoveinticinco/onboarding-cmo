@@ -65,10 +65,36 @@
       ></app-text-input>
     </div>
     <app-subtitle [subtitle]="'DOCUMENTOS PRECARGADOS'"></app-subtitle>
-    <p><b>RUT</b> <a>  Ver aquí</a></p>
-    <br><p>¿Desea actualizar el documento? <a class="green-anchor">click aquí</a></p>
-    @for(oc of vendorInfo.selectedOrders; track vendorInfo.selectedOrders.id) {
-      <br><p><b>{{oc.consecutive_codes}}</b>  <a>Ver aquí</a></p>
+    @if(invoiceJuridicaForm.get('electronicInvoice')?.value.url) {
+      <div class="link-wrapper">
+        <p><b>Factura Electrónica</b> <a>  Ver aquí</a></p>
+      </div>
+    }
+
+    @if(invoiceJuridicaForm.get('socialSecurity')?.value.url) {
+      <div class="link-wrapper">
+        <p><b>Pago seguridad social mes vigente</b> <a>  Ver aquí</a></p>
+      </div>
+    }
+
+    @if(invoiceJuridicaForm.get('taxAuditorCertificate')?.value.url) {
+      <div class="link-wrapper">
+        <p><b>Planilla seguridad Social con Riesgo Laboral del Empleado</b> <a>  Ver aquí</a></p>
+      </div>
+    }
+
+    @if(invoiceJuridicaForm.get('arlCertificate')?.value.url) {
+      <div class="link-wrapper">
+        <p><b>Certificado ARL / Contratista con Vinculación</b> <a>  Ver aquí</a></p>
+      </div>
+    }
+
+    @for(anexo of getOtherAnexesControls(); track $index) {
+      @if(anexo.value.url) {
+        <div class="link-wrapper">
+          <p><b>Anexo {{$index + 1}}</b> <a>  Ver aquí</a></p>
+        </div>
+      }
     }
     <app-subtitle [subtitle]="'Documentos solicitados'"></app-subtitle>
     <label>Factura Electrónica*</label>

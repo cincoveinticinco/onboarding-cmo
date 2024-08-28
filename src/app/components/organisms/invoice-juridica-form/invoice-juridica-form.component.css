@@ -41,3 +41,9 @@ p {
   align-items: center;
   justify-content: center;
 }
+
+.link-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}

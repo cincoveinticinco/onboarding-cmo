@@ -9,7 +9,7 @@ import { SelectOption } from '../../molecules/inf-step-one/inf-step-one.componen
 import { PurchaseOrders } from '../../../pages/oc-forms-cmo/oc-forms-cmo.component';
 import { SelectInputComponent } from '../../atoms/select-input/select-input.component';
 import { MatIconModule } from '@angular/material/icon';
-import { catchError, filter, from, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
+import { catchError, map, of, switchMap, throwError } from 'rxjs';
 import { InvoiceLodgingService } from '../../../services/invoiceLodging.service';
 import { environment } from '../../../../environments/environment';
 import { VendorService } from '../../../services/vendor.service';
@@ -27,17 +27,17 @@ import { HttpEventType } from '@angular/common/http';
     MatIconModule
   ],
   templateUrl: './invoice-juridica-form.component.html',
-  styleUrl: './invoice-juridica-form.component.css'
+  styleUrls: ['./invoice-juridica-form.component.css']
 })
 export class InvoiceJuridicaFormComponent {
   @Input() vendorInfo: any;
   @Input() purchaseOrders: PurchaseOrders[] | undefined;
-  @Input() selectedPurchaseOrders: PurchaseOrders[] | undefined
+  @Input() selectedPurchaseOrders: PurchaseOrders[] | undefined;
   @Input() selectOptionsPo?: SelectOption[];
 
-  @Output() saveForm = new EventEmitter()
+  @Output() saveForm = new EventEmitter();
 
-  loading = false
+  loading = false;
 
   invoiceJuridicaForm: any;
   availableOptions: any = [];
@@ -53,9 +53,9 @@ export class InvoiceJuridicaFormComponent {
       this.fillPurchaseOrderControl(index, po.id.toString());
     });
 
-    console.log(this.selectOptionsPo)
+    console.log(this.selectOptionsPo);
   }
-  
+
   getFormattedOcOptions(purchaseOrders: PurchaseOrders[]): SelectOption[] {
     return purchaseOrders.map((order: any) => ({
       optionValue: order.id,
@@ -82,15 +82,15 @@ export class InvoiceJuridicaFormComponent {
       taxAuditorCertificate: this.formBuilder.control('', Validators.requiredTrue),
       arlCertificate: this.formBuilder.control('', Validators.requiredTrue),
       otherAnexes: this.formBuilder.array([]),
-    })
+    });
   }
 
   cancelLoading() {
-    this.loading = false
+    this.loading = false;
   }
 
   async onSubmit() {
-    this.loading = true
+    this.loading = true;
     await this.uploadFiles(['electronicInvoice', 'socialSecurity', 'taxAuditorCertificate', 'arlCertificate']);
     await this.uploadFilesFromArrayOfControls(this.getOtherAnexesArray());
     this.ilsService.updateRegisterVendor(this.invoiceJuridicaForm.value);
@@ -129,7 +129,7 @@ export class InvoiceJuridicaFormComponent {
       this.availableOptions = {
         ...this.availableOptions,
         [`${this.getOrderIds().length - 1}`]: filteredOptions
-      }
+      };
     }
   }
 
@@ -168,11 +168,17 @@ export class InvoiceJuridicaFormComponent {
     if (!value) {
       const documentId = formControl.value.document_id;
       if(documentId) {
-        this.vendorService.deleteVendorDocument({ document_id: documentId })
+        this.vendorService.deleteVendorDocument({ document_id: documentId });
       }
-    }
-    else {
+    } else {
       const nameFile = this.globalService.normalizeString(value.name);
+      const existingUrl = formControl.value.url;
+      if(existingUrl) {
+        console.log('File already uploaded', existingUrl);
+        this.loading = false;
+        return;
+      }
+
       this.ilsService.getPresignedPutURLOc(nameFile, vendorId, "register").pipe(
         catchError((error) =>
           of({ id: value, file: value, key: '', url: '' })
@@ -211,10 +217,13 @@ export class InvoiceJuridicaFormComponent {
         }),
         switchMap((uploadFile: any) => {
           if (!uploadFile) return of(false);
-          const url = uploadFile?.url ? `${vendorId}/${nameFile}` : '';
+          const document_url = uploadFile?.url ? `${vendorId}/${nameFile}` : '';
+          const formControlCurrentValue = formControl.value;
           formControl.setValue({
+            document_id: formControlCurrentValue?.document_id,
             name: value.name,
-            url,
+            url: uploadFile.url,
+            document_url: document_url
           });
           return of(true);
         })
@@ -233,7 +242,7 @@ export class InvoiceJuridicaFormComponent {
         const control = this.getControl(controlName);
         const file = control.value.file;
         if (file) {
-          this.submitFile({ value: file, formControl: control })
+          this.submitFile({ value: file, formControl: control });
           setTimeout(() => resolve(), 3500);
         } else {
           resolve();
@@ -249,10 +258,10 @@ export class InvoiceJuridicaFormComponent {
       return new Promise<void>((resolve) => {
         const file = control.value.file;
         if (file) {
-          this.submitFile({ value: file, formControl: control })
+          this.submitFile({ value: file, formControl: control });
           setTimeout(() => resolve(), 3500);
         } else {
-          
+          resolve();
         }
       });
     });
