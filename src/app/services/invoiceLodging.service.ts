@@ -144,7 +144,10 @@ export class InvoiceLodgingService {
       'document': document,
     }
 
-    return this.http.post(`${environment.apiUrl}cmo/sign_document`, params, { headers: this.headers }).pipe(
+    return this.http.get(`${environment.apiUrl}cmo/sign_document`, { 
+      headers: this.headers,
+      params: params
+    }).pipe(
       map((response: any) => response));
   }
 
