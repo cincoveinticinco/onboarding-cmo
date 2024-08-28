@@ -77,8 +77,10 @@
 
   @for(anexo of getOtherAnexesControls(); track $index) {
     @if(anexo.value.url) {
-      <b><p>Otros Anexos</p></b>
-      <a href="{{ anexo.value.url }}" target="_blank">Ver documento</a>
+      <div class="link-wrapper">
+        <b><p>Otros Anexos</p></b>
+        <a href="{{ anexo.value.url }}" target="_blank">Ver documento</a>
+      </div>
     }
   }
   
