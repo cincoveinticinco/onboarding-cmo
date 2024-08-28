@@ -195,10 +195,19 @@
     </form>
   } @else {
     @for (dependent of getDependentsForms(); track $index) {
-      <app-inf-dependent-certification
-        [dependentForm]="dependent"
-        [dependentIndex]="$index + 1"
-      ></app-inf-dependent-certification>
+      <div class="dependent-form-container">
+        @if($index > 0){
+          <button type="button" class="delete-button" (click)="deleteDependent($index)">
+            <span class="material-symbols-outlined">
+              delete
+            </span>
+          </button>
+        }
+        <app-inf-dependent-certification
+          [dependentForm]="dependent"
+          [dependentIndex]="$index + 1"
+        ></app-inf-dependent-certification>
+    </div>
     }    
     <div class="add-dependent-wrapper">
       <img src="./assets/images/AddUser.svg" alt="Agregar usuario" class="plus-icon">

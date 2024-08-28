@@ -47,3 +47,14 @@ p {
   align-items: center;
   gap: 6px;
 }
+
+.anexo-container {
+  position: relative !important;
+  
+  .delete-button-anexo {
+    position: absolute;
+    top: 0px;
+    right: 0;
+    border: 0px solid black !important;
+  }
+}

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SubtitleComponent } from '../../atoms/subtitle/subtitle.component';
 import { TextInputComponent } from '../../atoms/text-input/text-input.component';
@@ -6,24 +6,6 @@ import { CheckboxInputComponent } from '../../atoms/checkbox-input/checkbox-inpu
 import { FileboxComponent } from '../../atoms/filebox/filebox.component';
 import { ElectronicSignatureAuthComponent } from '../electronic-signature-auth/electronic-signature-auth.component';
 import { InfdependentCertificationComponent } from '../inf-dependent-certification/inf-dependent-certification.component';
-
-export interface DependentForm {
-  dependentDocumentTypeId: number;
-  dependentDocumentNumber: number;
-  dependentFullName: string;
-  dependentKinship: string;
-  decreaseInTaxBase: boolean;
-  minorChildredn: boolean;
-  minorChildrenFile: string;
-  childrenStudyCertificateFile: string;
-  childrenStudyCertificate: boolean;
-  childrenMedicineCertificate: boolean;
-  childrenMedicineCertificateFile: string;
-  partnerMedicineCertificate: boolean;
-  partnerMedicineCertificateFile: string;
-  familyMedicineCertificate: boolean;
-  familyMedicineCertificateFile: string;
-}
 
 @Component({
   selector: 'app-inf-step-two',
@@ -42,7 +24,7 @@ export interface DependentForm {
   styleUrl: './inf-step-two.component.css'
 })
 
-export class InfStepTwoComponent {
+export class InfStepTwoComponent implements OnInit {
   @Input() invoiceNaturalForm!: FormGroup;
   @Input() vendorInfo: any;
   @Input() validateStep: any;
@@ -50,19 +32,35 @@ export class InfStepTwoComponent {
   @Output() formSubmit = new EventEmitter<void>();
   @Output() previousStep = new EventEmitter<void>();
 
-  // scroll to top when render the component
+  renderDependentsForm: boolean = false;
+
+  constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit() {
     this.scrollToTop();
+    this.subscribeToDependentsChange();
   }
 
   private scrollToTop() {
     window.scrollTo(0, 0);
   }
 
-  renderDependentsForm: boolean = false;
+  private subscribeToDependentsChange() {
+    const dependentsControl = this.getControl('dependents');
+    dependentsControl.valueChanges.subscribe((value) => {
+      if (value === '0') {
+        console.log('clear dependents info....');
+        this.clearDependentsInfo();
+      }
+    });
+  }
 
-  constructor(private formBuilder: FormBuilder) {}
+  private clearDependentsInfo() {
+    const dependentsInfo = this.getDependents();
+    while (dependentsInfo.length !== 0) {
+      dependentsInfo.removeAt(0);
+    }
+  }
 
   getControl(controlName: string) {
     return this.invoiceNaturalForm?.get(controlName) as FormControl;
@@ -78,7 +76,7 @@ export class InfStepTwoComponent {
 
   goToDependentsForm() {
     this.renderDependentsForm = true;
-    if(this.getDependents().length === 0) {
+    if (this.getDependents().length === 0) {
       this.addNewDependentFormGroup();
     }
   }
@@ -130,7 +128,6 @@ export class InfStepTwoComponent {
       familyMedicineCertificateFile: ['']
     });
     this.getDependents().push(newDependentForm);
-    console.log(this.invoiceNaturalForm)
   }
 
   validateDependentForm() {
@@ -179,7 +176,6 @@ export class InfStepTwoComponent {
   }
 
   scrollToError(controlName: string | null): void {
-      console.log('Scrolling to', controlName);
       setTimeout(() => {
         if (controlName) {
           const element = document.getElementById(controlName);
@@ -188,14 +184,14 @@ export class InfStepTwoComponent {
           }
         }
       });
-    }
+  }
 
   getDependentsForms() {
     return this.getDependents().controls as FormGroup[];
   }
 
   handlePreviousStep() {
-    if(this.renderDependentsForm) {
+    if (this.renderDependentsForm) {
       this.renderDependentsForm = false;
       return;
     }
@@ -205,5 +201,9 @@ export class InfStepTwoComponent {
 
   trackByIndex(index: number, item: any): number {
     return index;
+  }
+
+  deleteDependent(index: number) {
+    this.getDependents().removeAt(index);
   }
 }

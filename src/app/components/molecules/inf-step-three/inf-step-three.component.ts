@@ -53,4 +53,8 @@ export class InfStepThreeComponent {
   handlePreviousStep() {
     this.previousStep.emit();
   }
+
+  deleteAnnex(index: number) {
+    this.getOtherAnexesArray().removeAt(index);
+  }
 }

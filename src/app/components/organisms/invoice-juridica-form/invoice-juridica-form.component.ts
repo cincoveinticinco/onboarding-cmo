@@ -268,4 +268,8 @@ export class InvoiceJuridicaFormComponent {
   
     await Promise.all(uploadPromises);
   }
+
+  deleteAnnex(index: number) {
+    this.getOtherAnexesArray().removeAt(index);
+  }
 }

@@ -89,8 +89,17 @@
   <label>Pago seguridad social mes vigente*</label>
   <app-filebox [control]="getControl('socialSecurity')"></app-filebox>
   @for(anexo of getOtherAnexesControls(); track $index) {
-    <label>Otros Anexos*</label>
-    <app-filebox [control]="anexo" [id]="'otherAnexes-' + $index"></app-filebox>
+    <div class="anexo-container">
+      @if($index > 0){
+        <button type="button" class="delete-button delete-button-anexo" (click)="deleteAnnex($index)">
+          <span class="material-symbols-outlined">
+            delete
+          </span>
+        </button>
+      }
+      <label>Otros Anexos*</label>
+      <app-filebox [control]="anexo" [id]="'otherAnexes-' + $index"></app-filebox>
+    </div>
   }
   <a (click)="addNewAnexFormGroup()">+ Agregar anexo</a>
   <p class="col-12 margin-top margin-bottom">

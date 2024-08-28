@@ -63,3 +63,14 @@ label {
   align-items: center;
   justify-content: center;
 }
+
+.dependent-form-container {
+  position: relative;
+
+  .delete-button {
+    position: absolute;
+    top: 6px;
+    right: 0;
+    border: 0px solid black !important;
+  }
+}
