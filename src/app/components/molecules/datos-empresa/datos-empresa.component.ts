@@ -20,6 +20,7 @@ import { SelectInputComponent } from '../../atoms/select-input/select-input.comp
 })
 export class DatosEmpresaComponent {
   @Input() form: FormGroup | undefined;
+  nitPattern = '^[0-9]{1,9}$';
 
   getControl(controlName: string): FormControl {
     return this.form?.get(controlName) as FormControl;
