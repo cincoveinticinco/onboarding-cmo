@@ -129,6 +129,7 @@ export class DocumentationFormComponent implements OnInit {
   }
 
   onSubmit() {
+    if(this.loading) return;
     if (!this.documentForm.invalid) {
       this.subs.push(this._vS.setNextVendorStatus().subscribe({
         next: () => {
