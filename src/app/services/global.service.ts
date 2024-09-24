@@ -19,6 +19,9 @@ export class GlobalService {
       f_vendor_economic_act_id: data[('economic_activity_id')],
       address: data[('address')],
       city: data[('city')],
+      bank_key: data[('bank_key')],
+      bank_account_type: data[('bank_account_type')],
+      bank_branch: data[('bank_branch')],
       department: data[('department')],
       telephone: data[('telephone')],
       email: data[('email')],
@@ -168,6 +171,9 @@ export class GlobalService {
     form.get('emergency_contact_name')?.setValue(data?.emergency_contact_name || '');
     form.get('emergency_contact_telephone')?.setValue(data?.emergency_contact_telephone || '');
     form.get('emergency_contact_kinship')?.setValue(data?.emergency_contact_kinship || '');
+    form.get('bank_account_type')?.setValue(data?.bank_account_type || '');
+    form.get('bank_branch')?.setValue(data?.bank_branch || '');
+    form.get('bank_key')?.setValue(data?.bank_key || '');
     form.get('eps')?.setValue(data?.eps || '');
     form.get('economic_activity')?.setValue(data?.economic_activity || '');
     form.get('economic_activity_id')?.setValue(data?.f_vendor_economic_act_id || '');

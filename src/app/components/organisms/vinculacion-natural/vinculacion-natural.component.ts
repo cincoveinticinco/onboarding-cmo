@@ -20,6 +20,7 @@ import { Subscription } from 'rxjs';
 import { file_types } from '../../../shared/interfaces/files_types';
 import { AdditionalInfoComponent } from '../../molecules/additional-info/additional-info.component';
 import { AUTOCOMPLETE_CONTROLS } from '../../../shared/interfaces/autocomplete_controls';
+import { DatosBancariosComponent } from '../../molecules/datos-bancarios/datos-bancarios.component';
 
 @Component({
   selector: 'app-vinculacion-natural',
@@ -42,6 +43,7 @@ import { AUTOCOMPLETE_CONTROLS } from '../../../shared/interfaces/autocomplete_c
     BlackButtonComponent,
     PanelButtonsComponent,
     AdditionalInfoComponent,
+    DatosBancariosComponent
   ],
   templateUrl: './vinculacion-natural.component.html',
   styleUrl: './vinculacion-natural.component.css'
@@ -67,6 +69,9 @@ export class VinculacionNaturalComponent {
       ciiu: new FormControl(''),
       economic_activity_id: new FormControl('', [Validators.required]),
       economic_activity: new FormControl('', [Validators.required]),
+      bank_branch: new FormControl('', [Validators.required]),
+      bank_key: new FormControl('', [Validators.required]),
+      bank_account_type: new FormControl('', [Validators.required]),
       address: new FormControl('', [Validators.required]),
       city: new FormControl('', [Validators.required]),
       department: new FormControl('', [Validators.required]),

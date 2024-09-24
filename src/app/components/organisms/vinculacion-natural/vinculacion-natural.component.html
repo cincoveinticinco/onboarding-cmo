@@ -5,6 +5,7 @@
   <app-datos-contratista [form]="naturalForm" [lists]="lists"/>
   <app-datos-contables-fiscales [form]="naturalForm"/>
   <app-datos-salud [form]="naturalForm" [lists]="this.lists"/>
+  <app-datos-bancarios [form]="naturalForm"/>
   <app-datos-contacto-emergencia [form]="naturalForm"/>
   <app-personas-expuestas-politicamente [form]="naturalForm"/>
   @if(naturalForm.get('is_pep')?.value == '1'){

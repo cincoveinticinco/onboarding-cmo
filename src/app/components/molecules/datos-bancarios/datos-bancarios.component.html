@@ -1,0 +1,23 @@
+<app-subtitle [subtitle]="'DATOS PARA EL PAGO'"></app-subtitle>
+<div class="row">
+  <!-- bankBranch, bankKey, bankAccountType -->
+  <app-text-input
+    [label]="'Banco *'"
+    [control]="getControl('bank_branch')"
+    [type]="'text'"
+    class="col-4"
+  ></app-text-input>
+  <app-text-input
+    [label]="'Número de cuenta *'"
+    [control]="getControl('bank_key')"
+    [pattern]="'^[0-9]+$'"
+    [type]="'number'"
+    class="col-4"
+  ></app-text-input>
+  <app-text-input
+    [label]="'Tipo de cuenta *'"
+    [control]="getControl('bank_account_type')"
+    [type]="'text'"
+    class="col-4"
+  ></app-text-input>
+</div>
