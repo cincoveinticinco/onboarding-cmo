@@ -15,10 +15,12 @@
     [label]="'Celular'"
     [control]="getControl('legal_representative_telephone')"
     class="col-4"
+    [pattern]="'^[0-9+-]+$'"
   />
   <app-text-input
     [label]="'Correo electrónico'"
     [control]="getControl('legal_representative_email')"
     class="col-4"
+    [type]="'email'"
   />
 </div>

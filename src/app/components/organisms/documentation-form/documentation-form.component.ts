@@ -1,36 +1,50 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TIPOPERSONA } from '../../../shared/interfaces/typo_persona';
 import { VendorService } from '../../../services/vendor.service';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FileboxComponent } from '../../atoms/filebox/filebox.component';
 import { CommonModule } from '@angular/common';
 import { VENDORFORMSTATUS } from '../../../shared/interfaces/typo_vendor_form_status';
 import { GlobalService } from '../../../services/global.service';
-import { Subscription, catchError, map, of, switchMap } from 'rxjs';
+import { Subscription, catchError, map, of, switchMap, throwError } from 'rxjs';
 import { HttpEventType } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { BlackButtonComponent } from '../../atoms/black-button/black-button.component';
+import { environment } from '../../../../environments/environment';
+import { FileType } from '../../../shared/interfaces/files_types';
+import { MatIconModule } from '@angular/material/icon';
+import { TextInputComponent } from '../../atoms/text-input/text-input.component';
 
 @Component({
   selector: 'app-documentation-form',
   standalone: true,
-  imports: [ReactiveFormsModule, FileboxComponent, CommonModule, BlackButtonComponent],
+  imports: [
+    ReactiveFormsModule,
+    FileboxComponent,
+    CommonModule,
+    BlackButtonComponent,
+    MatIconModule,
+    TextInputComponent,
+  ],
   templateUrl: './documentation-form.component.html',
   styleUrl: './documentation-form.component.css'
 })
 export class DocumentationFormComponent implements OnInit {
 
-  @Input() typeVendor: any = null; 
+  @Input() typeVendor: any = null;
 
   readonly TIPOPERSONA = TIPOPERSONA;
   readonly VENDORFORMSTATUS = VENDORFORMSTATUS;
-  
+  readonly apiUrlFront = environment.apiUrlFront;
+
   loading: boolean = false;
   documents: any[] = [];
   documentForm: FormGroup;
-  linkDocument: any = null;
-  filesDynamic: {[key: number]: string} = {};
   subs: Subscription[] = [];
+
+  nonRequiredDocuments: FileType[] = [FileType.ARLcertification];
+  arrayDocuments: FileType[] = [FileType.AdditinalDocs];
+
 
   constructor(private _vS: VendorService, private fb: FormBuilder, private _gS: GlobalService, private router: Router) {
     this.documentForm = this.fb.group({});
@@ -38,67 +52,96 @@ export class DocumentationFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    this.onSubscribeValuesChanges();
+  }
 
-    this.subs.push(this.documentForm.valueChanges.subscribe(valor => {
-      Object.keys(this.documentForm.controls).forEach((controlName: any) => {
-        const control = this.documentForm.get(controlName);
-        if (control && control.dirty) {
-          const foundKey = Object.keys(this.filesDynamic).find((key: any) => this.filesDynamic[key] === controlName);
-          if (foundKey) {
-            const fileData = {
-              formControlName: controlName,
-              value: control?.value?.file,
-              vendor_id: this._vS.getVendorId(),
-            };
-            this.submitFile(fileData);
-            control.markAsPristine();
-          }
-        }
-      });
-      var data = {
+  onSubscribeValuesChanges() {
+    this.subs.push(this.documentForm.valueChanges.subscribe((valor: any) => {
+      const data = {
         typeForm: VENDORFORMSTATUS.VINCULACION,
-        form: valor
+        form: valor,
       };
+
       this._vS.setGeneralForm(data);
     }));
   }
 
   loadData() {
     this.loading = true;
+
     this.subs.push(this._vS.getDocumentsData().subscribe({
       next: ((data: any) => {
-        this.documents = data.f_vendor_document_types || [];
+        this.documents = data?.f_vendor_document_types || [];
         this.setFormData();
+
         this.loading = false;
       })
     }));
   }
 
   setFormData() {
-    this.documents.forEach((dc: any) => {
-      this.documentForm.addControl(`document_${dc.id}`, new FormControl('', [Validators.required]));
-      this.documentForm.get(`document_${dc.id}`)?.setValue(this.setDynamicFiles(dc));
-      dc['class'] = '';
-      if (dc.document_type.length > 120 ) dc['class'] = 'large-txt';
+    this.documents.forEach((doc: any) => {
+      doc.isArrayDocuments = this.arrayDocuments.includes(doc.id);
+
+      this.documentForm.addControl(`document_${doc.id}`, new FormArray([]));
+
+      doc?.documents?.forEach((file: any) => {
+        this.getArrayForm(doc.id).push(this.newDocGroup(doc, file));
+      });
+
+      if (!doc?.documents?.length && !doc.isArrayDocuments) {
+        this.getArrayForm(doc.id).push(this.newDocGroup(doc));
+      }
+
     });
-    this.documents.forEach((dc: any) => {
-      this.filesDynamic[dc.id] = `document_${dc.id}`;
+  }
+
+  newDocGroup(doc: any, file?: any) {
+    let newFileGroup = new FormGroup({
+      document_id: new FormControl(file?.document_id || null),
+      name: new FormControl( file?.name || '', Validators.required),
+      file: new FormControl(file ? this.setDynamicFiles(file) : null),
+      link: new FormControl(file?.link),
+    });
+
+    if (!this.nonRequiredDocuments.includes(doc.id)) {
+      newFileGroup.controls.file.addValidators(Validators.required);
+      newFileGroup.controls.file.updateValueAndValidity();
+    }
+
+    if (!doc?.isArrayDocuments) newFileGroup.controls.name.disable();
+
+    newFileGroup.controls.file.valueChanges.subscribe((value) => {
+      if (value) {
+        setTimeout(() => {
+          this.submitFile(doc, newFileGroup);
+        }, 0);
+      } else {
+        if (!doc?.isArrayDocuments) this.deleteFile(newFileGroup.get('document_id')?.value);
+      }
     })
+
+    return newFileGroup;
+  }
+
+  getArrayForm(docId: number) {
+    return this.documentForm.get(`document_${docId}`) as FormArray<FormGroup>;
   }
 
   onSubmit() {
+    if(this.loading) return;
     if (!this.documentForm.invalid) {
-      var params = { third_form: true }
       this.subs.push(this._vS.setNextVendorStatus().subscribe({
         next: () => {
-          this.loading = false;
           this.router.navigate(['thanks-docs', this._vS.getVendorId()]);
+          this.loading = false;
         }
       }));
-    }
-    else {
-      Object.values(this.documentForm.controls).forEach((control) => {
-        control.markAsTouched();
+    } else {
+      Object.values(this.documentForm.controls).forEach((control: any) => {
+        control?.controls?.forEach((subFile: any) => {
+          subFile?.controls?.file?.markAsTouched();
+        });
       });
     }
   }
@@ -108,79 +151,136 @@ export class DocumentationFormComponent implements OnInit {
     if (control?.hasError('required') && control?.touched) {
       return 'Este campo es requerido *';
     }
-    return
+
+    return;
   }
 
-  submitFile(ev: any) {
+  submitFile(doc: any, currentFormGroup: FormGroup) {
     this.loading = true;
-    const { value, formControlName } = ev;
-    const fileIdDocument = Object.keys(this.filesDynamic).find(
-      (key) =>
-      this.filesDynamic[key as unknown as keyof typeof this.filesDynamic] == formControlName
-    );
-    const documentId = this._gS.getDocumentLink(fileIdDocument)?.document_id;
-    if (!value) {
-      this._vS.deleteVendorDocument({ document_id: documentId })
-      .subscribe((data) => this.loading = false);
-    }
-    else {
-      const nameFile = this._gS.normalizeString(value.name);
-      this._vS.getPresignedPutURL(nameFile, ev.vendor_id).pipe(
-        catchError((error) =>
-          of({ id: fileIdDocument, file: value, key: '', url: '' })
-        ),
-        map((putUrl: any) => ({
-          ...putUrl,
-          id: fileIdDocument,
-          file: value,
-        })),
-        switchMap((uploadFile: any) => {
-          if (!uploadFile.url) {
-            return of({ blobFile: null, uploadFile });
-          }
-          return new Promise(resolve => {
-            uploadFile.file.arrayBuffer().then((blobFile: File) => resolve({ blobFile, uploadFile }));
+
+    const file = {...currentFormGroup.getRawValue()};
+    const currentFile = currentFormGroup.getRawValue()?.file;
+    const nameFile = this._gS.normalizeString(currentFile?.name);
+
+    this._vS.getPresignedPutURL(nameFile, this._vS.getVendorId()).pipe(
+      catchError(() => {
+        if (environment?.stage != 'local') {
+          currentFormGroup.get('file')?.setValue(null, { emitEvent: false });
+          this.loading = false;
+          this._gS.openSnackBar('Fallo al guardar el documento, intente de nuevo', '', 5000);
+          return throwError(() => new Error('Error al obtener la URL de subida.'));
+        } else {
+          return of({ id: doc.id, file: currentFile?.file, name: currentFile?.name, key: '', url: '' });
+        }
+      }),
+      map((putUrl: any) => ({
+        ...putUrl,
+        id: doc.id,
+        file: currentFile?.file,
+        name: currentFile?.name,
+      })),
+      switchMap((uploadFile: any) => {
+        if (!uploadFile.url) {
+          return of({ blobFile: null, uploadFile });
+        }
+        return new Promise(resolve => {
+          uploadFile.file.arrayBuffer().then((blobFile: File) => resolve({ blobFile, uploadFile }));
+        });
+      }),
+      switchMap((blobUpdateFile: any) => {
+        const { blobFile, uploadFile } = blobUpdateFile;
+        if (!blobFile) {
+          return of(uploadFile);
+        }
+        return this._vS.uploadFileUrlPresigned(<File>blobFile, uploadFile.url, uploadFile.file.type)
+          .pipe(
+            catchError(() => {
+              if (environment?.stage != 'local') {
+                currentFormGroup.get('file')?.setValue(null, { emitEvent: false });
+                this.loading = false;
+                this._gS.openSnackBar('Fallo al guardar el documento, intente de nuevo', '', 5000);
+                return throwError(() => new Error('Error al subir el archivo.'));
+              } else {
+                return of({ ...currentFile?.file, name: currentFile?.name, url: '' });
+              }
+            }),
+            map((value) => value.type == HttpEventType.Response ? uploadFile : null)
+          );
+      }),
+      switchMap(
+        (uploadFile: any) => {
+          if (!uploadFile) return of(false);
+
+          const link = uploadFile?.url ? `${this._vS.getVendorId()}/${nameFile}` : '';
+          currentFormGroup.get('link')?.setValue(link);
+
+          return this._vS.updateVendorDocument({
+            vendor_document_type_id: Number(uploadFile.id),
+            link: link,
+            vendor_document_id: file?.document_id,
+            name: file?.name,
           });
-        }),
-        switchMap((blobUpdateFile: any) => {
-          const { blobFile, uploadFile } = blobUpdateFile;
-          if (!blobFile) {
-            return of(uploadFile);
-          }
-          return this._vS.uploadFileUrlPresigned(<File>blobFile, uploadFile.url, uploadFile.file.type)
-            .pipe(
-              catchError((_) => of({ ...value, url: '' })),
-              map((value) => value.type == HttpEventType.Response ? uploadFile : null)
-            );
-        }),
-        switchMap(
-          (uploadFile: any) => {
-            if (!uploadFile) return of(false);
-            return this._vS.updateVendorDocument({
-              vendor_document_type_id: Number(uploadFile.id),
-              link: uploadFile.url
-              ? `${ev.vendor_id}/${nameFile}`
-              : '',
-            });
-          }
-        ),
-        map((response: any) => {
-          this.linkDocument = response;
-        })
+        }
       )
-      .subscribe((value) => {
-        setTimeout(() => { this.loading = false }, 3000)
-      });
+    ).subscribe({
+      next: (data: any) => {
+        currentFormGroup.get('document_id')?.setValue(data?.document_id);
+        currentFormGroup.get('document_id')?.updateValueAndValidity();
+
+        this.loading = false;
+      }
+    });
+  }
+
+  updateDocument(doc: any, file: FormGroup) {
+    this.loading = true;
+    const params = {
+      vendor_document_type_id: doc.id,
+      vendor_document_id: file.get('document_id')?.value,
+      link: file.get('link')?.value,
+      name: file.get('name')?.value,
     }
+
+    this._vS.updateVendorDocument(params).subscribe({
+      next: (data: any) => {
+        file.get('document_id')?.setValue(data?.document_id);
+        this.loading = false;
+      }
+    })
+  }
+
+  deleteFile(documentId: number) {
+    this.loading = true;
+
+    this._vS.deleteVendorDocument({ document_id: documentId }).subscribe({
+      next: () => {
+        this.loading = false;
+      }
+    });
   }
 
   setDynamicFiles(doc: any) {
-    const file = doc.link ? { name: doc.link, url: doc.link} : null;
+    const file = doc.link ? { name: doc.link, url: doc.link } : null;
     return file;
   }
 
   get fDocuments() {
     return this.documentForm.controls;
+  }
+
+  addNewDocument(doc: any) {
+    this.getArrayForm(doc.id).push(this.newDocGroup(doc));
+  }
+
+  deleteArraydoc(docId: number, index: number, file: FormGroup) {
+
+    const currentFile = file?.get('document_id')?.value;
+
+    if (currentFile) {
+      this.deleteFile(currentFile);
+    }
+
+    this.getArrayForm(docId).removeAt(index);
   }
 
   ngOnDestroy() {

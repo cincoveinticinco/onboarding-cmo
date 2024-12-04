@@ -8,6 +8,8 @@
   <app-text-input
     [label]="'NIT'"
     class="col-3"
+    type="number"
+    [pattern]="nitPattern"
     [control]="getControl('document')"
   />
   <app-text-input
@@ -24,10 +26,12 @@
     [label]="'Teléfonos de contacto'"
     class="col-4"
     [control]="getControl('telephone')"
+    [pattern]="'^[0-9+-]+$'"
   />
   <app-text-input
     [label]="'Correo electrónico'"
     class="col-4"
     [control]="getControl('email')"
+    [type]="'email'"
   />
 </div>
