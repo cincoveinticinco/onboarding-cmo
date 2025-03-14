@@ -8,12 +8,12 @@ import { shareReplay, tap } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  
+
   private loginApiUrl: string = environment.apiUrlFront;
   vendorId: any = null;
- 
+
   constructor(@Inject(PLATFORM_ID) private platformId: Object, private http: HttpClient, private router: Router, private route: ActivatedRoute) { }
- 
+
   loginVendor(email: string, token: string, vendor_id: any){
     return this.http.post(`${environment.apiUrl}cmo/validate_token`, {token: token, email: email, id: vendor_id}).pipe(
       tap( res => this.setVendorSession(res)),
@@ -26,10 +26,10 @@ export class AuthService {
   }
 
   generateVendorToken(email_vendor: any) {
-    return this.http.post(`${environment.apiUrl}cmo/send_token`, {email: email_vendor}).pipe(
+    return this.http.post(`${environment.apiUrl}cmo/send_token`, { email: email_vendor, company_id: 19 }).pipe(
       shareReplay(1)
     )
-  } 
+  }
 
   async getSession() {
     let sessionToken = await this.getToken();
