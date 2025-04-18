@@ -11,3 +11,8 @@ export const file_types: {[key: number]: string} = {
   333: 'confidentiality_agreement',
   334: 'data_update_form'
 };
+
+export enum FileType {
+  AdditinalDocs = 345,
+  ARLcertification = 329,
+}

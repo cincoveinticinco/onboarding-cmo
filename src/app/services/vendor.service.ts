@@ -42,7 +42,7 @@ export class VendorService {
   getDocumentsList() {
     return this._documentsList;
   }
-  
+
   setHeaders() {
     this.tokenSession = this.auth.getValueToken();
     this.headers = new HttpHeaders({
@@ -60,7 +60,6 @@ export class VendorService {
 
   updateVendor(values: any) {
     this.setHeaders();
-    console.log(values, '*****************************')
     return this.http.post(`${environment.apiUrl}cmo/update_vendor`, values, { headers: this.headers}).pipe(
       map((response: any) => response));
   }
@@ -130,7 +129,7 @@ export class VendorService {
 
   deleteVendorDocument(formData: any) {
     this.setHeaders();
- 
+
     return this.http.delete(`${environment.apiUrl}cmo/delete_document_vendor`, {
       headers: this.headers,
       params: formData

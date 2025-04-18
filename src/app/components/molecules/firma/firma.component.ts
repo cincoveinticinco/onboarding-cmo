@@ -16,7 +16,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 })
 export class FirmaComponent {
   @Input() form: FormGroup | undefined;
-  
+
   getControl(controlName: string): FormControl {
     return this.form?.get(controlName) as FormControl;
   }
