@@ -88,6 +88,7 @@ export class FormsCmoComponent implements OnInit {
   sendForm(ev: any) {
     if(this.loading) return;
     this.loading = true;
+    console.log(ev);
     const formData = this.globalService.setVinculationForm(ev.form);
     this.vendorService.updateVendor(formData).subscribe({
       next: () => {

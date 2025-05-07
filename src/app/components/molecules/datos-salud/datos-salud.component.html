@@ -1,31 +1,53 @@
 <app-subtitle [subtitle]="'Datos de Seguridad Social'"></app-subtitle>
-<div class="row">
-  <app-text-input 
-    [label]="'EPS'" 
+
+<div [formGroup]="form" class="row">
+  <app-text-input
+    [label]="'EPS'"
     [control]="getControl('eps')"
     class="col-4"
   ></app-text-input>
-  <app-text-input 
+  <app-text-input
     [label]="'Pensión'"
     [control]="getControl('afp')"
     class="col-4"></app-text-input>
-  <app-text-input 
-    [label]="'Cesantias'"
-    [control]="getControl('layoffs')" 
-    class="col-4"></app-text-input>
-  <app-text-input 
-    [label]="'ARL'" 
-    [control]="getControl('arl')"
-    class="col-4"></app-text-input>
     <app-select-input
-  [label]="'RH'"
-  [control]="getControl('blood_type_id')"
-  [options]="lists?.bloodTypes"
-  [optionName]="'name'"
-  [optionValue]="'id'"
-  class="col-4"></app-select-input>
-  <p class="col-4"></p>
-  <app-select-input 
+    [label]="'RH'"
+    [control]="getControl('blood_type_id')"
+    [options]="lists?.bloodTypes"
+    [optionName]="'name'"
+    [optionValue]="'id'"
+    class="col-4">
+  </app-select-input>
+
+  <app-text-input
+    [label]="'Cesantias'"
+    [control]="getControl('layoffs')"
+    class="col-6">
+  </app-text-input>
+  <mat-checkbox
+    class="col-6"
+    style="margin-top: 20px;"
+    formControlName="aplicaCesantias"
+    name="aplicaCesantias"
+    (ngModelChange)="changeApplyCesantias()">
+    No aplica Cesantías
+  </mat-checkbox>
+
+  <app-text-input
+    [label]="'ARL'"
+    [control]="getControl('arl')"
+    class="col-6">
+  </app-text-input>
+  <mat-checkbox
+    class="col-6"
+    style="margin-top: 20px;"
+    formControlName="aplicaArl"
+    name="aplicaArl"
+    (ngModelChange)="changeApplyArl()">
+    No aplica ARL
+  </mat-checkbox>
+
+  <app-select-input
     [label]="'Nivel de riesgo'"
     [control]="getControl('risk_level')"
     [options]="lists?.riskLevels"

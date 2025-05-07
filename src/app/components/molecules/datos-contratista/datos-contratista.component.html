@@ -1,10 +1,24 @@
 <app-subtitle [subtitle]="'datos del contratista'" />
 <div class="row">
   <app-text-input
-    [label]="'Nombres y Apellidos Completos'"
+    [label]="'Primer nombre'"
     [control]="getControl('name')"
-    [description]="'(Tal como aparece en su documento de identidad)'"
-    class="col-11"
+    class="col-3"
+  />
+  <app-text-input
+    [label]="'Segundo nombre'"
+    [control]="getControl('second_name')"
+    class="col-3"
+  />
+  <app-text-input
+    [label]="'Primer apellido'"
+    [control]="getControl('first_last_name')"
+    class="col-3"
+  />
+  <app-text-input
+    [label]="'Segundo apellido'"
+    [control]="getControl('second_last_name')"
+    class="col-3"
   />
   <app-select-input
     [label]="'Tipos de documento'"

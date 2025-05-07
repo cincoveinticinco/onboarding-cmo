@@ -13,6 +13,9 @@ export class GlobalService {
   setVinculationForm(data: any) {
     var formData = {
       name: data[('name')],
+      second_name: data[('second_name')],
+      first_last_name: data[('first_last_name')],
+      second_last_name: data[('second_last_name')],
       f_document_type_id: data[('document_type_id')],
       document: data[('document')],
       ciiu: data[('ciiu')],
@@ -159,6 +162,9 @@ export class GlobalService {
 
   fillInitialVinculationForm(form: any, data: any) {
     form.get('name')?.setValue(data?.name || '', { emitEvent: false });
+    form.get('second_name')?.setValue(data?.second_name || '', { emitEvent: false });
+    form.get('first_last_name')?.setValue(data?.last_name || '', { emitEvent: false });
+    form.get('second_last_name')?.setValue(data?.second_last_name || '', { emitEvent: false });
     form.get('document_type_id')?.setValue(data?.f_document_type_id || '');
     form.get('document')?.setValue(data?.document || '', { emitEvent: false });
     form.get('ciiu')?.setValue(data?.ciiu || '');

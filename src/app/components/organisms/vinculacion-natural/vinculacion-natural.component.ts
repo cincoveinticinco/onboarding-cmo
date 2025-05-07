@@ -63,6 +63,9 @@ export class VinculacionNaturalComponent {
       type: new FormControl('', [Validators.required]),
       date: new FormControl('', [Validators.required]),
       name: new FormControl('', [Validators.required]),
+      second_name: new FormControl(''),
+      first_last_name: new FormControl('', [Validators.required]),
+      second_last_name: new FormControl(''),
       document_type_id: new FormControl('', [Validators.required]),
       document: new FormControl('', [Validators.required]),
       pepff: new FormControl(''),
@@ -83,7 +86,9 @@ export class VinculacionNaturalComponent {
       eps: new FormControl('', [Validators.required]),
       afp: new FormControl('', [Validators.required]),
       layoffs: new FormControl('', [Validators.required]),
+      aplicaCesantias: new FormControl(false),
       arl: new FormControl('', [Validators.required]),
+      aplicaArl: new FormControl(false),
       risk_level: new FormControl({ value: '', disabled: true }, [Validators.required]),
       blood_type_id: new FormControl('', [Validators.required]),
       illness: new FormControl('', [Validators.required]),
@@ -176,7 +181,7 @@ export class VinculacionNaturalComponent {
   sendForm() {
     if (this.naturalForm.valid) {
       let data = {
-        form: this.naturalForm.value,
+        form: this.naturalForm.getRawValue(),
         nextForm: true
       }
       this.notify.emit(data);
@@ -199,7 +204,7 @@ export class VinculacionNaturalComponent {
 
   saveForm() {
     let data = {
-      form: this.naturalForm.value,
+      form: this.naturalForm.getRawValue(),
       nextForm: false
     }
     this.notify.emit(data);
