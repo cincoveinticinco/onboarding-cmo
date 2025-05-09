@@ -195,7 +195,7 @@ export class VinculacionNaturalComponent {
       this.naturalForm.get(control.controlName)?.valueChanges?.subscribe((value) => {
         this.lists.vendorInfo[control.controlName] = value;
 
-        if (control?.autocompleteControlName) {
+        if (control?.autocompleteControlName && control.controlName !== 'name') {
           this.naturalForm.get(control?.autocompleteControlName)?.setValue(value);
         }
       });

@@ -24,6 +24,14 @@ export class DatosContratistaComponent {
 
   ngOnInit() {
     this.form?.controls['economic_activity'].disable();
+    this.subscribeToForm();
+  }
+
+  subscribeToForm() {
+    this.form?.get('name')?.valueChanges.subscribe(() => this.setFullName());
+    this.form?.get('second_name')?.valueChanges.subscribe(() => this.setFullName());
+    this.form?.get('first_last_name')?.valueChanges.subscribe(() => this.setFullName());
+    this.form?.get('second_last_name')?.valueChanges.subscribe(() => this.setFullName());
   }
 
   getControl(controlName: string): FormControl {
@@ -39,6 +47,12 @@ export class DatosContratistaComponent {
     if(id) {
       this.form?.get('economic_activity')?.setValue(this.getEconomicActivity(id));
     }
+  }
+
+  setFullName() {
+    this.form?.get('form_responsible_name')?.setValue(
+      `${this.form?.get('name')?.value || ''} ${this.form?.get('second_name')?.value || ''} ${this.form?.get('first_last_name')?.value || ''} ${this.form?.get('second_last_name')?.value || ''}`
+    );
   }
 
   showPepff() {
