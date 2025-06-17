@@ -7,15 +7,15 @@
 	<div class="form-content">
 		<app-form-header [title]="title"/>
 		@if (typePerson == personEnnum.Natural && vendorStatus == VENDORSTATUS.CREADO) {
-			<p>
+			<!-- <p>
 				El presente documento deberá ser completado y suscrito por la persona natural que se vinculará a la sociedad CMO PRODUCCIONES S.A.S., CMO INTERNACIONAL S.A.S. y/o CMO STUDIOS S.A.S., o aquellas que deseen realizar una actualización de datos previamente registrados.
-			</p>
+			</p> -->
 			<app-vinculacion-natural class="full-width" (notify)="sendForm($event)" [lists]="lists" (onSubmitFile)="submitFile($event)" />
 		}
 		@else if (typePerson == personEnnum.Juridica && vendorStatus == VENDORSTATUS.CREADO) {
-			<p>
+			<!-- <p>
 				El presente documento deberá ser completado y suscrito por el representante legal de la persona jurídica que se vinculará a la sociedad CMO PRODUCCIONES S.A.S., CMO INTERNACIONAL S.A.S. y/o CMO STUDIOS S.A.S., o aquellas que deseen realizar una actualización de datos previamente registrados.
-			</p>
+			</p> -->
 			<app-vinculacion-juridica class="full-width" (notify)="sendForm($event)" [lists]="lists" (onSubmitFile)="submitFile($event)" />
 		}
 		@else if([VENDORSTATUS.VINCULACION, VENDORSTATUS.CORRECION_DOCS].includes(vendorStatus)) {
