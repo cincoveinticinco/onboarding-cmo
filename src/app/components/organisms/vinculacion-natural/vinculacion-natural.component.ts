@@ -101,6 +101,7 @@ export class VinculacionNaturalComponent {
       allergies_description: new FormControl(''),
       food_restrictions: new FormControl('', [Validators.required]),
       food_restrictions_description: new FormControl(''),
+      retefuente: new FormControl('', [Validators.required]),
       is_pep: new FormControl('', [Validators.required]),
       pep_start_date: new FormControl({ value: null, disabled: true }, Validators.required),
       pep_end_date: new FormControl({ value: null, disabled: true }, Validators.required),

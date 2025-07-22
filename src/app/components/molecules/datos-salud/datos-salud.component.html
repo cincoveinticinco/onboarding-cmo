@@ -109,23 +109,29 @@
     class="col-12"
   />
   @if(showDescription('allergies')  === '1') {
-    <app-text-input 
+    <app-text-input
       [label]="'¿Cuál(es)?'"
       [control]="getControl('allergies_description')"
       class="col-4"
     ></app-text-input>
   }
-  <app-checkbox-input 
+  <app-checkbox-input
     [label]="'¿Tiene alguna restricción alimenticia?'"
     [controlName]="'food_restrictions'"
     [control]="getControl('food_restrictions')"
     class="col-12"
   />
   @if(showDescription('food_restrictions')  === '1') {
-    <app-text-input 
-      [label]="'¿Cuál(es)?'"
-      [control]="getControl('food_restrictions_description')"
-      class="col-4"
+    <app-text-input
+    [label]="'¿Cuál(es)?'"
+    [control]="getControl('food_restrictions_description')"
+    class="col-4"
     ></app-text-input>
   }
+  <app-checkbox-input
+    [label]="'Las personas naturales que perciban rentas de trabajo diferentes a las provenientes de una relación laboral o legal y reglamentaria, y que no soliciten al agente retenedor la aplicación de costos y deducciones conforme al Num. 6 del Art. 1.2.4.1.6 del D.U. 1625 de 2016, se regirán por lo dispuesto en el Art. 383 del E.T. En caso contrario, se aplicará las tarifas de retención en la fuente previstas en los Art 392 y 401 del E.T. Autoriza aplicar la depuración de la retención en la fuente según el Art. 383 del ET.'"
+    [controlName]="'retefuente'"
+    [control]="getControl('retefuente')"
+    class="col-12"
+  />
 </div>
