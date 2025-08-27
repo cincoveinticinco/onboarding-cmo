@@ -9,7 +9,8 @@
     "test": "ng test",
     "serve:ssr:onboarding-cmo": "node dist/onboarding-cmo/server/server.mjs",
     "production": "ng build --base-href /onboarding-cmo/ --configuration production",
-    "staging": "ng build --base-href /onboarding-cmo/ --configuration staging"
+    "staging": "ng build --base-href /onboarding-cmo/ --configuration staging",
+    "development": "ng build --base-href /onboarding-cmo/ --configuration development-server"
   },
   "private": true,
   "dependencies": {
