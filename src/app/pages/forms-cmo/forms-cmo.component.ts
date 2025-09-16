@@ -1,9 +1,9 @@
-import { ChangeDetectorRef, Component, OnInit, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormHeaderComponent } from '../../components/molecules/form-header/form-header.component';
 import { TIPOPERSONA } from '../../shared/interfaces/typo_persona';
 import { PanelButtonsComponent } from '../../components/molecules/panel-buttons/panel-buttons.component';
 import { VinculacionNaturalComponent } from '../../components/organisms/vinculacion-natural/vinculacion-natural.component';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { VinculacionJuridicaComponent } from '../../components/organisms/vinculacion-juridica/vinculacion-juridica.component';
 import { VendorService } from '../../services/vendor.service';
 import { GlobalService } from '../../services/global.service';
@@ -48,7 +48,6 @@ export class FormsCmoComponent implements OnInit {
   constructor(
     private vendorService: VendorService,
     private globalService: GlobalService,
-    private cd: ChangeDetectorRef,
     private route: ActivatedRoute,
     private auth: AuthService
   ) {}
@@ -61,22 +60,21 @@ export class FormsCmoComponent implements OnInit {
     })
   }
 
-  loadData() {
-    this.loading = true;
+  loadData(loading: boolean = true) {
+    if (loading) this.loading = true;
+
     this.vendorService.getVendorInfo().subscribe({
       next: (response: any) => {
-        console.log('response', response);
         this.lists = {
           documentTypes: response.f_document_type_ids,
           economicActivities: response?.economic_activities,
           vendorInfo: response?.vendor_basic_info,
-          riskLevels: response?.arl_risk_levels
+          riskLevels: response?.arl_risk_levels,
+          bloodTypes: response?.blood_type || [],
         };
-        this.typePerson = response.vendor_basic_info?.f_person_type_id
-        console.log('typePerson', this.typePerson);
+        this.typePerson = response.vendor_basic_info?.f_person_type_id;
         this.vendorStatus = response?.vendor_status
         this.vendorService.setDocumentsList(response.document_vendor);
-        console.log('DOCS LIST', this.vendorService.getDocumentsList())
         this.getTitle();
         this.loading = false;
       },
@@ -85,16 +83,28 @@ export class FormsCmoComponent implements OnInit {
       }
 
     });
-    console.log('this.lists', this.lists);
   }
 
   sendForm(ev: any) {
+    if(this.loading) return;
+    this.loading = true;
+    console.log(ev);
     const formData = this.globalService.setVinculationForm(ev.form);
-    console.log('formData', formData);
-    this.vendorService.updateVendor(formData).subscribe((response: any) => {
-      return ev.nextForm && this.vendorService.setNextVendorStatus().subscribe((response: any) => {
-        this.loadData();
-      });
+    this.vendorService.updateVendor(formData).subscribe({
+      next: () => {
+        if (ev.nextForm) {
+          this.vendorService.setNextVendorStatus().subscribe(() => {
+            this.loadData();
+          });
+        } else {
+          this.loading = false;
+        }
+        this.globalService.openSnackBar('Cambios guardados', '', 5000);
+
+      },
+      error: () => {
+        this.globalService.openSnackBar('Fallo al guardar los datos', '', 5000);
+      }
     });
   }
 
@@ -108,7 +118,6 @@ export class FormsCmoComponent implements OnInit {
     );
 
     const documentId = this.globalService.getDocumentLink(fileIdDocument)?.document_id;
-    console.log(documentId, 'VALUE')
     if (!value) {
       this.vendorService.deleteVendorDocument({ document_id: documentId })
       .subscribe((data) => this.loading = false);
@@ -155,7 +164,6 @@ export class FormsCmoComponent implements OnInit {
           }
         ),
         map((response: any) => {
-          console.log('responsesssasasdaasd', response);
           this.linkDocument = response;
         })
       )

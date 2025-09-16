@@ -9,6 +9,7 @@
     [label]="'Celular'"
     [control]="getControl('treassury_responsible_telephone')"
     class="col-4"
+    [pattern]="'^[0-9+-]+$'"
   />
   <app-text-input
     [label]="'Correo electrónico'"
@@ -19,6 +20,7 @@
     [label]="'Cargo'"
     [control]="getControl('treassury_responsible_position')"
     class="col-4"
+    [type]="'email'"
   />
-  
+
 </div>
