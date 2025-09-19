@@ -103,7 +103,7 @@ export class GlobalService {
           description: data[('food_restrictions_description')]
         },
         {
-          info_additional_type_id: 125,
+          info_additional_type_id: 139,
           value: data[('retefuente')],
         },
         {
@@ -298,7 +298,7 @@ export class GlobalService {
         case 124:
           form.get('big_contributor')?.setValue(info.value ? '1' : '0');
           break;
-        case 125:
+        case 139:
           form.get('retefuente')?.setValue(info.value ? '1' : '0');
           break;
       }
