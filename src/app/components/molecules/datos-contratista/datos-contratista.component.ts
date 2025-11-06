@@ -32,6 +32,8 @@ export class DatosContratistaComponent {
     this.form?.get('second_name')?.valueChanges.subscribe(() => this.setFullName());
     this.form?.get('first_last_name')?.valueChanges.subscribe(() => this.setFullName());
     this.form?.get('second_last_name')?.valueChanges.subscribe(() => this.setFullName());
+
+    this.setFullName();
   }
 
   getControl(controlName: string): FormControl {
