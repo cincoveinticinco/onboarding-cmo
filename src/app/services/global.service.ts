@@ -170,7 +170,7 @@ export class GlobalService {
     form.get('first_last_name')?.setValue(data?.last_name || '', { emitEvent: false });
     form.get('second_last_name')?.setValue(data?.second_last_name || '', { emitEvent: false });
     form.get('document_type_id')?.setValue(data?.f_document_type_id || '');
-    form.get('document')?.setValue(data?.document || '', { emitEvent: false });
+    form.get('document')?.setValue(data?.document || '');
     form.get('ciiu')?.setValue(data?.ciiu || '');
     form.get('f_vendor_economic_act_id')?.setValue(data?.economic_activity_id || '');
     form.get('address')?.setValue(data?.address || '');
@@ -228,7 +228,7 @@ export class GlobalService {
     form.get('pep_term')?.setValue(data?.pep_term || '', { emitEvent: false });
     form.get('pep_position')?.setValue(data?.pep_position || '', { emitEvent: false });
     form.get('form_responsible_name')?.setValue(data?.form_responsible_name || '');
-    form.get('form_responsible_document')?.setValue(data?.form_responsible_document || '');
+    form.get('form_responsible_document')?.setValue(data?.form_responsible_document || data?.document || '');
     form.get('form_responsible_position')?.setValue(data?.form_responsible_position || '');
     form.get('signature')?.setValue(this.getDocumentLink(324), { emitEvent: false });
     form.get('cv_link')?.setValue(data?.cv_link || '');
@@ -304,13 +304,13 @@ export class GlobalService {
       }
     }
   }
-  
+
 
   getQuestionData(id: any, answers: any[], controlName?: string, form?: any) {
     let answer = answers.find((an: any) => an.id == id);
     if (answer.value === true && controlName) {
       form.get(`${controlName}_description`)?.setValidators(Validators.required);
-    } 
+    }
     else if (answer.value !== true && controlName){
       form.get(`${controlName}_description`)?.removeValidators(Validators.required);
     }
@@ -347,7 +347,7 @@ export class GlobalService {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
-  
+
     return `${day}/${month}/${year}`;
   }
 
