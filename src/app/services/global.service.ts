@@ -9,16 +9,22 @@ import { file_types } from '../shared/interfaces/files_types';
   providedIn: 'root'
 })
 export class GlobalService {
-  
+
   setVinculationForm(data: any) {
     var formData = {
       name: data[('name')],
+      second_name: data[('second_name')],
+      first_last_name: data[('first_last_name')],
+      second_last_name: data[('second_last_name')],
       f_document_type_id: data[('document_type_id')],
       document: data[('document')],
       ciiu: data[('ciiu')],
       f_vendor_economic_act_id: data[('economic_activity_id')],
       address: data[('address')],
       city: data[('city')],
+      bank_key: data[('bank_key')],
+      bank_account_type: data[('bank_account_type')],
+      bank_branch: data[('bank_branch')],
       department: data[('department')],
       telephone: data[('telephone')],
       email: data[('email')],
@@ -30,6 +36,7 @@ export class GlobalService {
       afp: data[('afp')],
       layoffs: data[('layoffs')],
       cmo_level_risk_arl_id: data[('risk_level')],
+      blood_type_id: data[('blood_type_id')],
       pepff: data[('pepff')],
       legal_representative_name: data[('legal_representative_name')],
       legal_representative_telephone: data[('legal_representative_telephone')],
@@ -62,10 +69,18 @@ export class GlobalService {
       last_close_expense: data[('last_close_expense')],
       last_year_expenses: data[('last_year_expenses')],
       is_pep: data[('is_pep')],
+      pep_start_date: data[('pep_start_date')],
+      pep_end_date: data[('pep_end_date')],
+      pep_term: data[('pep_term')],
+      pep_position: data[('pep_position')],
       form_responsible_name: data[('form_responsible_name')],
-      form_responsible_document: data[('form_responsible_document')],
+      form_responsible_document: data[('form_responsible_document')] || data[('document')],
       form_responsible_position: data[('form_responsible_position')],
-      cv_link: data[('cv_link')],
+      cv_link: data['cv_link'],
+      responsible_responsibles_name: data['responsible_responsibles_name'],
+      responsible_responsibles_document: data['responsible_responsibles_document'],
+      responsible_responsibles_email: data['responsible_responsibles_email'],
+      responsible_f_document_type_id: data['responsible_f_document_type_id'],
       info_additional: [
         {
           info_additional_type_id: 110,
@@ -86,6 +101,10 @@ export class GlobalService {
           info_additional_type_id: 113,
           value: data[('food_restrictions')],
           description: data[('food_restrictions_description')]
+        },
+        {
+          info_additional_type_id: 139,
+          value: data[('retefuente')],
         },
         {
           info_additional_type_id: 114,
@@ -146,7 +165,10 @@ export class GlobalService {
   }
 
   fillInitialVinculationForm(form: any, data: any) {
-    form.get('name')?.setValue(data?.name || '');
+    form.get('name')?.setValue(data?.name || '', { emitEvent: false });
+    form.get('second_name')?.setValue(data?.second_name || '', { emitEvent: false });
+    form.get('first_last_name')?.setValue(data?.last_name || '', { emitEvent: false });
+    form.get('second_last_name')?.setValue(data?.second_last_name || '', { emitEvent: false });
     form.get('document_type_id')?.setValue(data?.f_document_type_id || '');
     form.get('document')?.setValue(data?.document || '');
     form.get('ciiu')?.setValue(data?.ciiu || '');
@@ -159,12 +181,16 @@ export class GlobalService {
     form.get('emergency_contact_name')?.setValue(data?.emergency_contact_name || '');
     form.get('emergency_contact_telephone')?.setValue(data?.emergency_contact_telephone || '');
     form.get('emergency_contact_kinship')?.setValue(data?.emergency_contact_kinship || '');
+    form.get('bank_account_type')?.setValue(data?.bank_account_type || '');
+    form.get('bank_branch')?.setValue(data?.bank_branch || '');
+    form.get('bank_key')?.setValue(data?.bank_key || '');
     form.get('eps')?.setValue(data?.eps || '');
     form.get('economic_activity')?.setValue(data?.economic_activity || '');
     form.get('economic_activity_id')?.setValue(data?.f_vendor_economic_act_id || '');
     form.get('afp')?.setValue(data?.afp || '');
     form.get('arl')?.setValue(data?.arl || '');
     form.get('risk_level')?.setValue(data?.cmo_level_risk_arl_id || '');
+    form.get('blood_type_id')?.setValue(data?.blood_type_id || '');
     form.get('layoffs')?.setValue(data?.layoffs || '');
     form.get('legal_representative_name')?.setValue(data?.legal_representative_name || '');
     form.get('legal_representative_telephone')?.setValue(data?.legal_representative_telephone || '');
@@ -185,7 +211,7 @@ export class GlobalService {
     form.get('commercial_responsible_telephone')?.setValue(data?.commercial_responsible_telephone || '');
     form.get('commercial_responsible_email')?.setValue(data?.commercial_responsible_email || '');
     form.get('confidential_responsible_address')?.setValue(data?.confidential_responsible_address || '');
-    form.get('confidential_responsible_email')?.setValue(data?.confidential_responsible_email || '');
+    form.get('confidential_responsible_email')?.setValue(data?.confidential_responsible_email || data?.email || '');
     form.get('last_close_assets')?.setValue(data?.last_close_assets || '');
     form.get('last_year_assets')?.setValue(data?.last_year_assets || '');
     form.get('last_close_liabilities')?.setValue(data?.last_close_liabilities || '');
@@ -196,14 +222,20 @@ export class GlobalService {
     form.get('last_year_equity')?.setValue(data?.last_year_equity || '');
     form.get('last_close_expense')?.setValue(data?.last_close_expense || '');
     form.get('last_year_expenses')?.setValue(data?.last_year_expenses || '');
-    form.get('is_pep')?.setValue(data?.pep ? '1' : '0');
+    form.get('is_pep')?.setValue(data?.pep ? '1' : '0', { emitEvent: false });
+    form.get('pep_start_date')?.setValue(data?.pep_start_date || null, { emitEvent: false });
+    form.get('pep_end_date')?.setValue(data?.pep_end_date || null, { emitEvent: false });
+    form.get('pep_term')?.setValue(data?.pep_term || '', { emitEvent: false });
+    form.get('pep_position')?.setValue(data?.pep_position || '', { emitEvent: false });
     form.get('form_responsible_name')?.setValue(data?.form_responsible_name || '');
-    form.get('form_responsible_document')?.setValue(data?.form_responsible_document || '');
+    form.get('form_responsible_document')?.setValue(data?.form_responsible_document || data?.document || '');
     form.get('form_responsible_position')?.setValue(data?.form_responsible_position || '');
-    form.get('signature')?.setValue(this.getDocumentLink(324));
+    form.get('signature')?.setValue(this.getDocumentLink(324), { emitEvent: false });
     form.get('cv_link')?.setValue(data?.cv_link || '');
-    console.log(this._vS.getDocumentsList())
-    console.log(form.get('signature')?.value)
+    form.get('responsible_responsibles_name')?.setValue(data?.responsible_name || '');
+    form.get('responsible_responsibles_document')?.setValue(data?.responsible_document || null);
+    form.get('responsible_responsibles_email')?.setValue(data?.responsible_email || '');
+    form.get('responsible_f_document_type_id')?.setValue(data?.responsible_f_document_type_id || null);
 
     // Setting additional info
     const info_additional = data?.info_additional;
@@ -266,16 +298,19 @@ export class GlobalService {
         case 124:
           form.get('big_contributor')?.setValue(info.value ? '1' : '0');
           break;
+        case 139:
+          form.get('retefuente')?.setValue(info.value ? '1' : '0');
+          break;
       }
     }
   }
-  
+
 
   getQuestionData(id: any, answers: any[], controlName?: string, form?: any) {
     let answer = answers.find((an: any) => an.id == id);
     if (answer.value === true && controlName) {
       form.get(`${controlName}_description`)?.setValidators(Validators.required);
-    } 
+    }
     else if (answer.value !== true && controlName){
       form.get(`${controlName}_description`)?.removeValidators(Validators.required);
     }
@@ -290,9 +325,10 @@ export class GlobalService {
   }
 
   getDocumentLink(id: any) {
-    let documentsList = this._vS.getDocumentsList();
-    let document = documentsList.find((dl: any) => dl.id == id);
-    const file = document.link ? { name: document.link, url: document.link, document_id: document?.document_id } : null;
+    const documentsList = this._vS.getDocumentsList();
+    const document = documentsList.find(dl => dl?.id == id);
+    const file = document?.link ? { name: document.link, url: document.link, document_id: document?.document_id } : null;
+
     return file;
   }
 
@@ -311,7 +347,7 @@ export class GlobalService {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
-  
+
     return `${day}/${month}/${year}`;
   }
 

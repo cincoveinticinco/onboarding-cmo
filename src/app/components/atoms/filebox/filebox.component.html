@@ -1,25 +1,19 @@
 @if (!value) {
-  <small class="error">{{ getErrors() && getErrors()}}</small>
+  @if (getErrors()) {
+    <small class="error">{{ getErrors()}}</small>
+  }
+
   <label
       class="content-file-input"
       appDragAndDropFile
-      [extensiones_permitidas]="onlyPdf ? ['pdf'] : ['pdf', 'PDF', 'jpeg', 'jpg', 'png']"
+      [extensiones_permitidas]="allowedExtensions"
       (onChangeFile)="onDragFileChange($event)"
       >
     <span>Arrastar y soltar o <a>buscar</a></span>
-    @if (!onlyPdf) {
-      <input  
-        type="file" 
-        accept=".pdf, .jpeg, .png, .jpg" 
-        (change)="onFileChange($event)"
-      >
-    } @else {
-      <input  
-        type="file" 
-        accept=".pdf" 
-        (change)="onFileChange($event)" 
-      >
-    }
+    <input
+      type="file"
+      [accept]="acceptAllowedExtensions"
+      (change)="onFileChange($event)" />
   </label>
 } @else {
   <div class="content-file-filled">

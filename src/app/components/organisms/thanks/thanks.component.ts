@@ -11,7 +11,7 @@ import { LogoComponent } from '../../atoms/logo/logo.component';
   standalone: true,
   imports: [RouterModule, PanelButtonsComponent, LogoComponent],
   templateUrl: './thanks.component.html',
-  styleUrl: './thanks.component.scss'
+  styleUrl: './thanks.component.css'
 })
 export class ThanksComponent implements OnInit{
 

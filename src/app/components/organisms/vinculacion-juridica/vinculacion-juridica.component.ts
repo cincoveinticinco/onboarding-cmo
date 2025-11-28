@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostListener, Input,  Output, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input,  Output, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { InitialDataComponent } from '../../molecules/initial-data/initial-data.component';
 import { BlackButtonComponent } from '../../atoms/black-button/black-button.component';
@@ -22,6 +22,9 @@ import { GlobalService } from '../../../services/global.service';
 import { VendorService } from '../../../services/vendor.service';
 import { file_types } from '../../../shared/interfaces/files_types';
 import { Subscription } from 'rxjs';
+import { AdditionalInfoComponent } from '../../molecules/additional-info/additional-info.component';
+import { AUTOCOMPLETE_CONTROLS } from '../../../shared/interfaces/autocomplete_controls';
+import { ServiceProviderDataComponent } from "../../molecules/service-provider-data/service-provider-data.component";
 
 @Component({
   selector: 'app-vinculacion-juridica',
@@ -46,20 +49,24 @@ import { Subscription } from 'rxjs';
     AcuerdoConfidencialidadComponent,
     InformacionFinancieraComponent,
     PersonaDiligenciaFormularioComponent,
-    PanelButtonsComponent
-  ],
+    PanelButtonsComponent,
+    AdditionalInfoComponent,
+    ServiceProviderDataComponent
+],
   templateUrl: './vinculacion-juridica.component.html',
   styleUrls: ['./vinculacion-juridica.component.css']
 })
 export class VinculacionJuridicaComponent {
   juridicaForm: FormGroup;
   @Input() lists: any = {};
+
   @Output() notify: EventEmitter<any> = new EventEmitter();
   @Output() save: EventEmitter<any> = new EventEmitter();
   @Output() onSubmitFile: EventEmitter<any> = new EventEmitter();
+
   subs: Subscription[] = [];
 
-  constructor(private fb: FormBuilder, private _gS: GlobalService, private _vS: VendorService) {
+  constructor(private fb: FormBuilder, private _gS: GlobalService, private _vS: VendorService, private el: ElementRef) {
     this.juridicaForm = this.fb.group({
       type: new FormControl('', [Validators.required]),
       date: new FormControl('', [Validators.required]),
@@ -68,19 +75,19 @@ export class VinculacionJuridicaComponent {
       address: new FormControl('', [Validators.required]),
       city: new FormControl('', [Validators.required]),
       telephone: new FormControl('', [Validators.required]),
-      email: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
       legal_representative_name: new FormControl('', [Validators.required]),
       f_document_representative: new FormControl('', [Validators.required]),
       legal_representative_telephone: new FormControl('', [Validators.required]),
-      legal_representative_email: new FormControl('', [Validators.required]),
+      legal_representative_email: new FormControl('', [Validators.required, Validators.email]),
       electronic_billing_name: new FormControl('', [Validators.required]),
-      electronic_billing_email: new FormControl('', [Validators.required]),
+      electronic_billing_email: new FormControl('', [Validators.required, Validators.email]),
       electronic_billing_telephone: new FormControl('', [Validators.required]),
       accounting_responsible_name: new FormControl('', [Validators.required]),
       accounting_responsible_telephone: new FormControl('', [Validators.required]),
-      accounting_responsible_email: new FormControl('', [Validators.required]),
-      accounting_responsible_position: new FormControl('', [Validators.required]),
-      ciiu: new FormControl('', [Validators.required]),
+      accounting_responsible_email: new FormControl('', Validators.email),
+      accounting_responsible_position: new FormControl(''),
+      ciiu: new FormControl(''),
       economic_activity_id: new FormControl('', [Validators.required]),
       economic_activity: new FormControl('', [Validators.required]),
       simple_regime: new FormControl('', [Validators.required]),
@@ -88,11 +95,11 @@ export class VinculacionJuridicaComponent {
       big_contributor: new FormControl('', [Validators.required]),
       treassury_responsible_name: new FormControl('', [Validators.required]),
       treassury_responsible_telephone: new FormControl('', [Validators.required]),
-      treassury_responsible_email: new FormControl('', [Validators.required]),
+      treassury_responsible_email: new FormControl('', [Validators.required, Validators.email]),
       treassury_responsible_position: new FormControl('', [Validators.required]),
       commercial_responsible_name: new FormControl('', [Validators.required]),
       commercial_responsible_telephone: new FormControl('', [Validators.required]),
-      commercial_responsible_email: new FormControl('', [Validators.required]),
+      commercial_responsible_email: new FormControl('', [Validators.required, Validators.email]),
       last_close_assets: new FormControl('', [Validators.required]),
       last_year_assets: new FormControl('', [Validators.required]),
       last_close_liabilities: new FormControl('', [Validators.required]),
@@ -104,18 +111,27 @@ export class VinculacionJuridicaComponent {
       last_close_expense: new FormControl('', [Validators.required]),
       last_year_expenses: new FormControl('', [Validators.required]),
       is_pep: new FormControl('', [Validators.required]),
+      pep_start_date: new FormControl({ value: null, disabled: true }, Validators.required),
+      pep_end_date: new FormControl({ value: null, disabled: true }, Validators.required),
+      pep_position: new FormControl({ value: '', disabled: true }, Validators.required),
+      pep_term: new FormControl({ value: '', disabled: true }, Validators.required),
       confidential_responsible_address: new FormControl('', [Validators.required]),
-      confidential_responsible_email: new FormControl('', [Validators.required]),
+      confidential_responsible_email: new FormControl('', [Validators.required, Validators.email]),
       form_responsible_name: new FormControl('', [Validators.required]),
       form_responsible_document: new FormControl('', [Validators.required]),
       form_responsible_position: new FormControl('', [Validators.required]),
       signature: new FormControl('', [Validators.required]),
-      cv_link: new FormControl('', [Validators.required]),
+      cv_link: new FormControl(''),
+      responsible_responsibles_name: new FormControl('', [Validators.required]),
+      responsible_responsibles_document: new FormControl('', [Validators.required]),
+      responsible_responsibles_email: new FormControl('', [Validators.required, Validators.email]),
+      responsible_f_document_type_id: new FormControl('', [Validators.required]),
     });
   }
 
   ngOnInit() {
     this.subscribeToFormChanges();
+    this.setAutoSave();
   }
 
   subscribeToFormChanges() {
@@ -152,19 +168,10 @@ export class VinculacionJuridicaComponent {
   }
 
   @HostListener('submit', ['$event'])
-  onFormSubmit(event: Event) {
-    event.preventDefault();
-    if (this.juridicaForm.valid) {
-      return;
-    } else {
-      Object.values(this.juridicaForm.controls).forEach((control) => {
-        control.markAsTouched();
-      });
-
-      const invalidElements = document.querySelectorAll('.ng-invalid');
-      if (invalidElements.length > 0) {
-        invalidElements[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+  onFormSubmit() {
+    const invalidElements = this.el.nativeElement.querySelectorAll('.ng-invalid:not(.ng-submitted)');
+    if (invalidElements.length > 0) {
+      invalidElements[0].focus();
     }
   }
 
@@ -196,6 +203,18 @@ export class VinculacionJuridicaComponent {
       if (controlErrors) {
         console.log(`Control: ${key}, Errors:`, controlErrors);
       }
+    });
+  }
+
+  setAutoSave() {
+    AUTOCOMPLETE_CONTROLS.forEach(control => {
+      this.juridicaForm.get(control.controlName)?.valueChanges?.subscribe((value) => {
+        this.lists.vendorInfo[control.controlName] = value;
+
+        if (control?.autocompleteControlName) {
+          this.juridicaForm.get(control?.autocompleteControlName)?.setValue(value);
+        }
+      });
     });
   }
 

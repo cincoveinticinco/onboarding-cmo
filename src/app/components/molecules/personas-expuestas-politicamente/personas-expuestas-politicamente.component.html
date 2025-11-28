@@ -11,9 +11,37 @@
   cargos y durante los dos (2) años siguientes a su dejación, renuncia, despido o declaración de
   insubsistencia del nombramiento, o de cualquier otra forma de desvinculación.
 </p>
-<app-checkbox-input 
+<app-checkbox-input
   [label]="'¿Es persona expuesta políticamente?'"
   [control]="getControl('is_pep')"
   [controlName]="'is_pep'"
-  class="col-12" 
+  class="col-12"
 />
+
+
+@if (getControl('is_pep').value == '1') {
+  <div class="row">
+    <app-text-input
+    [label]="'Fecha desde'"
+    [control]="getControl('pep_start_date')"
+    class="col-4"
+    [type]="'date'"
+    ></app-text-input>
+    <app-text-input
+    [label]="'Fecha hasta'"
+    [control]="getControl('pep_end_date')"
+    class="col-4"
+    [type]="'date'"
+    ></app-text-input>
+    <app-text-input
+        [label]="'Término'"
+        [control]="getControl('pep_term')"
+        class="col-4"
+      ></app-text-input>
+    <app-text-input
+        [label]="'Cargo'"
+        [control]="getControl('pep_position')"
+        class="col-4"
+      ></app-text-input>
+  </div>
+}

@@ -1,26 +1,46 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'app-text-input',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, NgxMaskDirective],
+  providers: [
+    provideNgxMask(),
+  ],
   templateUrl: './text-input.component.html',
   styleUrls: ['./text-input.component.css']
 })
-export class TextInputComponent {
+export class TextInputComponent implements OnInit {
+
   @Input() label: string | undefined;
   @Input() description: string | undefined;
   @Input() placeholder: string = '';
   @Input() control: FormControl = new FormControl();
   @Input() type: string = 'text';
+  @Input() pattern?: string | RegExp = '';
+  @Input() mask?: string = '';
+
+  @Output() onBlur = new EventEmitter<any>();
 
   getErrors(): string | null {
     const touched = this.control.touched;
     if (this.control.hasError('required') && touched) {
       return 'Este campo es requerido *';
     }
-    return null;
+    if (this.control.hasError('email') && touched) {
+      return 'Correo electrónico inválido';
+    }
+    return this.control.valid ? null : 'Campo inválido';
   }
+
+  blur() {
+    this.onBlur.emit();
+  }
+
+  ngOnInit(): void {
+  }
+
 }

@@ -4,7 +4,7 @@
 
 <p>Entre los suscritos, a saber, Clara María Ochoa Domínguez, mayor de edad, identificada
 con la cédula de ciudadanía No. 41.640.044, quien obra en calidad de representante legal
-de CMO STUDIOS S.A.S., sociedad identificada con NIT 901.717.539-4 (“LA PRODUCTORA), por una parte; y por la otra, _______________________________, mayor de edad, identificado con documento No. ________________, quien obra en su propio nombre (“EL RECEPTOR”), suscriben el presente acuerdo de confidencialidad (en adelante ‘Acuerdo’ o ‘Acuerdo de Confidencialidad’) con el fin de establecer los términos y condiciones que regirán la recepción de la información confidencial de LA PRODUCTORA relacionada con el desarrollo del proyecto audiovisual llamado “CASI AMOR”(el “PROYECTO AUDIOVISUAL”).</p>
+de CMO STUDIOS S.A.S., sociedad identificada con NIT 901.717.539-4 (“LA PRODUCTORA), por una parte; y por la otra, <b style="text-transform: uppercase;">{{lists?.vendorInfo?.full_name || '___________________________'}}</b>, mayor de edad, identificado con documento No. <b style="text-transform: uppercase;">{{lists?.vendorInfo?.document || '___________________________'}}</b>, quien obra en su propio nombre (“EL RECEPTOR”), suscriben el presente acuerdo de confidencialidad (en adelante ‘Acuerdo’ o ‘Acuerdo de Confidencialidad’) con el fin de establecer los términos y condiciones que regirán la recepción de la información confidencial de LA PRODUCTORA relacionada con el desarrollo del proyecto audiovisual llamado <b style="text-transform: uppercase;">{{lists?.vendorInfo?.proj_name || '_____________'}}</b>.</p>
 
 <p>PRIMERA. OBJETO. EL RECEPTOR se obliga a no divulgar, mantener para sí mismo y
 usar exclusivamente para los fines dispuestos por LA PRODUCTORA, el contenido y/o
@@ -150,18 +150,19 @@ medios, exclusivamente:</p>
 <p>
 <br>LA PRODUCTORA
 <br>Dirección física: Cra 5 N 67 - 28
-<br>Correo electrónico:  legal&#64;cmoproducciones.co
+<br>Correo electrónico:  legal&#64;cmo.com.co
 </p>
 
   <p>EL RECEPTOR</p>
   <div class="row">
-    <app-text-input 
+    <app-text-input
     [label]="'Dirección Física'"
-    [control]="getControl('confidential_responsible_address')" 
+    [control]="getControl('confidential_responsible_address')"
     class="col-4" />
-    <app-text-input 
+    <app-text-input
       [label]="'Correo Electrónico'"
       [control]="getControl('confidential_responsible_email')"
+      [type]="'email'"
       class="col-4" />
   </div>
 </div>

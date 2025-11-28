@@ -3,11 +3,14 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --port 4201",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:onboarding-cmo": "node dist/onboarding-cmo/server/server.mjs"
+    "serve:ssr:onboarding-cmo": "node dist/onboarding-cmo/server/server.mjs",
+    "production": "ng build --base-href /onboarding-cmo/ --configuration production",
+    "staging": "ng build --base-href /onboarding-cmo/ --configuration staging",
+    "development": "ng build --base-href /onboarding-cmo/ --configuration development-server"
   },
   "private": true,
   "dependencies": {
@@ -25,6 +28,7 @@
     "@angular/ssr": "^18.0.2",
     "express": "^4.18.2",
     "localstorage-polyfill": "^1.0.1",
+    "ngx-mask": "^17.0.8",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"

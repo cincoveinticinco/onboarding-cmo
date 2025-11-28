@@ -2,20 +2,41 @@
   <label>{{ label }}</label>
   @if(control.errors && (control.dirty || control.touched)) {
     <small class="error">
-      {{
-        getErrors()
-      }}
+      {{ getErrors() }}
     </small>
-  } 
-  @if(!getErrors()){
+  }
+  @if(!getErrors() && description){
     <small class="description">
       {{ description }}
     </small>
   }
-  <input
-    [placeholder]="placeholder"
-    [formControl]="control"
-    [type]="type"
-  />
- 
+
+  @if (type == 'currency') {
+    <input
+      [placeholder]="placeholder"
+      [formControl]="control"
+      type="text"
+      mask="separator.0"
+      prefix="$"
+      [allowNegativeNumbers]="true"
+      thousandSeparator="."
+    />
+  } @else if(type === 'number') {
+    <input
+      [placeholder]="placeholder"
+      [formControl]="control"
+      type="number"
+      [pattern]="pattern || '[0-9]*'"
+      inputmode="numeric"
+      (blur)="blur()"
+    />
+  } @else {
+    <input
+      [placeholder]="placeholder"
+      [formControl]="control"
+      [type]="type"
+      [pattern]="pattern || ''"
+      (blur)="blur()"
+    />
+  }
 </div>

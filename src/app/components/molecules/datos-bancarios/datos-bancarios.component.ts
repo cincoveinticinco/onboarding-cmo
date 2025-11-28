@@ -1,27 +1,23 @@
 import { Component, Input } from '@angular/core';
-import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { SubtitleComponent } from '../../atoms/subtitle/subtitle.component';
 import { TextInputComponent } from '../../atoms/text-input/text-input.component';
 import { SelectInputComponent } from '../../atoms/select-input/select-input.component';
+import { SubtitleComponent } from '../../atoms/subtitle/subtitle.component';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-datos-empresa',
+  selector: 'app-datos-bancarios',
   standalone: true,
   imports: [
-    ReactiveFormsModule,
-    CommonModule,
-    SubtitleComponent,
     TextInputComponent,
     SelectInputComponent,
+    SubtitleComponent,
   ],
-  templateUrl: './datos-empresa.component.html',
-  styleUrls: ['./datos-empresa.component.css']
+  templateUrl: './datos-bancarios.component.html',
+  styleUrl: './datos-bancarios.component.css'
 })
-export class DatosEmpresaComponent {
+export class DatosBancariosComponent {
   @Input() form: FormGroup | undefined;
-  nitPattern = '^[0-9]{1,9}$';
-
+  
   getControl(controlName: string): FormControl {
     return this.form?.get(controlName) as FormControl;
   }

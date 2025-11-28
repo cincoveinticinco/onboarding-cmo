@@ -20,10 +20,22 @@ export class DatosContratistaComponent {
   @Input() form: FormGroup | undefined;
   @Input() lists: any = {};
 
+  addressRegexp = /^[a-zA-Z0-9\s]+$/;
+
   ngOnInit() {
     this.form?.controls['economic_activity'].disable();
+    this.subscribeToForm();
   }
-  
+
+  subscribeToForm() {
+    this.form?.get('name')?.valueChanges.subscribe(() => this.setFullName());
+    this.form?.get('second_name')?.valueChanges.subscribe(() => this.setFullName());
+    this.form?.get('first_last_name')?.valueChanges.subscribe(() => this.setFullName());
+    this.form?.get('second_last_name')?.valueChanges.subscribe(() => this.setFullName());
+
+    this.setFullName();
+  }
+
   getControl(controlName: string): FormControl {
     return this.form?.get(controlName) as FormControl;
   }
@@ -34,11 +46,15 @@ export class DatosContratistaComponent {
 
   setEconomicActivity(event: any) {
     let id = event.target?.value;
-    console.log('setEconomicActivity', id)
-    console.log('setEconomicActivity', this.getEconomicActivity(id))
     if(id) {
       this.form?.get('economic_activity')?.setValue(this.getEconomicActivity(id));
     }
+  }
+
+  setFullName() {
+    this.form?.get('form_responsible_name')?.setValue(
+      `${this.form?.get('name')?.value || ''} ${this.form?.get('second_name')?.value || ''} ${this.form?.get('first_last_name')?.value || ''} ${this.form?.get('second_last_name')?.value || ''}`
+    );
   }
 
   showPepff() {

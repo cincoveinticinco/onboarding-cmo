@@ -9,17 +9,17 @@
     font-size: var(--primary-font-size);
     color: var(--font-color);
     height: 56px;
-  
+
     input{
       display: none;
     }
-  
+
     a{
       color: var(--light-border-box);
       cursor: pointer;
     }
 }
-  
+
 .content-file-filled {
     background: var(--background-light-color);
     display: flex;
@@ -28,8 +28,8 @@
     justify-content: space-between;
     padding-left: 8px;
     max-width: 270px;
-    margin: 16px 0px;
-  
+    margin: 6px 0px;
+
     span{
       display: block;
       white-space: nowrap;
